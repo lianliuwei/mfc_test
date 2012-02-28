@@ -1,0 +1,31 @@
+.svn/
+*.pyc
+.gclient_entries
+.gclient
+#generation folder
+Debug/
+Release/
+Purify/
+unicode_Debug/
+#visual studio files
+*.user
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.ncb
+*.aps
+*.suo
+*.obj
+*.lib
+*.dll
+*.ilk
+*.exp
+*.res
+*.pdb
+*.dep
+*.idb
+*.tlh
+*.tli
+*.pch
+*.aps
+*.log
