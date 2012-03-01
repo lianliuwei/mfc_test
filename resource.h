@@ -11,6 +11,8 @@
 #define IDR_MAINFRAME                   128
 #define IDR_RIBBONTYPE                  129
 #define ID_TAB_HOME                     130
+#define ID_GROUP_TEST                   158
+#define ID_TEST_TOGGLE                  159
 #define ID_GROUP_FILE                   131
 #define ID_TAB_VIEW                     132
 #define ID_TAB_INSERT                   133

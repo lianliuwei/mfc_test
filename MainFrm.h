@@ -60,6 +60,7 @@ protected:
 	void OnViewWorkspace();
 	void OnUpdateViewWorkspace(CCmdUI* pCmdUI);
 	void OnUpdateRibbonTab(CCmdUI* pCmdUI);
+  void OnUpdateToggleTest(CCmdUI* pCmdUI);
 
 	BOOL m_bShowWorkspace;
 

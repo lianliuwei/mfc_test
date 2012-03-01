@@ -902,6 +902,18 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\XTPToggleButton.cpp"
+				>
+				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="2"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -937,6 +949,10 @@
 			</File>
 			<File
 				RelativePath="StdAfx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XTPToggleButton.h"
 				>
 			</File>
 		</Filter>
