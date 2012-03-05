@@ -343,6 +343,7 @@ BEGIN
     IDR_RIBBONTYPE          "\nRibbon\nRibbon\n\n\nRibbonMDISample.Document\nRibbon Document"
     ID_TAB_HOME             "&Home"
     ID_GROUP_TEST           "&Test"
+    ID_TEST_TOGGLE          "Test using a Toggle\nToggle"
     ID_GROUP_FILE           "&File"
     ID_TAB_VIEW             "&View"
     ID_TAB_EDIT             "&Edit"

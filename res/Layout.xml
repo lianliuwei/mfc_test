@@ -10,6 +10,11 @@
 				<Tabs>
 					<Tab Caption="&amp;Home" Id="130" Selected="1">
 						<Groups>
+              <Group Id="158" IconId="-1" Caption="&amp;Test">
+                <Controls>
+                  <Control Class="CXTPToggleButton" SetIconId="57636" UnSetIconId="300" state ="1" Caption="Toggle" TooltipText="TooltipText" DescriptionText="DescriptionText"/>
+                </Controls>
+              </Group>
 							<Group Id="131" IconId="-1" Caption="&amp;File">
 								<Controls>
 									<Control Class="CXTPControlButton" Id="57600" Caption="New" TooltipText="New" DescriptionText="Create a new document"/>

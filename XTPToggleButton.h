@@ -32,6 +32,9 @@ private:
   // when using 
   virtual void Copy(CXTPControl* pControl, BOOL bRecursive);
 
+  // get call when using XML to config
+  virtual void DoPropExchange(CXTPPropExchange* pPX);
+
 private:
   // the set and unset icon id
   int set_icon_id_;

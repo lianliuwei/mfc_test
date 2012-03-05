@@ -148,123 +148,30 @@ void CMainFrame::LoadIcons()
 
 }
 
-//#define CREATE_FROM_XML
 
 BOOL CMainFrame::CreateRibbonBar()
 {
-	CXTPCommandBars* pCommandBars = GetCommandBars();
-
-	CMenu menu;
-	menu.Attach(::GetMenu(m_hWnd));
-	SetMenu(NULL);
-
- CXTPRibbonBar* pRibbonBar = (CXTPRibbonBar*)pCommandBars->Add(_T("The Ribbon"), xtpBarTop, RUNTIME_CLASS(CXTPRibbonBar));
- if (!pRibbonBar)
- {
-   return FALSE;
- }
-
-
- pRibbonBar->EnableDocking(0);
-
- CXTPControlPopup* pControlFile = (CXTPControlPopup*)pRibbonBar->AddSystemButton(0);
- pControlFile->SetCommandBar(menu.GetSubMenu(0));
-
- pControlFile->SetIconId(IDB_GEAR);
-
- CXTPRibbonTab* pTabHome = pRibbonBar->AddTab(ID_TAB_HOME);
-
- CXTPRibbonGroup* pGroupTest = pTabHome->AddGroup(ID_GROUP_TEST);
- pGroupTest->Add(
-   new CXTPToggleButton(ID_EDIT_FIND, IDB_GEAR, CXTPToggleButton::STATE_SET),
-   ID_TEST_TOGGLE);
-
- CXTPRibbonGroup* pGroupFile = pTabHome->AddGroup(ID_GROUP_FILE);
- pGroupFile->Add(xtpControlButton, ID_FILE_NEW);
- pGroupFile->Add(xtpControlButton, ID_FILE_OPEN);
- pGroupFile->Add(xtpControlButton, ID_FILE_CLOSE);
- CXTPControlPopup* pControlSave = (CXTPControlPopup*)pGroupFile->Add(xtpControlSplitButtonPopup, ID_FILE_SAVE);
- pControlSave->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_FILE_SAVE);
- pControlSave->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_FILE_SAVE_AS);
-
- CXTPControlPopup* pControlPrint = (CXTPControlPopup*)pGroupFile->Add(xtpControlSplitButtonPopup, ID_FILE_PRINT);
- pControlPrint->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_FILE_PRINT);
- pControlPrint->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_FILE_PRINT_SETUP);
- pControlPrint->SetBeginGroup(TRUE);
-
-
- CXTPRibbonTab* pTabEdit = pRibbonBar->AddTab(ID_TAB_EDIT);
-
-
- CXTPRibbonGroup* pGroupClipborad = pTabEdit->AddGroup(ID_GROUP_CLIPBOARD);
- pGroupClipborad->ShowOptionButton();
-
- CXTPControlPopup* pControlPaste = (CXTPControlPopup*)pGroupClipborad->Add(xtpControlSplitButtonPopup, ID_EDIT_PASTE);
- pControlPaste->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_EDIT_PASTE);
- pControlPaste->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_EDIT_PASTE_SPECIAL);
- pGroupClipborad->Add(xtpControlButton, ID_EDIT_CUT);
- pGroupClipborad->Add(xtpControlButton, ID_EDIT_COPY);	
- pGroupClipborad->Add(xtpControlButton, ID_FORMAT_PAINTER);
-
- CXTPRibbonGroup* pGroupEditing = pTabEdit->AddGroup(ID_GROUP_EDITING);
- pGroupEditing->Add(xtpControlButton, ID_EDIT_FIND);
- pGroupEditing->Add(xtpControlButton, ID_EDIT_REPLACE);
- pGroupEditing->Add(xtpControlButton, ID_EDIT_GOTO);
- CXTPControlPopup* pControlSelect = (CXTPControlPopup*)pGroupEditing->Add(xtpControlPopup, ID_EDIT_SELECT);
- pControlSelect->GetCommandBar()->GetControls()->Add(xtpControlButton, ID_EDIT_SELECT_ALL);
- pControlSelect->SetFlags(xtpFlagManualUpdate);
-
-
-
-
- CXTPRibbonTab* pTabView = pRibbonBar->AddTab(ID_TAB_VIEW);
-
- CXTPRibbonGroup* pGroupDocumentView = pTabView->AddGroup(ID_GROUP_DOCUMENTVIEWS);
- pGroupDocumentView->Add(xtpControlButton, ID_VIEW_NORMAL);
- pGroupDocumentView->Add(xtpControlButton, ID_FILE_PRINT_PREVIEW);
- pGroupDocumentView->Add(xtpControlButton, ID_VIEW_FULLSCREEN);
-
- CXTPRibbonGroup* pGroupShowHide = pTabView->AddGroup(ID_GROUP_SHOWHIDE);
- pGroupShowHide->Add(xtpControlCheckBox, ID_VIEW_STATUS_BAR);
- pGroupShowHide->Add(xtpControlCheckBox, ID_VIEW_WORKSPACE);
-
- CXTPRibbonGroup* pGroupWindow = pTabView->AddGroup(ID_GROUP_WINDOW);
- pGroupWindow->Add(xtpControlButton, ID_WINDOW_NEW);
- pGroupWindow->Add(xtpControlButton, ID_WINDOW_ARRANGE);
- CXTPControlPopup* pControlSwitchWindows = (CXTPControlPopup*)pGroupWindow->Add(xtpControlPopup, ID_WINDOW_SWITCH);
- pControlSwitchWindows->GetCommandBar()->GetControls()->Add(xtpControlButton, XTP_ID_WINDOWLIST);
-
-
- CXTPControl* pControlAbout = pRibbonBar->GetControls()->Add(xtpControlButton, ID_APP_ABOUT);
- pControlAbout->SetFlags(xtpFlagRightAlign);
-
- pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_FILE_SAVE);
- pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_EDIT_UNDO);
- pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_FILE_PRINT);
- pRibbonBar->GetQuickAccessControls()->CreateOriginalControls();
-
-
-// 	CXTPPropExchangeXMLNode px(TRUE, 0, _T("Settings"));
-// 
-// 	if (px.LoadFromResource(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_LAYOUT), RT_HTML))
-// 	{
-// 		CXTPPropExchangeSection pxCommandBars(px.GetSection(_T("CommandBars")));
-// 		XTP_COMMANDBARS_PROPEXCHANGE_PARAM param; 
-// 		param.bSerializeControls = TRUE;
-// 		GetCommandBars()->DoPropExchange(&pxCommandBars, &param);
-// 	}
-// 	else
-// 	{
-// 		AfxMessageBox(_T("Can't load Layout"));
-// 		return FALSE;
-// 	}
-// 	CXTPRibbonBar* pRibbonBar = (CXTPRibbonBar*)GetCommandBars()->GetMenuBar();
-// 	pRibbonBar->EnableCustomization(FALSE);
-// 
-// 	pRibbonBar->GetQuickAccessControls()->SetOriginalControls(new CXTPOriginalControls());
-// 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_FILE_SAVE);
-// 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_EDIT_UNDO);
-// 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_FILE_PRINT);
+ 	CXTPPropExchangeXMLNode px(TRUE, 0, _T("Settings"));
+ 
+ 	if (px.LoadFromResource(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_LAYOUT), RT_HTML))
+ 	{
+ 		CXTPPropExchangeSection pxCommandBars(px.GetSection(_T("CommandBars")));
+ 		XTP_COMMANDBARS_PROPEXCHANGE_PARAM param; 
+ 		param.bSerializeControls = TRUE;
+ 		GetCommandBars()->DoPropExchange(&pxCommandBars, &param);
+ 	}
+ 	else
+ 	{
+ 		AfxMessageBox(_T("Can't load Layout"));
+ 		return FALSE;
+ 	}
+ 	CXTPRibbonBar* pRibbonBar = (CXTPRibbonBar*)GetCommandBars()->GetMenuBar();
+ 	pRibbonBar->EnableCustomization(FALSE);
+ 
+ 	pRibbonBar->GetQuickAccessControls()->SetOriginalControls(new CXTPOriginalControls());
+ 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_FILE_SAVE);
+ 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_EDIT_UNDO);
+ 	pRibbonBar->GetQuickAccessControls()->GetOriginalControls()->Add(xtpControlButton, ID_FILE_PRINT);
 
 
 	pRibbonBar->EnableFrameTheme();
@@ -336,8 +243,6 @@ void CMainFrame::OnUpdateViewNormal(CCmdUI* pCmdUI)
 void CMainFrame::OnWindowArrange() 
 {
 	::SendMessage(m_hWndMDIClient, WM_MDITILE, MDITILE_HORIZONTAL, 0);
-
-	
 }
 
 void CMainFrame::OnUpdateWindowSwitch(CCmdUI* pCmdUI) 
