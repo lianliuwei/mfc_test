@@ -148,8 +148,6 @@ void CMainFrame::LoadIcons()
 
 }
 
-//#define CREATE_FROM_XML
-
 BOOL CMainFrame::CreateRibbonBar()
 {
   CXTPCommandBars* pCommandBars = GetCommandBars();
@@ -163,7 +161,6 @@ BOOL CMainFrame::CreateRibbonBar()
   {
     return FALSE;
   }
-
 
   pRibbonBar->EnableDocking(0);
 

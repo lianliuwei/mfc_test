@@ -81,13 +81,6 @@ ID_GROUP_EDITING        PNG                     "res\\GroupFind.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// HTML
-//
-
-IDR_LAYOUT              HTML                    "res\\Layout.xml"
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Toolbar
 //
 
@@ -342,7 +335,6 @@ BEGIN
     IDR_MAINFRAME           "RibbonMDISample"
     IDR_RIBBONTYPE          "\nRibbon\nRibbon\n\n\nRibbonMDISample.Document\nRibbon Document"
     ID_TAB_HOME             "&Home"
-    ID_GROUP_TEST           "&Test"
     ID_GROUP_FILE           "&File"
     ID_TAB_VIEW             "&View"
     ID_TAB_EDIT             "&Edit"
@@ -356,6 +348,14 @@ BEGIN
     ID_VIEW_NORMAL          "\n&Normal"
     ID_VIEW_FULLSCREEN      "\n&Full Screen"
     ID_WINDOW_SWITCH        "\n&Switch Windows"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_SELECT          "\n&Select"
+    ID_CUSTOM_CONTROL       "test the custom"
+    ID_GROUP_TEST           "&Test"
+    ID_TEST_TOGGLE          "Test using a Toggle\nToggle"
 END
 
 STRINGTABLE 
@@ -489,12 +489,6 @@ END
 STRINGTABLE 
 BEGIN
     AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
-END
-
-STRINGTABLE 
-BEGIN
-    ID_EDIT_SELECT          "\n&Select"
-    ID_CUSTOM_CONTROL       "test the custom"
 END
 
 #endif    // English (U.S.) resources

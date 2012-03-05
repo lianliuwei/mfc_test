@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="RibbonMDISample"
 	ProjectGUID="{39779355-7176-2726-8196-263347557186}"
+	RootNamespace="RibbonMDISample"
 	Keyword="MFCProj"
 	TargetFrameworkVersion="0"
 	>
@@ -178,7 +179,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../../bin/vc90/RibbonMDISampleUD.exe"
+				OutputFile="bin/vc90/RibbonMDISampleUD.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../../lib/vc90"
@@ -989,10 +990,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\res\Layout.xml"
-			>
-		</File>
 		<File
 			RelativePath=".\res\shiny-gear.png"
 			>
