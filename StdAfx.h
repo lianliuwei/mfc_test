@@ -6,6 +6,10 @@
 #if !defined(AFX_STDAFX_H__4A5C9121_286B_4D36_9F58_C4C98637CA44__INCLUDED_)
 #define AFX_STDAFX_H__4A5C9121_286B_4D36_9F58_C4C98637CA44__INCLUDED_
 
+#include <algorithm>
+using std::max;
+using std::min;
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

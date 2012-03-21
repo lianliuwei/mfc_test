@@ -11,6 +11,8 @@
 #define IDR_MAINFRAME                   128
 #define IDR_RIBBONTYPE                  129
 #define ID_TAB_HOME                     130
+#define ID_GROUP_TEST                   158
+#define ID_TEST_TOGGLE                  159
 #define ID_GROUP_FILE                   131
 #define ID_TAB_VIEW                     132
 #define ID_TAB_INSERT                   133
@@ -27,9 +29,8 @@
 #define ID_WINDOW_SWITCH                143
 #define ID_EDIT_SELECT                  144
 #define ID_CUSTOM_CONTROL               145
-#define ID_GROUP_TEST                   158
-#define ID_TEST_TOGGLE                  159
 #define IDB_GEAR                        300
+#define IDR_LAYOUT                      500
 #define ID_CANCEL_EDIT_CNTR             32768
 #define ID_VIEW_WORKSPACE               59394
 

@@ -8,7 +8,7 @@ CXTPToggleButton::CXTPToggleButton(int set_icon_id, int unset_icon_id,
                                    State state)
   : set_icon_id_(set_icon_id)
   , unset_icon_id_(unset_icon_id)
-  , state_(state) {
+  ,state_(state) {
   m_nIconId = state == STATE_SET ? set_icon_id : unset_icon_id;
 }
 
@@ -51,20 +51,6 @@ void CXTPToggleButton::Copy(CXTPControl* pControl, BOOL bRecursive) {
   // NO IMPLEMENT
   VERIFY(FALSE);
 }
-
-void CXTPToggleButton::DoPropExchange( CXTPPropExchange* pPX )
-{
-  CXTPControlButton::DoPropExchange(pPX);
-
-  PX_Int(pPX, _T("SetIconId"), set_icon_id_, 0);
-  PX_Int(pPX, _T("UnSetIconId"), unset_icon_id_, 0);
-  PX_Enum(pPX, _T("state"), state_, STATE_SET);
-
-  if (pPX->IsLoading()) {
-    ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET);
-  }
-}
-
 
 
 
