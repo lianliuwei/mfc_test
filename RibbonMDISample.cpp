@@ -4,6 +4,9 @@
 #include "stdafx.h"
 #include "RibbonMDISample.h"
 
+#include "base/command_line.h"
+#include "base/logging.h"
+#include "base/at_exit.h"
 #include "MainFrm.h"
 #include "ChildFrm.h"
 #include "RibbonMDISampleDoc.h"
@@ -39,6 +42,8 @@ CRibbonMDISampleApp::CRibbonMDISampleApp()
 // The one and only CRibbonMDISampleApp object
 
 CRibbonMDISampleApp theApp;
+
+base::AtExitManager g_atExitMamager;
 
 /////////////////////////////////////////////////////////////////////////////
 // CRibbonMDISampleApp initialization
@@ -106,6 +111,17 @@ BOOL CRibbonMDISampleApp::InitInstance()
 	// The main window has been initialized, so show and update it.
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
+
+  using namespace logging;
+
+  CommandLine::Init(0, NULL);
+  InitLogging(L"xtp.log", 
+    LOG_TO_BOTH_FILE_AND_SYSTEM_DEBUG_LOG,
+    LOCK_LOG_FILE,
+    DELETE_OLD_LOG_FILE,
+    DISABLE_DCHECK_FOR_NON_OFFICIAL_RELEASE_BUILDS);
+
+  VLOG(1) << "log init";
 
 	return TRUE;
 }
