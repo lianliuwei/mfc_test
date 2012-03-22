@@ -7,7 +7,11 @@
 
 #include "MainFrm.h"
 
+#include "base/logging.h"
+
 #include "XTPToggleButton.h"
+#include "XTPConfigBar.h"
+#include "osc_command_ids.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,7 +39,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 	ON_UPDATE_COMMAND_UI(XTP_ID_RIBBONCONTROLTAB, OnUpdateRibbonTab)
-  ON_UPDATE_COMMAND_UI(ID_TEST_TOGGLE, OnUpdateToggleTest)
 
 END_MESSAGE_MAP()
 
@@ -53,11 +56,13 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO: add member initialization code here
-	
+	command_updater_.reset(new CommandUpdater(this));
+  osc_on_off_ = true;
 }
 
 CMainFrame::~CMainFrame()
 {
+  command_updater_->RemoveCommandObserver(config_bar_.get());
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -139,6 +144,9 @@ void CMainFrame::LoadIcons()
 	UINT uiGroupClipboard[] = {ID_EDIT_PASTE, ID_EDIT_CUT, ID_EDIT_COPY, ID_FORMAT_PAINTER};
 	pCommandBars->GetImageManager()->SetIcons(ID_GROUP_CLIPBOARD, uiGroupClipboard, _countof(uiGroupClipboard), CSize(16, 16));
 
+  UINT uiGroupOscControl[] = {ID_START_OSC, ID_STOP_OSC, ID_DUMP_1, ID_AUTOSCALE};
+  pCommandBars->GetImageManager()->SetIcons(ID_GROUP_OSC_CONTROL, uiGroupOscControl, _countof(uiGroupOscControl), CSize(32, 32));
+
 	UINT uiGroupFind[] = {ID_EDIT_FIND, ID_EDIT_REPLACE, ID_EDIT_GOTO, ID_EDIT_SELECT};
 	pCommandBars->GetImageManager()->SetIcons(ID_GROUP_EDITING, uiGroupFind, _countof(uiGroupFind), CSize(16, 16));
 
@@ -147,8 +155,6 @@ void CMainFrame::LoadIcons()
 
 
 }
-
-//#define CREATE_FROM_XML
 
 BOOL CMainFrame::CreateRibbonBar()
 {
@@ -164,7 +170,6 @@ BOOL CMainFrame::CreateRibbonBar()
     return FALSE;
   }
 
-
   pRibbonBar->EnableDocking(0);
 
   CXTPControlPopup* pControlFile = (CXTPControlPopup*)pRibbonBar->AddSystemButton(0);
@@ -172,13 +177,17 @@ BOOL CMainFrame::CreateRibbonBar()
 
   pControlFile->SetIconId(IDB_GEAR);
 
+  // Osc Tab
+  config_bar_.reset(new XTPConfigBar(pRibbonBar, command_updater_.get()));
+  LOG_ASSERT(config_bar_->Init());
+  command_updater_->AddCommandObserver(IDC_OSC_ON_OFF, config_bar_.get());
+  command_updater_->AddCommandObserver(IDC_AUTOSCALE, config_bar_.get());
+  InitCommandState();
+
+
   // home Tab
   CXTPRibbonTab* pTabHome = pRibbonBar->AddTab(ID_TAB_HOME);
-  // test Group
-  CXTPRibbonGroup* pGroupTest = pTabHome->AddGroup(ID_GROUP_TEST);
-  pGroupTest->Add(
-    new CXTPToggleButton(ID_EDIT_FIND, IDB_GEAR, CXTPToggleButton::STATE_SET),
-    ID_TEST_TOGGLE);
+ 
   // file Group
   CXTPRibbonGroup* pGroupFile = pTabHome->AddGroup(ID_GROUP_FILE);
   pGroupFile->Add(xtpControlButton, ID_FILE_NEW);
@@ -364,7 +373,23 @@ void CMainFrame::OnClose()
 	CXTPMDIFrameWnd::OnClose();
 }
 
-void CMainFrame::OnUpdateToggleTest( CCmdUI* pCmdUI )
+void CMainFrame::ExecuteCommand( int id, CommandParam& param )
 {
-  pCmdUI->Enable(TRUE);
+   switch (id) {
+   case IDC_OSC_ON_OFF:
+     bool on_off = *(static_cast<Param<bool>>(param).ptr());
+     LOG_ASSERT(osc_on_off_ != on_off);
+     osc_on_off_ = on_off;
+     command_updater_->UpdateCommandEnabled(IDC_OSC_ON_OFF, true, 
+       Param<bool>(&osc_on_off_));
+   	break;
+   }
+}
+
+void CMainFrame::InitCommandState()
+{
+  command_updater_->UpdateCommandEnabled(
+    IDC_OSC_ON_OFF, true, Param<bool>(&osc_on_off_));
+  command_updater_->UpdateCommandEnabled(
+    IDC_AUTOSCALE, true, CommandUpdater::NoParam());
 }

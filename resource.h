@@ -11,8 +11,7 @@
 #define IDR_MAINFRAME                   128
 #define IDR_RIBBONTYPE                  129
 #define ID_TAB_HOME                     130
-#define ID_GROUP_TEST                   158
-#define ID_TEST_TOGGLE                  159
+#define IDB_BITMAP1                     130
 #define ID_GROUP_FILE                   131
 #define ID_TAB_VIEW                     132
 #define ID_TAB_INSERT                   133
@@ -29,8 +28,14 @@
 #define ID_WINDOW_SWITCH                143
 #define ID_EDIT_SELECT                  144
 #define ID_CUSTOM_CONTROL               145
+#define ID_TAB_OSC                      177
+#define ID_GROUP_OSC_CONTROL            178
+#define ID_START_OSC                    179
+#define ID_STOP_OSC                     180
+#define ID_START_STOP_OSC               181
+#define ID_AUTOSCALE                    182
+#define ID_DUMP_1                       183
 #define IDB_GEAR                        300
-#define IDR_LAYOUT                      500
 #define ID_CANCEL_EDIT_CNTR             32768
 #define ID_VIEW_WORKSPACE               59394
 
@@ -39,7 +44,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        130
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101

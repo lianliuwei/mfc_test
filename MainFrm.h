@@ -9,21 +9,33 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "base/memory/scoped_ptr.h"
+#include "command_updater.h"
+
+class XTPConfigBar;
 
 class CMainFrame : public CXTPMDIFrameWnd
+                 , public CommandUpdater::CommandUpdaterDelegate
 {
 	DECLARE_DYNAMIC(CMainFrame)
 public:
 	CMainFrame();
 
-// Attributes
 public:
+  virtual void ExecuteCommand(int id, CommandParam& param);
+
+private:
+  void InitCommandState();
+
+  bool osc_on_off_;
+  scoped_ptr<CommandUpdater> command_updater_;
+  scoped_ptr<XTPConfigBar> config_bar_;
 
 // Operations
 public:
 	BOOL CreateRibbonBar();
-	void LoadIcons();
 
+  void LoadIcons();
 	void OnSetPreviewMode(BOOL bPreview, CPrintPreviewState* pState);
 
 
@@ -60,7 +72,6 @@ protected:
 	void OnViewWorkspace();
 	void OnUpdateViewWorkspace(CCmdUI* pCmdUI);
 	void OnUpdateRibbonTab(CCmdUI* pCmdUI);
-  void OnUpdateToggleTest(CCmdUI* pCmdUI);
 
 	BOOL m_bShowWorkspace;
 
