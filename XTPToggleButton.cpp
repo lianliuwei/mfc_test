@@ -23,16 +23,18 @@ CXTPToggleButton::~CXTPToggleButton() {}
 
 
 void CXTPToggleButton::ToggleState() {
-  ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET);
+  ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET, true);
 }
 
-void CXTPToggleButton::ChangeState(State state) {
+void CXTPToggleButton::ChangeState(State state, bool notify) {
   if (state == state_)
     return;
 
-  // notify the change
-  OnChangeState(state);
   state_ = state;
+  // notify the change
+  if (notify)
+    OnChangeState(state);
+
   SetIconId(state_ == STATE_SET ? set_icon_id_ : unset_icon_id_);
 }
 
@@ -65,7 +67,7 @@ void CXTPToggleButton::DoPropExchange( CXTPPropExchange* pPX )
   PX_Enum(pPX, _T("state"), state_, STATE_SET);
 
   if (pPX->IsLoading()) {
-    ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET);
+    ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET, true);
   }
 }
 

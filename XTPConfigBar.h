@@ -5,7 +5,10 @@
 #include "command_updater.h"
 
 class CXTPRibbonBar;
-class CXTPToggleButton;
+namespace {
+class OnOffButton;
+}
+
 // this class using for create the Osc Config Controls. change control set for 
 // different Osc state. controls the show or hide of professional controls (it
 // is only the ui state). respond the command state change and change the UI.
@@ -46,7 +49,7 @@ private:
   OSC_STATE osc_state_;
 
   // the button switch between the start and stop state.
-  CXTPToggleButton* start_or_stop_;
+  OnOffButton* start_or_stop_;
   
   CXTPControlButton* auto_scale_;
   

@@ -17,7 +17,9 @@ public:
   virtual ~CXTPToggleButton();
 
   // set the button into special state
-  void ChangeState(State state);
+  // when the control level set the state it need set notify to false.
+  // or it logic lead to nest call.
+  void ChangeState(State state, bool notify);
 
   // toggle the state.
   void ToggleState();

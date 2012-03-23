@@ -324,7 +324,7 @@ END
 // Bitmap
 //
 
-ID_GROUP_OSC_CONTROL    BITMAP                  "D:\\workspace\\codejock_togglebutton_test\\res\\GroupOscControl.bmp"
+ID_GROUP_OSC_CONTROL    BITMAP                  "res\GroupOscControl.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
