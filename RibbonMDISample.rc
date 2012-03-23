@@ -339,6 +339,12 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_START_STOP_OSC     "Osc Start Stop button\nOnOff"
+    ID_AUTOSCALE          "AutoScale all chnl wave\nAutoScale"
+END
+
+STRINGTABLE 
+BEGIN
     IDR_MAINFRAME           "RibbonMDISample"
     IDR_RIBBONTYPE          "\nRibbon\nRibbon\n\n\nRibbonMDISample.Document\nRibbon Document"
     ID_TAB_HOME             "&Home"

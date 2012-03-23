@@ -101,5 +101,3 @@ void XTPConfigBar::StateChangedForCommand(int id, bool enabled,
     control->SetEnabled(enabled);
   }
 }
-
-
