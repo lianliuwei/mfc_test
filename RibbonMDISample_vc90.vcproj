@@ -117,8 +117,8 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Debug|Win32"
-			OutputDirectory=".\Unicode_Debug/vc90"
-			IntermediateDirectory=".\Unicode_Debug/vc90"
+			OutputDirectory="$(SolutionDir)Debug"
+			IntermediateDirectory="$(OutDir)\obj\$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -156,10 +156,10 @@
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdafx.h"
-				PrecompiledHeaderFile=".\Unicode_Debug/vc90/RibbonMDISample.pch"
-				AssemblerListingLocation=".\Unicode_Debug/vc90/"
-				ObjectFile=".\Unicode_Debug/vc90/"
-				ProgramDataBaseFileName=".\Unicode_Debug/vc90/"
+				PrecompiledHeaderFile="$(OutDir)\obj\$(ProjectName)\$(ProjectName).pch"
+				AssemblerListingLocation=""
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)\vc80.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -180,12 +180,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="mfcs90ud.lib MSVCRTD.lib dbghelp.lib psapi.lib"
-				OutputFile="bin/vc90/RibbonMDISampleUD.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../../lib/vc90"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Unicode_Debug/vc90/RibbonMDISampleUD.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				SubSystem="2"
 				EntryPointSymbol="wWinMainCRTStartup"
 				TargetMachine="1"
@@ -939,10 +939,6 @@
 			</File>
 			<File
 				RelativePath="CntrItem.h"
-				>
-			</File>
-			<File
-				RelativePath=".\command_param.h"
 				>
 			</File>
 			<File
