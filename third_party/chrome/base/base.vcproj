@@ -1138,6 +1138,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\float_util.h"
+			>
+		</File>
+		<File
 			RelativePath="format_macros.h"
 			>
 		</File>
@@ -1423,6 +1427,14 @@
 		</File>
 		<File
 			RelativePath="utf_string_conversions.h"
+			>
+		</File>
+		<File
+			RelativePath=".\values.cc"
+			>
+		</File>
+		<File
+			RelativePath=".\values.h"
 			>
 		</File>
 		<File
