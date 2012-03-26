@@ -8,7 +8,8 @@
 
 #include "base/basictypes.h"
 #include "base/hash_tables.h"
-#include "command_param.h"
+#include "base/memory/scoped_ptr.h"
+#include "base/values.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -20,16 +21,12 @@
 //
 class CommandUpdater {
  public:
-   // Returns a CommandParam object that represents a lack of Param
-   // associated with a Command.  (This is effectively a null pointer.)
-  static Param<void> NoParam() { return Param<void>(NULL); }
-
   // A Delegate object implements this interface so that it can execute commands
   // when needed.
   class CommandUpdaterDelegate {
    public:
     // Perform the action associated with the command with the specified ID.
-    virtual void ExecuteCommand(int id, CommandParam& param) = 0;
+    virtual void ExecuteCommand(int id, const base::Value& param) = 0;
 
    protected:
     virtual ~CommandUpdaterDelegate();
@@ -47,10 +44,13 @@ class CommandUpdater {
   // supported by this updater.
   bool IsCommandEnabled(int id) const;
 
+  // Return the param of the specified command ID. always return a Value
+  base::Value* GetCommandParam(int id) const;
+
   // Performs the action associated with this command ID.
   // TODO(beng): get rid of this since it's effectively just a pass-thru and the
   // call sites would be better off using more well defined delegate interfaces.
-  void ExecuteCommand(int id, CommandParam& param);
+  void ExecuteCommand(int id, const base::Value& param);
 
   // An Observer interface implemented by objects that want to be informed when
   // the state of a particular command ID is modified.
@@ -58,8 +58,10 @@ class CommandUpdater {
    public:
     // Notifies the observer that the enabled state has changed for the
     // specified command id.
-    virtual void StateChangedForCommand(
-      int id, bool enabled, CommandParam& param) = 0;
+    virtual void EnabledStateChangedForCommand(int id, bool enabled) = 0;
+
+    // Notifies the observer that the command param changed.
+    virtual void ParamChangedForCommand(int id, const base::Value& param) = 0;
 
    protected:
     virtual ~CommandObserver();
@@ -79,7 +81,11 @@ class CommandUpdater {
   // enabled or disabled. If the command does not exist, it is created and
   // initialized to |state|. This function is very lightweight if the command
   // state has not changed.
-  void UpdateCommandEnabled(int id, bool state, CommandParam& param);
+  void UpdateCommandEnabled(int id, bool state);
+
+  // Notify all observers of a particular command that the command param has
+  // been change.
+  void UpdateCommandParam(int id, const base::Value& param);
 
  private:
   // A piece of data about a command - whether or not it is enabled, and a list
@@ -96,6 +102,9 @@ class CommandUpdater {
   // This is a map of command IDs to states and observer lists
   typedef base::hash_map<int, Command*> CommandMap;
   CommandMap commands_;
+
+  // for return to the caller of GetCommandParam
+  scoped_ptr<base::Value> null_value_;
 
   CommandUpdater();
   DISALLOW_COPY_AND_ASSIGN(CommandUpdater);

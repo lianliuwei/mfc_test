@@ -22,7 +22,7 @@ public:
 	CMainFrame();
 
 public:
-  virtual void ExecuteCommand(int id, CommandParam& param);
+  virtual void ExecuteCommand(int id, const base::Value& param) OVERRIDE;
 
 private:
   void InitCommandState();

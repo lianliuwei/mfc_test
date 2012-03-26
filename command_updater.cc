@@ -16,13 +16,18 @@ CommandUpdater::CommandUpdaterDelegate::~CommandUpdaterDelegate() {
 class CommandUpdater::Command {
  public:
   bool enabled;
+  scoped_ptr<base::Value> value;
+
   ObserverList<CommandObserver> observers;
 
-  Command() : enabled(true) {}
+  Command() : enabled(true) {
+    value.reset(base::Value::CreateNullValue());
+  }
 };
 
 CommandUpdater::CommandUpdater(CommandUpdaterDelegate* handler)
     : delegate_(handler) {
+      null_value_.reset(base::Value::CreateNullValue());
 }
 
 CommandUpdater::~CommandUpdater() {
@@ -36,11 +41,19 @@ bool CommandUpdater::IsCommandEnabled(int id) const {
   return command->second->enabled;
 }
 
+
+base::Value* CommandUpdater::GetCommandParam( int id ) const {
+  const CommandMap::const_iterator command(commands_.find(id));
+  if (command == commands_.end())
+    return null_value_.get();
+  return (command->second->value).get();
+}
+
 bool CommandUpdater::SupportsCommand(int id) const {
   return commands_.find(id) != commands_.end();
 }
 
-void CommandUpdater::ExecuteCommand(int id, CommandParam& param) {
+void CommandUpdater::ExecuteCommand(int id, const base::Value& param) {
   if (IsCommandEnabled(id))
     delegate_->ExecuteCommand(id, param);
 }
@@ -48,15 +61,23 @@ void CommandUpdater::ExecuteCommand(int id, CommandParam& param) {
 CommandUpdater::CommandObserver::~CommandObserver() {
 }
 
-void CommandUpdater::UpdateCommandEnabled(
-  int id, bool enabled, CommandParam& param) {
+void CommandUpdater::UpdateCommandEnabled(int id, bool enabled) {
   Command* command = GetCommand(id, true);
-// notify with param so need to notify ervey time.
-//   if (command->enabled == enabled)
-//     return;  // Nothing to do.
+  if (command->enabled == enabled)
+    return;  // Nothing to do.
   command->enabled = enabled;
   FOR_EACH_OBSERVER(CommandObserver, command->observers,
-                    StateChangedForCommand(id, enabled, param));
+                    EnabledStateChangedForCommand(id, enabled));
+}
+
+void CommandUpdater::UpdateCommandParam( int id, const base::Value& param ) {
+    Command* command = GetCommand(id, true);
+    if (base::Value::Equals(&param, (command->value).get()))
+      return;  // Nothing to do.
+
+    command->value.reset(param.DeepCopy());
+    FOR_EACH_OBSERVER(CommandObserver, command->observers,
+      ParamChangedForCommand(id, param));
 }
 
 CommandUpdater::Command* CommandUpdater::GetCommand(int id, bool create) {

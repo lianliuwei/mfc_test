@@ -31,11 +31,10 @@ public:
   // create the controls
   bool Init();
 
-private:
-  
+private:  
   // CommandUpdater::CommandObserver
-  virtual void StateChangedForCommand(
-    int id, bool enabled, CommandParam& param) OVERRIDE;
+  virtual void EnabledStateChangedForCommand(int id, bool enabled) OVERRIDE;
+  virtual void ParamChangedForCommand(int id, const base::Value& param) OVERRIDE;
 
 private:
   // for execute the command 

@@ -373,15 +373,17 @@ void CMainFrame::OnClose()
 	CXTPMDIFrameWnd::OnClose();
 }
 
-void CMainFrame::ExecuteCommand( int id, CommandParam& param )
+void CMainFrame::ExecuteCommand(int id, const base::Value& param)
 {
    switch (id) {
    case IDC_OSC_ON_OFF:
-     bool on_off = *(static_cast<Param<bool>>(param).ptr());
+     bool on_off;
+     CHECK(param.GetAsBoolean(&on_off));
      LOG_ASSERT(osc_on_off_ != on_off);
      osc_on_off_ = on_off;
-     command_updater_->UpdateCommandEnabled(IDC_OSC_ON_OFF, true, 
-       Param<bool>(&osc_on_off_));
+     scoped_ptr<base::Value> value(
+       base::Value::CreateBooleanValue(osc_on_off_));
+     command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
    	break;
    }
 }
@@ -389,7 +391,10 @@ void CMainFrame::ExecuteCommand( int id, CommandParam& param )
 void CMainFrame::InitCommandState()
 {
   command_updater_->UpdateCommandEnabled(
-    IDC_OSC_ON_OFF, true, Param<bool>(&osc_on_off_));
+    IDC_OSC_ON_OFF, true);
   command_updater_->UpdateCommandEnabled(
-    IDC_AUTOSCALE, true, CommandUpdater::NoParam());
+    IDC_AUTOSCALE, true);
+  scoped_ptr<base::Value> value(
+    base::Value::CreateBooleanValue(osc_on_off_));
+  command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
 }

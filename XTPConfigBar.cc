@@ -15,7 +15,8 @@ class OnOffButton : public CXTPToggleButton
 public:
   OnOffButton(int set_icon_id, int unset_icon_id, 
     bool on_off, CommandUpdater* command_updater);
-  
+  virtual ~OnOffButton() {}
+
   // using the CommandUpdater to Execute command.
   virtual void OnChangeState(State new_sate) OVERRIDE;
   
@@ -34,7 +35,9 @@ OnOffButton::OnOffButton(int on_icon_id, int off_icon_id,
 void OnOffButton::OnChangeState(State new_sate) {
   // the old state is the command to execute.
   bool on_off = !(new_sate == STATE_SET);
-  command_updater_->ExecuteCommand(IDC_OSC_ON_OFF, Param<bool>(&on_off));
+  scoped_ptr<base::Value> value(
+    base::Value::CreateBooleanValue(on_off));
+  command_updater_->ExecuteCommand(IDC_OSC_ON_OFF, *(value.get()));
 }
 
 void OnOffButton::UpdateState( bool on_off ) {
@@ -75,29 +78,41 @@ bool XTPConfigBar::Init() {
   return true;
 }
 
-void XTPConfigBar::StateChangedForCommand(int id, bool enabled,
-                                          CommandParam& param) {
+void XTPConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
   CXTPControl* control = NULL;
   switch (id) {
-    case IDC_OSC_ON_OFF: {
-      Param<bool> on_off = static_cast<Param<bool>>(param);
+    case IDC_OSC_ON_OFF: 
       control = start_or_stop_;
-      if (start_or_stop_ != NULL) {
-        // when on state need to show the stop UI
-        start_or_stop_->UpdateState(*(on_off.ptr()));
-      }
-    }
-    break;
 
-  case IDC_AUTOSCALE:
-    control = auto_scale_;
-    break;
+    case IDC_AUTOSCALE:
+      control = auto_scale_;
+      break;
 
     default:
-    NOTREACHED();
+      NOTREACHED();
   }
   // set enable of the control
   if (control != NULL) {
     control->SetEnabled(enabled);
+  }
+}
+
+void XTPConfigBar::ParamChangedForCommand(int id, const base::Value& param) {
+  switch (id) {
+    case IDC_OSC_ON_OFF: {
+      bool on_off;
+      CHECK(param.GetAsBoolean(&on_off));
+      if (start_or_stop_ != NULL) {
+        // when on state need to show the stop UI
+        start_or_stop_->UpdateState(on_off);
+      }
+     }
+      break;
+
+    case IDC_AUTOSCALE:
+      break;
+
+    default:
+      NOTREACHED();
   }
 }
