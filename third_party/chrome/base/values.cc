@@ -11,6 +11,8 @@
 #include "base/string_util.h"
 #include "base/utf_string_conversions.h"
 
+using namespace base;
+
 namespace {
 
 // Make a deep copy of |node|, but don't include empty lists or dictionaries
