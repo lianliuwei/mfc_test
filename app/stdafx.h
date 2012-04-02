@@ -18,8 +18,9 @@
 #define WINVER 0x0400       // Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
 #endif
 
-#ifndef _WIN32_WINNT        // Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0400     // Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+// Allow use of features specific to Windows NT 5 or later.
+#ifndef _WIN32_WINNT        
+#define _WIN32_WINNT 0x0500
 #endif
 
 #ifndef _WIN32_WINDOWS      // Allow use of features specific to Windows 98 or later.

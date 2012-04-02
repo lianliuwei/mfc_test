@@ -1,12 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by codejock_dlg.RC
-//
-#define IDR_MAINFRAME                   128
-#define IDM_ABOUTBOX                    0x0010
-#define IDD_ABOUTBOX                    100
-#define IDS_ABOUTBOX                    101
-#define IDD_CODEJOCK_DLG_DIALOG				102
+#define IDD_ABOUTBOX                100
+#define IDP_OLE_INIT_FAILED         100
+#define IDR_MAINFRAME               128
+#define IDB_BITMAP_ICONS            130
+#define IDR_PANE_OPTIONS            4000
+#define IDR_PANE_PROPERTIES         4001
 
 // Next default values for new objects
 //
