@@ -14,11 +14,15 @@ public:
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
 private:
+    int CreateCommandBars();
+    int CreatePanes();
+
+    void LoadLayout();
+    void SaveLayout();
+
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSetFocus(CWnd *pOldWnd);
     afx_msg void OnClose();
-    afx_msg void OnCustomize();
-    afx_msg LRESULT OnDockingPaneNotify(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
 
 private:

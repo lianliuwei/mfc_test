@@ -6,20 +6,6 @@
 
 namespace {
 
-static UINT indicators[] =
-{
-    ID_SEPARATOR,           // status line indicator
-    ID_INDICATOR_CAPS,
-    ID_INDICATOR_NUM,
-    ID_INDICATOR_SCRL,
-};
-
-static UINT uHideCmds[] =
-{
-    ID_FILE_PRINT,
-    ID_FILE_PRINT_PREVIEW,
-};
-
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -28,10 +14,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
     ON_WM_CREATE()
     ON_WM_SETFOCUS()
     ON_WM_CLOSE()
-    ON_COMMAND(XTP_ID_CUSTOMIZE, OnCustomize)
-    ON_MESSAGE(XTPWM_DOCKINGPANE_NOTIFY, OnDockingPaneNotify)
 END_MESSAGE_MAP()
-
 
 MainFrame::MainFrame() {}
 
@@ -50,6 +33,37 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
+    if (CreateCommandBars()) {
+        TRACE0("Failed to create command bars\n");
+        return -1;
+    }
+
+    if (CreatePanes()) {
+        TRACE0("Failed to create panes\n");
+        return -1;
+    }
+
+    CXTPCommandBars* pCommandBars = GetCommandBars();
+    // Set Windows XP Theme
+    CXTPPaintManager::SetTheme(xtpThemeVisualStudio2010);
+    // Set Windows XP Theme
+    m_paneManager.SetTheme(xtpPaneThemeVisualStudio2010);
+    // Set "Always Show Full Menus" option to the FALSE
+    pCommandBars->GetCommandBarsOptions()->bAlwaysShowFullMenus = FALSE;
+
+    LoadLayout();
+
+    return 0;
+}
+
+int MainFrame::CreateCommandBars()
+{
+     UINT indicators[] = {
+        ID_SEPARATOR,           // status line indicator
+        ID_INDICATOR_CAPS,
+        ID_INDICATOR_NUM,
+        ID_INDICATOR_SCRL,
+    };
 
     if (!m_wndStatusBar.Create(this) ||
         !m_wndStatusBar.SetIndicators(indicators,
@@ -89,38 +103,54 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Set Windows XP Theme
-    CXTPPaintManager::SetTheme(xtpThemeNativeWinXP);
-
-    // Hide array of commands
-   // pCommandBars->HideCommands(uHideCmds, _countof(uHideCmds));
-
-    // Set "Always Show Full Menus" option to the FALSE
-    pCommandBars->GetCommandBarsOptions()->bAlwaysShowFullMenus = FALSE;
-
     pCommandBars->GetShortcutManager()->SetAccelerators(IDR_MAINFRAME);
 
-    // Load the previous state for toolbars and menus.
-    LoadCommandBars(_T("CommandBars"));
+    return 0;
+}
 
+int MainFrame::CreatePanes()
+{
     // Initialize the docking pane manager and set the
     // initial them for the docking panes.  Do this only after all
     // control bars objects have been created and docked.
     m_paneManager.InstallDockingPanes(this);
-    // Set Windows XP Theme
-    m_paneManager.SetTheme(xtpPaneThemeOffice2007Visio);
 
     // Create docking panes.
     CXTPDockingPane* pwndPane2 = m_paneManager.CreatePane(
         IDR_PANE_PROPERTIES, CRect(0, 0,200, 120), xtpPaneDockBottom);
 
+    if (m_wndOptions.GetSafeHwnd() == 0)
+    {
+        m_wndOptions.Create(_T("\n\nOptions"),
+            WS_CHILD|WS_CLIPCHILDREN|
+            WS_CLIPSIBLINGS|SS_CENTER,
+            CRect(0, 0, 0, 0), this, 0);
+    }
+    pwndPane2->Attach(&m_wndOptions);
+
     CXTPDockingPane* pwndPane1 = m_paneManager.CreatePane(
         IDR_PANE_OPTIONS, CRect(0, 0,200, 120), xtpPaneDockRight);
+
+    if (m_wndProperties.GetSafeHwnd() == 0)
+    {
+        m_wndProperties.Create(WS_CHILD|
+            ES_AUTOVSCROLL|ES_MULTILINE,
+            CRect(0, 0, 0, 0), this, 0);
+    }
+    pwndPane1->Attach(&m_wndProperties);
 
     // Set the icons for the docking pane tabs.
     int nIDIcons[] = {IDR_PANE_OPTIONS, IDR_PANE_PROPERTIES};
     m_paneManager.SetIcons(IDB_BITMAP_ICONS, nIDIcons,
         _countof(nIDIcons), RGB(0, 255, 0));
+
+    return 0;
+}
+
+void MainFrame::LoadLayout()
+{
+    // Load the previous state for toolbars and menus.
+    LoadCommandBars(_T("CommandBars"));
 
     // Load the previous state for docking panes.
     CXTPDockingPaneLayout layoutNormal(&m_paneManager);
@@ -128,16 +158,23 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     {
         m_paneManager.SetLayout(&layoutNormal);
     }
+}
 
-    return 0;
+void MainFrame::SaveLayout()
+{
+    // Save the current state for toolbars and menus.
+    SaveCommandBars(_T("CommandBars"));
+
+    // Save the current state for docking panes.
+    CXTPDockingPaneLayout layoutNormal(&m_paneManager);
+    m_paneManager.GetLayout(&layoutNormal);
+    layoutNormal.Save(_T("NormalLayout"));
 }
 
 BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     if( !CFrameWnd::PreCreateWindow(cs) )
         return FALSE;
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
 
     cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
         | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_MAXIMIZE | WS_SYSMENU;
@@ -167,88 +204,7 @@ BOOL MainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* 
 
 void MainFrame::OnClose()
 {
-
-    // Save the current state for toolbars and menus.
-    SaveCommandBars(_T("CommandBars"));
-
-    // Save the current state for docking panes.
-    CXTPDockingPaneLayout layoutNormal(&m_paneManager);
-    m_paneManager.GetLayout(&layoutNormal);
-    layoutNormal.Save(_T("NormalLayout"));
+    SaveLayout();
 
     CFrameWnd::OnClose();
-}
-
-
-void MainFrame::OnCustomize()
-{
-    // Get a pointer to the command bars object.
-    CXTPCommandBars* pCommandBars = GetCommandBars();
-    if(pCommandBars != NULL)
-    {
-        // Instanciate the customize dialog object.
-        CXTPCustomizeSheet dlg(pCommandBars);
-
-        // Add the keyboard page to the customize dialog.
-        CXTPCustomizeKeyboardPage pageKeyboard(&dlg);
-        dlg.AddPage(&pageKeyboard);
-        pageKeyboard.AddCategories(IDR_MAINFRAME);
-
-        // Add the options page to the customize dialog.
-        CXTPCustomizeOptionsPage pageOptions(&dlg);
-        dlg.AddPage(&pageOptions);
-
-        // Add the commands page to the customize dialog.
-        CXTPCustomizeCommandsPage* pCommands = dlg.GetCommandsPage();
-        pCommands->AddCategories(IDR_MAINFRAME);
-
-        // Use the command bar manager to initialize the
-        // customize dialog.
-        pCommands->InsertAllCommandsCategory();
-        pCommands->InsertBuiltInMenus(IDR_MAINFRAME);
-        pCommands->InsertNewMenuCategory();
-
-        // Dispaly the dialog.
-        dlg.DoModal();
-    }
-}
-
-LRESULT MainFrame::OnDockingPaneNotify(WPARAM wParam, LPARAM lParam)
-{
-    if (wParam == XTP_DPN_SHOWWINDOW)
-    {
-        CXTPDockingPane* pPane = (CXTPDockingPane*)lParam;
-
-        if (!pPane->IsValid())
-        {
-            switch (pPane->GetID())
-            {
-            case IDR_PANE_PROPERTIES:
-                {
-                    if (m_wndProperties.GetSafeHwnd() == 0)
-                    {
-                        m_wndProperties.Create(WS_CHILD|
-                            ES_AUTOVSCROLL|ES_MULTILINE,
-                            CRect(0, 0, 0, 0), this, 0);
-                    }
-                    pPane->Attach(&m_wndProperties);
-                    break;
-                }
-            case IDR_PANE_OPTIONS:
-                {
-                    if (m_wndOptions.GetSafeHwnd() == 0)
-                    {
-                        m_wndOptions.Create(_T("\n\nOptions"),
-                            WS_CHILD|WS_CLIPCHILDREN|
-                            WS_CLIPSIBLINGS|SS_CENTER,
-                            CRect(0, 0, 0, 0), this, 0);
-                    }
-                    pPane->Attach(&m_wndOptions);
-                    break;
-                }
-            }
-        }
-        return TRUE;
-    }
-    return FALSE;
 }
