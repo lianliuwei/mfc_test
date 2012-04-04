@@ -16,7 +16,10 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
     ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
-MainFrame::MainFrame() {}
+MainFrame::MainFrame()
+    : downloadlist_(NULL) {
+}
+
 
 MainFrame::~MainFrame() {}
 
@@ -26,10 +29,11 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
 
+    downloadlist_ = new DownloadList();
     // create a view to occupy the client area of the frame
-    if (!m_wndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+    if (!downloadlist_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
         CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL)) {
-        TRACE0("Failed to create view window\n");
+        TRACE0("Failed to create download list\n");
         return -1;
     }
 
@@ -189,13 +193,13 @@ BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs)
 void MainFrame::OnSetFocus(CWnd* /*pOldWnd*/)
 {
     // forward focus to the view window
-    m_wndView.SetFocus();
+    downloadlist_->SetFocus();
 }
 
 BOOL MainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
     // let the view have first crack at the command
-    if (m_wndView.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+    if (downloadlist_->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
         return TRUE;
 
     // otherwise, do default handling

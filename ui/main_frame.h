@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui/main_view.h"
+#include "ui/download_list.h"
 
 class MainFrame : public CXTPFrameWnd
 {
@@ -27,7 +27,7 @@ private:
 
 private:
     CXTPStatusBar  m_wndStatusBar;
-    MainView    m_wndView;
+    DownloadList* downloadlist_;
     CXTPDockingPaneManager m_paneManager;
     CXTPOfficeBorder<CStatic> m_wndOptions;
     CXTPOfficeBorder<CEdit> m_wndProperties;
