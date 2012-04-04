@@ -123,13 +123,9 @@
     </ClCompile>
     <ClCompile Include="..\ui\about_dialog.cc" />
     <ClCompile Include="..\ui\download_list.cc" />
-    <ClCompile Include="..\ui\each_download_info_view.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\ui\each_download_info_view.cc" />
     <ClCompile Include="..\ui\main_frame.cc" />
-    <ClCompile Include="..\ui\total_download_info_view .cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\ui\total_download_info_view .cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\app\app.h" />
@@ -137,13 +133,9 @@
     <ClInclude Include="..\resources\resource.h" />
     <ClInclude Include="..\ui\about_dialog.h" />
     <ClInclude Include="..\ui\download_list.h" />
-    <ClInclude Include="..\ui\each_download_info_view.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\ui\each_download_info_view.h" />
     <ClInclude Include="..\ui\main_frame.h" />
-    <ClInclude Include="..\ui\total_download_info_view.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\ui\total_download_info_view.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\resources\app.ico" />

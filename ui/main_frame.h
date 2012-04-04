@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ui/download_list.h"
+#include "ui/each_download_info_view.h"
+#include "ui/total_download_info_view.h"
 
 class MainFrame : public CXTPFrameWnd
 {
@@ -11,7 +13,8 @@ public:
 
 public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+    virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, 
+        AFX_CMDHANDLERINFO* pHandlerInfo);
 
 private:
     int CreateCommandBars();
@@ -27,10 +30,17 @@ private:
 
 private:
     CXTPStatusBar  m_wndStatusBar;
-    DownloadList* downloadlist_;
-    CXTPDockingPaneManager m_paneManager;
-    CXTPOfficeBorder<CStatic> m_wndOptions;
-    CXTPOfficeBorder<CEdit> m_wndProperties;
 
+    // this is a view, view destory it self.
+    DownloadList* downloadlist_;
+
+    // the download info of each item.
+    EachDownloadInfoView each_download_info_;
+
+    // total info 
+    TotalDownloadInfoView total_download_info_;
+
+    CXTPDockingPaneManager m_paneManager;
+    
     DECLARE_DYNAMIC(MainFrame)
 };

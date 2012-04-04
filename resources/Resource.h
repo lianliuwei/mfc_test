@@ -2,8 +2,10 @@
 #define IDP_OLE_INIT_FAILED         100
 #define IDR_MAINFRAME               128
 #define IDB_BITMAP_ICONS            130
-#define IDR_PANE_OPTIONS            4000
-#define IDR_PANE_PROPERTIES         4001
+#define ID_TASKGROUP_TIMEINFO       4000
+#define ID_TASKGROUP_TOTAL_DOWNLOAD 4003
+#define IDR_PANE_EACH_DOWNLOAD_INFO            4002
+#define IDR_PANE_TOTAL_DOWNLOAD_INFO         4001
 
 // Next default values for new objects
 //

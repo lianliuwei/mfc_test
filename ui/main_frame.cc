@@ -55,7 +55,6 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     // Set "Always Show Full Menus" option to the FALSE
     pCommandBars->GetCommandBarsOptions()->bAlwaysShowFullMenus = FALSE;
 
-    LoadLayout();
 
     return 0;
 }
@@ -120,31 +119,26 @@ int MainFrame::CreatePanes()
     m_paneManager.InstallDockingPanes(this);
 
     // Create docking panes.
-    CXTPDockingPane* pwndPane2 = m_paneManager.CreatePane(
-        IDR_PANE_PROPERTIES, CRect(0, 0,200, 120), xtpPaneDockBottom);
-
-    if (m_wndOptions.GetSafeHwnd() == 0)
-    {
-        m_wndOptions.Create(_T("\n\nOptions"),
-            WS_CHILD|WS_CLIPCHILDREN|
-            WS_CLIPSIBLINGS|SS_CENTER,
+    CXTPDockingPane* pPane = m_paneManager.CreatePane(
+        IDR_PANE_TOTAL_DOWNLOAD_INFO, CRect(0, 0,200, 120), xtpPaneDockBottom);
+    if (total_download_info_.GetSafeHwnd() == 0) {
+        total_download_info_.Create(
+            WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_TABSTOP,
             CRect(0, 0, 0, 0), this, 0);
     }
-    pwndPane2->Attach(&m_wndOptions);
+    pPane->Attach(&total_download_info_);
 
-    CXTPDockingPane* pwndPane1 = m_paneManager.CreatePane(
-        IDR_PANE_OPTIONS, CRect(0, 0,200, 120), xtpPaneDockRight);
-
-    if (m_wndProperties.GetSafeHwnd() == 0)
-    {
-        m_wndProperties.Create(WS_CHILD|
-            ES_AUTOVSCROLL|ES_MULTILINE,
+    pPane = m_paneManager.CreatePane(
+        IDR_PANE_EACH_DOWNLOAD_INFO, CRect(0, 0,200, 120), xtpPaneDockRight);
+    if (each_download_info_.GetSafeHwnd() == 0) {
+        each_download_info_.Create(
+            WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_TABSTOP,
             CRect(0, 0, 0, 0), this, 0);
     }
-    pwndPane1->Attach(&m_wndProperties);
+    pPane->Attach(&each_download_info_);
 
     // Set the icons for the docking pane tabs.
-    int nIDIcons[] = {IDR_PANE_OPTIONS, IDR_PANE_PROPERTIES};
+    int nIDIcons[] = {IDR_PANE_TOTAL_DOWNLOAD_INFO, IDR_PANE_EACH_DOWNLOAD_INFO};
     m_paneManager.SetIcons(IDB_BITMAP_ICONS, nIDIcons,
         _countof(nIDIcons), RGB(0, 255, 0));
 
@@ -208,7 +202,5 @@ BOOL MainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* 
 
 void MainFrame::OnClose()
 {
-    SaveLayout();
-
     CFrameWnd::OnClose();
 }
