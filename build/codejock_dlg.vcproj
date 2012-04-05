@@ -245,7 +245,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\resources\paneicons.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\resources\resource.h"
+					>
+				</File>
+				<File
+					RelativePath="..\resources\Toolbar.bmp"
 					>
 				</File>
 			</Filter>
@@ -261,11 +269,35 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ui\frame_dialog.cc"
+					RelativePath="..\ui\download_list.cc"
 					>
 				</File>
 				<File
-					RelativePath="..\ui\frame_dialog.h"
+					RelativePath="..\ui\download_list.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\each_download_info_view.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\each_download_info_view.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\main_frame.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\main_frame.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\total_download_info_view .cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\total_download_info_view.h"
 					>
 				</File>
 			</Filter>
