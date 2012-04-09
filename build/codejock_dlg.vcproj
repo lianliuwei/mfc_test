@@ -302,7 +302,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ui\total_download_info_view .cc"
+					RelativePath="..\ui\total_download_info_view.cc"
 					>
 				</File>
 				<File

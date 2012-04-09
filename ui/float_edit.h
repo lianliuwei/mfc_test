@@ -42,16 +42,19 @@ public:
    static UINT UWM_VALID_CHANGE;
 
 protected:
+  COLORREF color();
+  void SetColor(COLORREF color);
+  HBRUSH GetBrush();
+  void Check();
+
   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
   afx_msg HBRUSH CtlColor(CDC * dc, UINT id);
   afx_msg BOOL OnChange();
   DECLARE_MESSAGE_MAP()
 
-  CBrush errorBrush;
-  CBrush partialBrush;
-  CBrush emptyBrush;
-  CBrush OKBrush; 
-  CBrush * Check();
+  bool set_color_;
+  COLORREF color_;
+  CBrush brush_;
   BOOL SyntaxValid;
   BOOL ValueValid;
 
