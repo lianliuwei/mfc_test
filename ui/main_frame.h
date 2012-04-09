@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui/download_list.h"
+#include "ui/float_edit.h"
 #include "ui/each_download_info_view.h"
 #include "ui/total_download_info_view.h"
 
@@ -31,8 +31,7 @@ private:
 private:
     CXTPStatusBar  m_wndStatusBar;
 
-    // this is a view, view destory it self.
-    DownloadList* downloadlist_;
+    CFloatEdit floating_edit_;
 
     // the download info of each item.
     EachDownloadInfoView each_download_info_;

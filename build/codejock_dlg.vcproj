@@ -69,6 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				ShowProgress="0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Program Files (x86)\Xtreme ToolkitPro v15.2.1.0221\Lib\vc90"
 				GenerateDebugInformation="true"
@@ -282,6 +283,14 @@
 				</File>
 				<File
 					RelativePath="..\ui\each_download_info_view.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\float_edit.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\float_edit.h"
 					>
 				</File>
 				<File
