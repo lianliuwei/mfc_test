@@ -34,6 +34,11 @@
 #define ID_STOP_OSC                     180
 #define ID_START_STOP_OSC               181
 #define ID_AUTOSCALE                    182
+#define ID_GROUP_CAN_HIGH               305
+#define ID_LABEL_CAN_HIGH_VERTICAL_DIV   301
+#define ID_COMBOX_CAN_HIGH_VERTICAL_DIV  302
+#define ID_LABEL_CAN_HIGH_VERICAL_OFFSET 303
+#define ID_EDIT_CAN_HIGH_VERICAL_OFFSET  304
 #define ID_DUMP_1                       183
 #define IDB_GEAR                        300
 #define ID_CANCEL_EDIT_CNTR             32768

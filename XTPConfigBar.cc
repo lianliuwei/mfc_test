@@ -10,6 +10,8 @@
 
 namespace {
 
+static const int kControlWidth = 80;
+
 class OnOffButton : public CXTPToggleButton
 {
 public:
@@ -48,11 +50,20 @@ void SetControlToManualUpdate(CXTPControl* control) {
   control->SetFlags(control->GetFlags()|xtpFlagManualUpdate);
 }
 
+void SetControlShowStyle(CXTPControl* control) {
+  control->SetWidth(kControlWidth);
+  // show the describe text and the control 
+  control->SetStyle(xtpButtonIconAndCaption);
 }
 
-XTPConfigBar::XTPConfigBar(CXTPRibbonBar* ribbon_bar, 
+static const SIZE gOffsetSize = {80, 22};
+}
+
+XTPConfigBar::XTPConfigBar(CXTPRibbonBar* ribbon_bar,
+                           CWnd* main_frame,
                            CommandUpdater* command_updater)
   : ribbon_bar_(ribbon_bar)
+  , main_frame_(main_frame)
   , command_updater_(command_updater)
   , osc_state_(SOFTWARE_DIFF)
   , start_or_stop_(NULL)
@@ -71,9 +82,17 @@ bool XTPConfigBar::Init() {
   start_or_stop_ = new OnOffButton(ID_START_OSC, ID_STOP_OSC, 
     true, command_updater_);
   pGroupOscControl->Add(start_or_stop_, ID_START_STOP_OSC);
-  auto_scale_ = static_cast<CXTPControlButton*>(
+  auto_scale_ = DYNAMIC_DOWNCAST(CXTPControlButton,
     pGroupOscControl->Add(xtpControlButton, ID_AUTOSCALE));
   SetControlToManualUpdate(auto_scale_);
+  // CAN-H Group
+  CXTPRibbonGroup* pGroupCANH = pTabOsc->AddGroup(ID_GROUP_CAN_HIGH);
+  can_h_vertical_div_ = DYNAMIC_DOWNCAST(CXTPControlComboBox,
+    pGroupCANH->Add(xtpControlComboBox, ID_COMBOX_CAN_HIGH_VERTICAL_DIV));
+  SetControlShowStyle(can_h_vertical_div_);
+  can_h_vertical_offset_ = DYNAMIC_DOWNCAST(CXTPControlEdit,
+    pGroupCANH->Add(xtpControlEdit, ID_EDIT_CAN_HIGH_VERICAL_OFFSET));
+  SetControlShowStyle(can_h_vertical_offset_);
 
   return true;
 }
@@ -106,8 +125,8 @@ void XTPConfigBar::ParamChangedForCommand(int id, const base::Value& param) {
         // when on state need to show the stop UI
         start_or_stop_->UpdateState(on_off);
       }
-     }
       break;
+     }
 
     case IDC_AUTOSCALE:
       break;

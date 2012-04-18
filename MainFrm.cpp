@@ -178,7 +178,7 @@ BOOL CMainFrame::CreateRibbonBar()
   pControlFile->SetIconId(IDB_GEAR);
 
   // Osc Tab
-  config_bar_.reset(new XTPConfigBar(pRibbonBar, command_updater_.get()));
+  config_bar_.reset(new XTPConfigBar(pRibbonBar, this, command_updater_.get()));
   LOG_ASSERT(config_bar_->Init());
   command_updater_->AddCommandObserver(IDC_OSC_ON_OFF, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_AUTOSCALE, config_bar_.get());

@@ -25,7 +25,8 @@ public:
   };
 
   // create the control ui.
-  XTPConfigBar(CXTPRibbonBar* ribbon_bar, CommandUpdater* command_updater);
+  XTPConfigBar(CXTPRibbonBar* ribbon_bar, CWnd* main_frame,
+    CommandUpdater* command_updater);
   ~XTPConfigBar() {};
 
   // create the controls
@@ -40,6 +41,10 @@ private:
   // for execute the command 
   CommandUpdater* command_updater_;
 
+  // for create edit, the AfxGetMainWnd() is no available when LoadFrame and
+  // main_frame_ OnCreate.
+  CWnd* main_frame_;
+
   // need the ribbon to create the tab, group, and control.
   CXTPRibbonBar* ribbon_bar_;
 
@@ -52,6 +57,10 @@ private:
   
   CXTPControlButton* auto_scale_;
   
+  CXTPControlComboBox* can_h_vertical_div_;
+
+  CXTPControlEdit* can_h_vertical_offset_;
+
   // TODO need a self-verify textbox for input voltage and ampere.
   DISALLOW_COPY_AND_ASSIGN(XTPConfigBar);
 };
