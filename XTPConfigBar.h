@@ -5,9 +5,7 @@
 #include "command_updater.h"
 
 class CXTPRibbonBar;
-namespace {
 class OnOffButton;
-}
 
 // this class using for create the Osc Config Controls. change control set for 
 // different Osc state. controls the show or hide of professional controls (it

@@ -833,6 +833,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OnOffButton.cc"
+				>
+			</File>
+			<File
 				RelativePath="RibbonMDISample.cpp"
 				>
 			</File>
@@ -947,6 +951,10 @@
 			</File>
 			<File
 				RelativePath="MainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OnOffButton.h"
 				>
 			</File>
 			<File

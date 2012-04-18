@@ -27,13 +27,14 @@ public:
   // do custom action in this function.
   virtual void OnChangeState(State new_sate);
 
-private:
-  // change the CXTPControlButton OnClick function
-  virtual void OnClick(BOOL bKeyboard, CPoint pt);
-
+protected:
   // when using 
   virtual void Copy(CXTPControl* pControl, BOOL bRecursive);
 
+private:
+  // change the CXTPControlButton OnClick function
+  virtual void OnClick(BOOL bKeyboard, CPoint pt);
+  
   // get call when using XML to config
   virtual void DoPropExchange(CXTPPropExchange* pPX);
 

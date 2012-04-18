@@ -6,45 +6,11 @@
 #include "base/logging.h"
 
 #include "osc_command_ids.h"
-#include "XTPToggleButton.h"
+#include "OnOffButton.h"
 
 namespace {
 
 static const int kControlWidth = 80;
-
-class OnOffButton : public CXTPToggleButton
-{
-public:
-  OnOffButton(int set_icon_id, int unset_icon_id, 
-    bool on_off, CommandUpdater* command_updater);
-  virtual ~OnOffButton() {}
-
-  // using the CommandUpdater to Execute command.
-  virtual void OnChangeState(State new_sate) OVERRIDE;
-  
-  // 
-  void UpdateState(bool on_off);
-private:
-  CommandUpdater* command_updater_;
-};
-
-OnOffButton::OnOffButton(int on_icon_id, int off_icon_id, 
-  bool on_off, CommandUpdater* command_updater )
-  : CXTPToggleButton(on_icon_id, off_icon_id, 
-    on_off ? STATE_UNSET : STATE_UNSET)
-  , command_updater_(command_updater) {}
-
-void OnOffButton::OnChangeState(State new_sate) {
-  // the old state is the command to execute.
-  bool on_off = !(new_sate == STATE_SET);
-  scoped_ptr<base::Value> value(
-    base::Value::CreateBooleanValue(on_off));
-  command_updater_->ExecuteCommand(IDC_OSC_ON_OFF, *(value.get()));
-}
-
-void OnOffButton::UpdateState( bool on_off ) {
-  ChangeState(on_off ? STATE_UNSET : STATE_SET, false);
-}
 
 void SetControlToManualUpdate(CXTPControl* control) {
   control->SetFlags(control->GetFlags()|xtpFlagManualUpdate);
