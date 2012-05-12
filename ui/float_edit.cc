@@ -29,9 +29,7 @@ CFloatEdit::~CFloatEdit() {
 }
 
 BEGIN_MESSAGE_MAP(CFloatEdit, CEdit)
-  //{{AFX_MSG_MAP(CFloatingEdit)
 	ON_WM_CHAR()
-  //}}AFX_MSG_MAP
 	ON_WM_CTLCOLOR_REFLECT()
 	ON_CONTROL_REFLECT_EX(EN_CHANGE, OnChange)
 END_MESSAGE_MAP()
@@ -286,7 +284,7 @@ BOOL CFloatEdit::OnChange() {
 void CFloatEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
   if( _tcschr( _T("\b+-.Ee123456790")
     _T("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"), nChar) == NULL ) {
-    MessageBeep(0);
+    MessageBeep(MB_ICONERROR);
     return;
   }
   CEdit::OnChar(nChar, nRepCnt, nFlags);

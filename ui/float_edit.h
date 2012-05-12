@@ -41,7 +41,9 @@ public:
    ****************************************************************************/
    static UINT UWM_VALID_CHANGE;
 
-protected:
+protected: 
+  
+private:
   COLORREF color();
   void SetColor(COLORREF color);
   HBRUSH GetBrush();
