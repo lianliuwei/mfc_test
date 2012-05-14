@@ -5,7 +5,8 @@
 #include "resources/Resource.h"
 
 namespace {
-
+static const XTPPaintTheme kTheme = xtpThemeVisualStudio2010;
+static const XTPDockingPanePaintTheme kPaneTheme = xtpPaneThemeVisualStudio2010;
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -29,13 +30,21 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    downloadlist_ = new DownloadList();
-    // create a view to occupy the client area of the frame
-    if (!downloadlist_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-        CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL)) {
+    if (!tab_ctrl_.Create(AFX_WS_DEFAULT_VIEW,
+      CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST)) {
         TRACE0("Failed to create download list\n");
         return -1;
     }
+
+    downloadlist_ = new DownloadList();
+    // create a view to occupy the client area of the frame
+    if (!downloadlist_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+        CRect(0, 0, 0, 0), &tab_ctrl_, AFX_IDW_PANE_FIRST, NULL)) {
+        TRACE0("Failed to create download list\n");
+        return -1;
+    }
+
+    tab_ctrl_.AddControl(_T("view test"), downloadlist_);
 
     if (CreateCommandBars()) {
         TRACE0("Failed to create command bars\n");
@@ -46,15 +55,13 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         TRACE0("Failed to create panes\n");
         return -1;
     }
-
+    // config UI
     CXTPCommandBars* pCommandBars = GetCommandBars();
-    // Set Windows XP Theme
-    CXTPPaintManager::SetTheme(xtpThemeVisualStudio2010);
-    // Set Windows XP Theme
-    m_paneManager.SetTheme(xtpPaneThemeVisualStudio2010);
+    // Set Theme
+    CXTPPaintManager::SetTheme(kTheme);
+    m_paneManager.SetTheme(kPaneTheme);
     // Set "Always Show Full Menus" option to the FALSE
     pCommandBars->GetCommandBarsOptions()->bAlwaysShowFullMenus = FALSE;
-
 
     return 0;
 }
@@ -183,21 +190,10 @@ BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs)
     return TRUE;
 }
 
-
 void MainFrame::OnSetFocus(CWnd* /*pOldWnd*/)
 {
     // forward focus to the view window
-    downloadlist_->SetFocus();
-}
-
-BOOL MainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
-{
-    // let the view have first crack at the command
-    if (downloadlist_->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-        return TRUE;
-
-    // otherwise, do default handling
-    return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+    tab_ctrl_.SetFocus();
 }
 
 void MainFrame::OnClose()

@@ -11,17 +11,14 @@ public:
     MainFrame();
     virtual ~MainFrame();
 
-public:
-    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, 
-        AFX_CMDHANDLERINFO* pHandlerInfo);
-
 private:
     int CreateCommandBars();
     int CreatePanes();
 
     void LoadLayout();
     void SaveLayout();
+
+    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSetFocus(CWnd *pOldWnd);
@@ -30,6 +27,9 @@ private:
 
 private:
     CXTPStatusBar  m_wndStatusBar;
+
+    // add each client in the Tab ctrl.
+    CXTPTabCtrl tab_ctrl_;
 
     // this is a view, view destory it self.
     DownloadList* downloadlist_;
