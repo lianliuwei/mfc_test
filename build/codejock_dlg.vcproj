@@ -237,6 +237,10 @@
 				Name="resources"
 				>
 				<File
+					RelativePath="..\resources\analog_disturbance_view.rc"
+					>
+				</File>
+				<File
 					RelativePath="..\resources\app.ico"
 					>
 				</File>
@@ -250,6 +254,10 @@
 				</File>
 				<File
 					RelativePath="..\resources\resource.h"
+					>
+				</File>
+				<File
+					RelativePath="..\resources\stress_resource.h"
 					>
 				</File>
 				<File
@@ -269,19 +277,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ui\download_list.cc"
+					RelativePath="..\ui\analog_disturbance.cc"
 					>
 				</File>
 				<File
-					RelativePath="..\ui\download_list.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\each_download_info_view.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\each_download_info_view.h"
+					RelativePath="..\ui\analog_disturbance.h"
 					>
 				</File>
 				<File
@@ -290,14 +290,6 @@
 				</File>
 				<File
 					RelativePath="..\ui\main_frame.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\total_download_info_view.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\total_download_info_view.h"
 					>
 				</File>
 			</Filter>

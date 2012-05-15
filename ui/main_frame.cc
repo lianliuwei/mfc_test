@@ -7,6 +7,8 @@
 namespace {
 static const XTPPaintTheme kTheme = xtpThemeVisualStudio2010;
 static const XTPDockingPanePaintTheme kPaneTheme = xtpPaneThemeVisualStudio2010;
+static const int frame_height = 500;
+static const int frame_width = 640;
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -18,7 +20,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 END_MESSAGE_MAP()
 
 MainFrame::MainFrame()
-    : downloadlist_(NULL) {
+    : analog_disturbance_view_(NULL) {
 }
 
 
@@ -32,19 +34,19 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     if (!tab_ctrl_.Create(AFX_WS_DEFAULT_VIEW,
       CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST)) {
-        TRACE0("Failed to create download list\n");
+        TRACE0("Failed to create main frame tab ctrl\n");
         return -1;
     }
 
-    downloadlist_ = new DownloadList();
+    analog_disturbance_view_ = new AnalogDisturbanceView();
     // create a view to occupy the client area of the frame
-    if (!downloadlist_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+    if (!analog_disturbance_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
         CRect(0, 0, 0, 0), &tab_ctrl_, AFX_IDW_PANE_FIRST, NULL)) {
-        TRACE0("Failed to create download list\n");
+        TRACE0("Failed to create analog disturbance view tab page\n");
         return -1;
     }
 
-    tab_ctrl_.AddControl(_T("view test"), downloadlist_);
+    tab_ctrl_.AddControl(_T("Analog disturbance"), analog_disturbance_view_);
 
     if (CreateCommandBars()) {
         TRACE0("Failed to create command bars\n");
@@ -125,30 +127,6 @@ int MainFrame::CreatePanes()
     // control bars objects have been created and docked.
     m_paneManager.InstallDockingPanes(this);
 
-    // Create docking panes.
-    CXTPDockingPane* pPane = m_paneManager.CreatePane(
-        IDR_PANE_TOTAL_DOWNLOAD_INFO, CRect(0, 0,200, 120), xtpPaneDockBottom);
-    if (total_download_info_.GetSafeHwnd() == 0) {
-        total_download_info_.Create(
-            WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_TABSTOP,
-            CRect(0, 0, 0, 0), this, 0);
-    }
-    pPane->Attach(&total_download_info_);
-
-    pPane = m_paneManager.CreatePane(
-        IDR_PANE_EACH_DOWNLOAD_INFO, CRect(0, 0,200, 120), xtpPaneDockRight);
-    if (each_download_info_.GetSafeHwnd() == 0) {
-        each_download_info_.Create(
-            WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_TABSTOP,
-            CRect(0, 0, 0, 0), this, 0);
-    }
-    pPane->Attach(&each_download_info_);
-
-    // Set the icons for the docking pane tabs.
-    int nIDIcons[] = {IDR_PANE_TOTAL_DOWNLOAD_INFO, IDR_PANE_EACH_DOWNLOAD_INFO};
-    m_paneManager.SetIcons(IDB_BITMAP_ICONS, nIDIcons,
-        _countof(nIDIcons), RGB(0, 255, 0));
-
     return 0;
 }
 
@@ -182,11 +160,13 @@ BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs)
         return FALSE;
 
     cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
-        | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_MAXIMIZE | WS_SYSMENU;
+         | WS_MINIMIZEBOX | WS_SYSMENU;
 
     cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
     cs.lpszClass = AfxRegisterWndClass(0);
     cs.style |= WS_CLIPCHILDREN|WS_CLIPSIBLINGS;
+    cs.cx = frame_width;
+    cs.cy = frame_height;
     return TRUE;
 }
 

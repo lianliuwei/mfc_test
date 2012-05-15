@@ -1,8 +1,6 @@
 #pragma once
 
-#include "ui/download_list.h"
-#include "ui/each_download_info_view.h"
-#include "ui/total_download_info_view.h"
+#include "ui/analog_disturbance.h"
 
 class MainFrame : public CXTPFrameWnd
 {
@@ -32,13 +30,7 @@ private:
     CXTPTabCtrl tab_ctrl_;
 
     // this is a view, view destory it self.
-    DownloadList* downloadlist_;
-
-    // the download info of each item.
-    EachDownloadInfoView each_download_info_;
-
-    // total info 
-    TotalDownloadInfoView total_download_info_;
+    AnalogDisturbanceView* analog_disturbance_view_;
 
     CXTPDockingPaneManager m_paneManager;
     
