@@ -15,8 +15,10 @@ BEGIN_MESSAGE_MAP(ValueGetSpinCtrl, CXTPSpinButtonCtrl)
 END_MESSAGE_MAP()
 
 void ValueGetSliderCtrl::HScroll(UINT nSBCode, UINT nPos) {
+  if (nSBCode == SB_ENDSCROLL)
+    return;
   int pos = GetPos();
-  value_get_->ValueChange(pos / scale_); // scale back.
+  value_get_->ValueChange(static_cast<double>(pos) / scale_); // scale back.
 }
 
 void ValueGetSliderCtrl::SetRangeAndStep(double min, double max, double step) {
@@ -30,8 +32,10 @@ void ValueGetSliderCtrl::SetRangeAndStep(double min, double max, double step) {
 }
 
 void ValueGetSpinCtrl::VScroll(UINT nSBCode, UINT nPos) {
+  if (nSBCode == SB_ENDSCROLL)
+    return;
   int pos = GetPos32();
-  value_get_->ValueChange(pos / scale_); // scale back.
+  value_get_->ValueChange(static_cast<double>(pos) / scale_); // scale back.
 }
 
 void ValueGetSpinCtrl::SetRangeAndStep(double min, double max, double step) {
@@ -40,7 +44,7 @@ void ValueGetSpinCtrl::SetRangeAndStep(double min, double max, double step) {
   int nMin = static_cast<int>(min * scale_); 
   int nMax = static_cast<int>(max * scale_); 
   UINT nStep = static_cast<UINT>(step * scale_); 
-  SetRange(nMin, nMax);
+  SetRange32(nMin, nMax);
   UDACCEL accel = { 1, nStep };
   SetAccel(1, &accel);
 }
