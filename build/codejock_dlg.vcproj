@@ -292,6 +292,14 @@
 					RelativePath="..\ui\main_frame.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ui\value_get_controls.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\value_get_controls.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
