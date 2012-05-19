@@ -99,7 +99,7 @@ int MainFrame::CreateCommandBars()
 
     // Add the menu bar
     CXTPCommandBar* pMenuBar = pCommandBars->SetMenu(
-        _T("Menu Bar"), IDR_MAINFRAME);
+        _T("Menu Bar"), IDR_MAINFRAME_STRESS);
     if(pMenuBar == NULL)
     {
         TRACE0("Failed to create menu bar.\n");
@@ -109,13 +109,13 @@ int MainFrame::CreateCommandBars()
     // Create ToolBar
     CXTPToolBar* pToolBar = (CXTPToolBar*)
         pCommandBars->Add(_T("Standard"), xtpBarTop);
-    if (!pToolBar || !pToolBar->LoadToolBar(IDR_MAINFRAME))
+    if (!pToolBar || !pToolBar->LoadToolBar(IDR_MAINFRAME_STRESS))
     {
         TRACE0("Failed to create toolbar\n");
         return -1;
     }
 
-    pCommandBars->GetShortcutManager()->SetAccelerators(IDR_MAINFRAME);
+    pCommandBars->GetShortcutManager()->SetAccelerators(IDR_MAINFRAME_STRESS);
 
     return 0;
 }

@@ -53,7 +53,7 @@ BOOL App::InitInstance()
         return FALSE;
     m_pMainWnd = pFrame;
     // create and load the frame with its resources
-    pFrame->LoadFrame(IDR_MAINFRAME);
+    pFrame->LoadFrame(IDR_MAINFRAME_STRESS);
 
     // The one and only window has been initialized, so show and update it
     pFrame->ShowWindow(SW_NORMAL);

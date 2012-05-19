@@ -60,14 +60,14 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE 9, 1
 #pragma code_page(1252)
-IDR_MAINFRAME           ICON         "resources\\app.ico"
+IDR_MAINFRAME_STRESS           ICON         "resources\\app.ico"
 #endif
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDR_MAINFRAME           BITMAP      "resources\\Toolbar.bmp"
+IDR_MAINFRAME_STRESS           BITMAP      "resources\\Toolbar.bmp"
 IDB_BITMAP_ICONS		BITMAP  MOVEABLE PURE   "resources\\PaneIcons.bmp"
 
 
@@ -76,7 +76,7 @@ IDB_BITMAP_ICONS		BITMAP  MOVEABLE PURE   "resources\\PaneIcons.bmp"
 // Toolbar
 //
 
-IDR_MAINFRAME TOOLBAR   32, 32
+IDR_MAINFRAME_STRESS TOOLBAR   32, 32
 BEGIN
     BUTTON      ID_EDIT_CUT
     BUTTON      ID_EDIT_COPY
@@ -96,7 +96,7 @@ LANGUAGE 9, 1
 // Menu
 //
 
-IDR_MAINFRAME MENU   
+IDR_MAINFRAME_STRESS MENU   
 BEGIN
 	POPUP "&File"
 	BEGIN
@@ -125,7 +125,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS   
+IDR_MAINFRAME_STRESS ACCELERATORS   
 BEGIN
 	"C",            ID_EDIT_COPY,           VIRTKEY,CONTROL,NOINVERT
 	"V",            ID_EDIT_PASTE,          VIRTKEY,CONTROL,NOINVERT
@@ -152,7 +152,7 @@ CAPTION "About App"
 STYLE DS_MODALFRAME | DS_SHELLFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU
 FONT 8, "MS Shell Dlg"
 BEGIN
-	ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+	ICON            IDR_MAINFRAME_STRESS,IDC_STATIC,11,17,20,20
 	LTEXT           "mfc_test Version 1.0",IDC_STATIC,40,10,119,8,
                     SS_NOPREFIX
 	LTEXT           "Copyright (C) 2012",IDC_STATIC,40,25,119,8
@@ -229,7 +229,7 @@ END
 STRINGTABLE   
 BEGIN
 // Non-mac-targeting apps remove the two extra substrings
-	IDR_MAINFRAME           "mfc_test"
+	IDR_MAINFRAME_STRESS           "mfc_test"
 END
 STRINGTABLE   
 BEGIN
