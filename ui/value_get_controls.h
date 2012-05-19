@@ -33,7 +33,7 @@ public:
 
   double GetValue() {
     int pos = GetPos();
-    return pos/scale_;
+    return static_cast<double>(pos)/scale_;
   }
   void SetRangeAndStep(double min, double max, double step);
 
@@ -46,6 +46,7 @@ private:
 
   // CSliderCtrl only accept int pos so need to scale the value up 
   // if value has decimals.
+  // TODO using value/step to replace.
   int scale_;
 };
 
@@ -154,7 +155,7 @@ public:
     , spin_id_(spin_id)
     , init_min_(min)
     , init_max_(max)
-    , init_step_(step)
+    , step_(step)
     , init_value_(value)
     , precision_(precision)
     , listener_(listener)
@@ -163,7 +164,7 @@ public:
     , spin_(this, pow(10.0, static_cast<int>(precision)))
     , init_ui_(false) {
       ASSERT(init_max_ > init_min_);
-      ASSERT(init_step_);
+      ASSERT(step_);
       ASSERT(init_min_ <= init_value_ && init_value_ <= init_max_);
       ASSERT(precision_ >= 0);
   }
@@ -175,12 +176,13 @@ public:
     return slider_.GetValue();
   }
   void set_value(double value) {
-    slider_.SetValue(value);
-    edit_.SetValue(value, precision_);
-    spin_.SetValue(value);
+    double round_value = step_ * static_cast<int>(value / step_);
+    slider_.SetValue(round_value);
+    edit_.SetValue(round_value, precision_);
+    spin_.SetValue(round_value);
   }
 
-  void ValueChange(double value);
+  void ValueChange(double val);
 
   void SetRangeAndStep(double min, double max, double step) {
     ASSERT(max > min);
@@ -214,7 +216,7 @@ public:
   // range and step to limit the value
   const double init_max_;
   const double init_min_;
-  const double init_step_;
+  const double step_;
   const double init_value_;
 
   // need to set ui when get HWND

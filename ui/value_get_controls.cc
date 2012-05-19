@@ -31,6 +31,10 @@ void ValueGetSliderCtrl::SetRangeAndStep(double min, double max, double step) {
   SetTicFreq(nStep);
 }
 
+// double ValueGetSliderCtrl::GetStep() {
+//   GetTic()
+// }
+
 void ValueGetSpinCtrl::VScroll(UINT nSBCode, UINT nPos) {
   if (nSBCode == SB_ENDSCROLL)
     return;
@@ -77,15 +81,13 @@ void ValueGetControls::DoDataExchange(CDataExchange* pDX) {
   if (init_ui_ == false) {
     init_ui_ = true;
     // must set Range first, or SetValue will break.
-    SetRangeAndStep(init_min_, init_max_, init_step_);
+    SetRangeAndStep(init_min_, init_max_, step_);
     set_value(init_value_);
   }
 }
 
-void ValueGetControls::ValueChange(double value) {
-  slider_.SetValue(value);
-  edit_.SetValue(value, precision_);
-  spin_.SetValue(value);
+void ValueGetControls::ValueChange(double val) {
+  set_value(val);
   if (listener_ != NULL)
-    listener_->OnValueChange(this, value);
+    listener_->OnValueChange(this, value());
 }
