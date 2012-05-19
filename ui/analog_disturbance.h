@@ -4,12 +4,12 @@
 
 #include "ui/value_get_controls.h"
 
+class StressDevice;
+
 class AnalogDisturbanceView : public CFormView, public ValueGetListener
 {
-  DECLARE_DYNCREATE(AnalogDisturbanceView)
-
 public:
-  AnalogDisturbanceView();
+  AnalogDisturbanceView(StressDevice* device);
   virtual ~AnalogDisturbanceView() {};
 
   virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, 
@@ -28,7 +28,18 @@ private:
   virtual void DoDataExchange(CDataExchange* pDX);
   
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-  afx_msg void OnEnableCheckBoxClick();
+  afx_msg void OnRHEnable();
+  afx_msg void OnRHLEnable();
+  afx_msg void OnRLEnable();
+  afx_msg void OnRSHEnable();
+  afx_msg void OnCHLEnable();
+  afx_msg void OnRSLEnable();
+
+  afx_msg void OnOscListenPort();
+  afx_msg void OnCANHDisturbVolt();
+  afx_msg void OnCANLDisturbVolt();
+  afx_msg void OnBusType();
+
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -48,6 +59,15 @@ private:
   CXTPButton chl_enable_;
   CXTPButton rsl_enable_;
   
+  // Port Option
+  CXTPButton osc_listen_port_;
+  CXTPButton can_high_dist_vlot_;
+  CXTPButton can_low_dist_vlot_;
+  CXTPButton bus_type_;
+
   // init GUI trick
   bool init_;
+
+  // hardware object.
+  StressDevice* device_;
 };

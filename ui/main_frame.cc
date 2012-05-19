@@ -38,7 +38,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    analog_disturbance_view_ = new AnalogDisturbanceView();
+    analog_disturbance_view_ = new AnalogDisturbanceView(&device_);
     // create a view to occupy the client area of the frame
     if (!analog_disturbance_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
         CRect(0, 0, 0, 0), &tab_ctrl_, AFX_IDW_PANE_FIRST, NULL)) {

@@ -2,6 +2,8 @@
 
 #include "ui/analog_disturbance.h"
 
+#include "stress/stress_device.h"
+
 class MainFrame : public CXTPFrameWnd
 {
 
@@ -34,5 +36,8 @@ private:
 
     CXTPDockingPaneManager m_paneManager;
     
+    //
+    StressDevice device_;
+
     DECLARE_DYNAMIC(MainFrame)
 };
