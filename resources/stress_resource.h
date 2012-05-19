@@ -2,6 +2,7 @@
 #define IDC_STATIC (-1)
 #endif
 
+#define IDC_CHECKBOX_OSC_LISTEN_PORT            1004
 #define IDC_CHECKBOX_RH                         1006
 #define IDC_SLIDER_RHL                          1015
 #define IDD_ANALOG_DISTURBANCE                  2001
@@ -27,3 +28,6 @@
 #define IDC_CHECKBOX_RSH                        2027
 #define IDC_CHECKBOX_CHL                        2028
 #define IDC_CHECKBOX_RSL                        2029
+#define IDC_CHECKBOX_CANH_DIS_VOLT              2032
+#define IDC_CHECKBOX_CANL_DIS_VOLT              2033
+#define IDC_CHECKBOX_CAN_BUS_TYPE               2034
