@@ -921,6 +921,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\validating_edit.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\XTPConfigBar.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\XTPToggleButton.cpp"
 				>
 				<FileConfiguration
@@ -982,6 +990,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\validating_edit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\XTPConfigBar.h"
 				>
 			</File>
@@ -1033,10 +1045,6 @@
 		</Filter>
 		<File
 			RelativePath=".\res\shiny-gear.png"
-			>
-		</File>
-		<File
-			RelativePath=".\XTPConfigBar.cc"
 			>
 		</File>
 	</Files>
