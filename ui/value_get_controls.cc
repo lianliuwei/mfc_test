@@ -78,6 +78,7 @@ void ValueGetControls::DoDataExchange(CDataExchange* pDX) {
   DDX_Control(pDX, slider_id_, slider_);
   DDX_Control(pDX, edit_id_, edit_);
   DDX_Control(pDX, spin_id_, spin_);
+  DDX_Control(pDX, picture_id_, picture_);
   if (init_ui_ == false) {
     init_ui_ = true;
     // must set Range first, or SetValue will break.

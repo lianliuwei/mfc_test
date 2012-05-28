@@ -13,7 +13,8 @@ const static double kCStep = 250.0;
 const static double kDoubleMin = 0.000001;
 }
 
-StressDevice::StressDevice() {
+StressDevice::StressDevice(StressDeviceListener* listener)
+    : listener_(listener) {
   cfg_.portcfg3 = false;
   cfg_.portcfg4 = true;
   cfg_.portcfg5 = true;
@@ -61,6 +62,7 @@ void StressDevice::SetComponentValue(StressComponent component,
       ASSERT(FALSE); // no exit
     }
   }
+  NotifyValueChanged(component, value);
 }
 
 void StressDevice::SetComponentEnable(StressComponent component,
@@ -85,6 +87,7 @@ void StressDevice::SetComponentEnable(StressComponent component,
       ASSERT(FALSE); // no exit
     }
   }
+  NotifyEnableChanged(component, enable);
 }
 
 double StressDevice::ComponentValue(StressComponent component) {
@@ -160,6 +163,7 @@ void StressDevice::SetDisturbanceVoltage(CAN_CHNL chnl,
   } else {
     ASSERT(FALSE);
   }
+  NotifyDisturbanceVoltageChanged(chnl, volt);
 }
 
 DisturbanceVoltage StressDevice::GetDisturbanceVoltage(CAN_CHNL chnl) {

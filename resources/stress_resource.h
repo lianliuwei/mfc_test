@@ -2,8 +2,33 @@
 #define IDC_STATIC (-1)
 #endif
 
+#define IDR_MENU1                               100
+#define ID_PNG_RH_ENABLE                        103
+#define ID_PNG_RH_DISABLE                       104
+#define ID_PNG_RHL_ENABLE                        103
+#define ID_PNG_RHL_DISABLE                       104
+#define ID_PNG_RL_ENABLE                        103
+#define ID_PNG_RL_DISABLE                       104
+#define ID_PNG_RSH_ENABLE                        103
+#define ID_PNG_RSH_DISABLE                       104
+#define ID_PNG_CHL_ENABLE                        103
+#define ID_PNG_CHL_DISABLE                       104
+#define ID_PNG_RSL_ENABLE                        103
+#define ID_PNG_RSL_DISABLE                       104
+#define ID_PNG_CAN_HIGH_VOLT_PLUS                 103
+#define ID_PNG_CAN_HIGH_VOLT_MINUS                104
+#define ID_PNG_CAN_LOW_VOLT_PLUS                 103
+#define ID_PNG_CAN_LOW_VOLT_MINUS                104
+#define IDC_PICTURE_RH                          1000
+#define IDC_COMBOX_LAYOUT                       1001
+#define IDC_PICTURE_RHL                         1002
+#define IDC_PICTURE_RL                          1003
 #define IDC_CHECKBOX_OSC_LISTEN_PORT            1004
+#define IDC_PICTURE_RSH                         1005
 #define IDC_CHECKBOX_RH                         1006
+#define IDC_PICTURE_CHL                         1007
+#define IDC_PICTURE_RSL                         1008
+#define IDC_PICTURE_CAN_H_VOLT                  1011
 #define IDC_SLIDER_RHL                          1015
 #define IDD_ANALOG_DISTURBANCE                  2001
 #define IDC_SLIDER_RH                           2004
@@ -31,3 +56,4 @@
 #define IDC_CHECKBOX_CANH_DIS_VOLT              2032
 #define IDC_CHECKBOX_CANL_DIS_VOLT              2033
 #define IDC_CHECKBOX_CAN_BUS_TYPE               2034
+#define IDC_PICTURE_CAN_L_VOLT                  2035

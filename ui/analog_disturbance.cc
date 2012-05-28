@@ -12,6 +12,59 @@ const static double kCMin = 0.0;
 const static double kCMax = 15750.0;
 const static double kCStep = 250.0;
 const static int kCPrecision = 0;
+
+static const bool kLayoutStatus[][kComponentSize] = {
+  // kRH kRHL   kRL   kRSH   kCHL    kRSL
+  // kStandard
+  {true, true, false, false, false, false},
+  // kR_H
+  {true, true, false, false, false, false},
+  // kR_SH
+  {false, true, false, false, false, false},
+  // kR_HL_without_R_SH
+  {false, false, false, true, false, false},
+  // kR_HL_without_R_SL
+  {false, true, false, false, false, false},
+  // kR_SL
+  {false, true, false, false, false, true},
+  // kR_L
+  {false, true, true, false, false, false},
+  // kR_H_and_R_SL
+  {true, true, false, false, false, true},
+  // kR_H_and_R_L
+  {true, false, true, false, false, false},
+  // kR_SH_and_R_HL
+  {false, true, true, true, false, false},
+  // kR_SH_and_R_SL
+  {false, true, false, true, false, true},
+  // kR_SH_and_R_L
+  {false, true, true, true, false, false},
+  // kR_HL_and_R_SL
+  {false, true, false, false, false, true},
+  // kR_HL_and_R_H
+  {true, true, false, false, false, false},
+  // kR_HL_and_R_L
+  {false, true, true, false, false, false},
+};
+
+static const TCHAR* kLayoutString[] = {
+  _T("Standard Layout"),
+  _T("R_H"),
+  _T("R_SH"),
+  _T("R_HL (without R_SH)"),
+  _T("R_HL (without_R_SL)"),
+  _T("R_SL"),
+  _T("R_L"),
+  _T("R_H and R_SL"),
+  _T("R_H and R_L"),
+  _T("R_SH and R_HL"),
+  _T("R_SH and R_SL"),
+  _T("R_SH and R_L"),
+  _T("R_HL and R_SL"),
+  _T("R_HL and R_H"),
+  _T("R_HL and R_L"),
+};
+
 }
 
 
@@ -26,25 +79,27 @@ BEGIN_MESSAGE_MAP(AnalogDisturbanceView, CFormView)
   ON_COMMAND(IDC_CHECKBOX_CANH_DIS_VOLT, OnCANHDisturbVolt)
   ON_COMMAND(IDC_CHECKBOX_CANL_DIS_VOLT, OnCANLDisturbVolt)
   ON_COMMAND(IDC_CHECKBOX_CAN_BUS_TYPE, OnBusType)
+  ON_CBN_SELCHANGE(IDC_COMBOX_LAYOUT, OnLayoutChange)
 END_MESSAGE_MAP()
 
 AnalogDisturbanceView::AnalogDisturbanceView(StressDevice* device)
     : CFormView(AnalogDisturbanceView::IDD)
-    , value_rh_(IDC_SLIDER_RH, IDC_EDIT_RH, IDC_SPIN_RH,
+    , value_rh_(IDC_SLIDER_RH, IDC_EDIT_RH, IDC_SPIN_RH, IDC_PICTURE_RH, ID_PNG_RH_ENABLE, ID_PNG_RH_DISABLE,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rhl_(IDC_SLIDER_RHL, IDC_EDIT_RHL, IDC_SPIN_RHL,
+    , value_rhl_(IDC_SLIDER_RHL, IDC_EDIT_RHL, IDC_SPIN_RHL, IDC_PICTURE_RHL, ID_PNG_RHL_ENABLE, ID_PNG_RHL_DISABLE,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rl_(IDC_SLIDER_RL, IDC_EDIT_RL, IDC_SPIN_RL,
+    , value_rl_(IDC_SLIDER_RL, IDC_EDIT_RL, IDC_SPIN_RL, IDC_PICTURE_RL, ID_PNG_RL_ENABLE, ID_PNG_RL_DISABLE,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rsh_(IDC_SLIDER_RSH, IDC_EDIT_RSH, IDC_SPIN_RSH,
+    , value_rsh_(IDC_SLIDER_RSH, IDC_EDIT_RSH, IDC_SPIN_RSH, IDC_PICTURE_RSH, ID_PNG_RSH_ENABLE, ID_PNG_RSH_DISABLE,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_chl_(IDC_SLIDER_CHL, IDC_EDIT_CHL, IDC_SPIN_CHL,
+    , value_chl_(IDC_SLIDER_CHL, IDC_EDIT_CHL, IDC_SPIN_CHL, IDC_PICTURE_CHL, ID_PNG_CHL_ENABLE, ID_PNG_CHL_DISABLE,
     kCMin, kCMax, kCStep, 0.0, kCPrecision, this)
-    , value_rsl_(IDC_SLIDER_RSL, IDC_EDIT_RSL, IDC_SPIN_RSL,
+    , value_rsl_(IDC_SLIDER_RSL, IDC_EDIT_RSL, IDC_SPIN_RSL, IDC_PICTURE_RSL, ID_PNG_RSL_ENABLE, ID_PNG_RSL_DISABLE,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
     , init_(false)
     , device_(device) {
   ASSERT(device != NULL);
+
 }
 
 BOOL AnalogDisturbanceView::Create( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, 
@@ -73,9 +128,14 @@ void AnalogDisturbanceView::DoDataExchange( CDataExchange* pDX )
   DDX_Control(pDX, IDC_CHECKBOX_CHL, chl_enable_);
   DDX_Control(pDX, IDC_CHECKBOX_RSL, rsl_enable_);
 
+  DDX_Control(pDX, IDC_COMBOX_LAYOUT, layout_);
+
+  DDX_Control(pDX, IDC_PICTURE_CAN_H_VOLT, can_h_volt_);
+  DDX_Control(pDX, IDC_PICTURE_CAN_L_VOLT, can_l_volt_);
+
   DDX_Control(pDX, IDC_CHECKBOX_OSC_LISTEN_PORT, osc_listen_port_);
-  DDX_Control(pDX, IDC_CHECKBOX_CANH_DIS_VOLT, can_high_dist_vlot_);
-  DDX_Control(pDX, IDC_CHECKBOX_CANL_DIS_VOLT, can_low_dist_vlot_);
+  DDX_Control(pDX, IDC_CHECKBOX_CANH_DIS_VOLT, can_high_dist_volt_);
+  DDX_Control(pDX, IDC_CHECKBOX_CANL_DIS_VOLT, can_low_dist_volt_);
   DDX_Control(pDX, IDC_CHECKBOX_CAN_BUS_TYPE, bus_type_);
 
   if (init_ == false) {
@@ -105,42 +165,39 @@ void AnalogDisturbanceView::OnValueChange(ValueGetControls* value_get, double va
 
 void AnalogDisturbanceView::OnRHEnable() {
   bool enable = (rh_enable_.GetChecked() == TRUE);
-  value_rh_.SetEnable(enable);
   device_->SetComponentEnable(kRH, enable);
 }
 
 void AnalogDisturbanceView::OnRHLEnable() {
   bool enable = (rhl_enable_.GetChecked() == TRUE);
-  value_rhl_.SetEnable(enable);
   device_->SetComponentEnable(kRHL, enable);
 }
 
 void AnalogDisturbanceView::OnRLEnable() {
   bool enable = (rl_enable_.GetChecked() == TRUE);
-  value_rl_.SetEnable(enable);
   device_->SetComponentEnable(kRL, enable);
 }
 
 void AnalogDisturbanceView::OnRSHEnable() {
   bool enable = (rsh_enable_.GetChecked() == TRUE);
-  value_rsh_.SetEnable(enable);
   device_->SetComponentEnable(kRSH, enable);
 }
 
 void AnalogDisturbanceView::OnCHLEnable() {
   bool enable = (chl_enable_.GetChecked() == TRUE);
-  value_chl_.SetEnable(enable);
   device_->SetComponentEnable(kCHL, enable);
 }
 
 void AnalogDisturbanceView::OnRSLEnable() {
   bool enable = (rsl_enable_.GetChecked() == TRUE);
-  value_rsl_.SetEnable(enable);
   device_->SetComponentEnable(kRSL, enable);
 }
 
 void AnalogDisturbanceView::Init()
 {
+  for (int i = 0; i < kLayoutSize; ++i)
+    layout_.AddString(kLayoutString[i]);
+
   value_rh_.set_value(device_->ComponentValue(kRH));
   value_rhl_.set_value(device_->ComponentValue(kRHL));
   value_rl_.set_value(device_->ComponentValue(kRL));
@@ -148,24 +205,20 @@ void AnalogDisturbanceView::Init()
   value_chl_.set_value(device_->ComponentValue(kCHL));
   value_rsl_.set_value(device_->ComponentValue(kRSL));
 
-  rh_enable_.SetChecked(device_->ComponentEnable(kRH));
-  rhl_enable_.SetChecked(device_->ComponentEnable(kRHL));
-  rl_enable_.SetChecked(device_->ComponentEnable(kRL));
-  rsh_enable_.SetChecked(device_->ComponentEnable(kRSH));
-  chl_enable_.SetChecked(device_->ComponentEnable(kCHL));
-  rsl_enable_.SetChecked(device_->ComponentEnable(kRSL));
+  OnComponendEnableChanged(kRH, device_->ComponentEnable(kRH));
+  OnComponendEnableChanged(kRHL, device_->ComponentEnable(kRHL));
+  OnComponendEnableChanged(kRL, device_->ComponentEnable(kRL));
+  OnComponendEnableChanged(kRSH, device_->ComponentEnable(kRSH));
+  OnComponendEnableChanged(kCHL, device_->ComponentEnable(kCHL));
+  OnComponendEnableChanged(kRSL, device_->ComponentEnable(kRSL));
 
   osc_listen_port_.SetChecked(device_->GetOscListenPort() != CAN_IN);
-  can_high_dist_vlot_.SetChecked(device_->GetDisturbanceVoltage(CAN_HIGH) != VOLT_PLUS);
-  can_low_dist_vlot_.SetChecked(device_->GetDisturbanceVoltage(CAN_LOW) != VOLT_PLUS);
+  OnDisturbanceVoltageChanged(CAN_HIGH, device_->GetDisturbanceVoltage(CAN_HIGH));
+  OnDisturbanceVoltageChanged(CAN_LOW, device_->GetDisturbanceVoltage(CAN_LOW));
   bus_type_.SetChecked(device_->GetCANBusType() != HIGH_SPEED);
 
-  value_rh_.SetEnable(device_->ComponentEnable(kRH));
-  value_rhl_.SetEnable(device_->ComponentEnable(kRHL));
-  value_rl_.SetEnable(device_->ComponentEnable(kRL));
-  value_rsh_.SetEnable(device_->ComponentEnable(kRSH));
-  value_chl_.SetEnable(device_->ComponentEnable(kCHL));
-  value_rsl_.SetEnable(device_->ComponentEnable(kRSL));
+  // listener the device_ get notify when device change.
+  device_->set_listener(this);
 }
 
 void AnalogDisturbanceView::OnOscListenPort()
@@ -175,16 +228,96 @@ void AnalogDisturbanceView::OnOscListenPort()
 
 void AnalogDisturbanceView::OnCANHDisturbVolt()
 {
-  device_->SetDisturbanceVoltage(CAN_HIGH, !can_high_dist_vlot_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
+  device_->SetDisturbanceVoltage(CAN_HIGH, !can_high_dist_volt_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
 }
 
 void AnalogDisturbanceView::OnCANLDisturbVolt()
 {
-  device_->SetDisturbanceVoltage(CAN_LOW, !can_low_dist_vlot_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
+  device_->SetDisturbanceVoltage(CAN_LOW, !can_low_dist_volt_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
 }
 
 void AnalogDisturbanceView::OnBusType()
 {
   device_->SetCANBusType(!bus_type_.GetChecked() ?  HIGH_SPEED : FAULT_TOLERANT);
+}
+
+void AnalogDisturbanceView::OnLayoutChange() {
+  // the combobox select and the StressLayout are match.
+  StressLayout select = static_cast<StressLayout>(layout_.GetCurSel());
+  ASSERT(0 <= select && select < kLayoutSize);
+  device_->SetComponentEnable(kRH, kLayoutStatus[select][kRH]);
+  device_->SetComponentEnable(kRHL, kLayoutStatus[select][kRHL]);
+  device_->SetComponentEnable(kRL, kLayoutStatus[select][kRL]);
+  device_->SetComponentEnable(kRSH, kLayoutStatus[select][kRSH]);
+  device_->SetComponentEnable(kCHL, kLayoutStatus[select][kCHL]);
+  device_->SetComponentEnable(kRSL, kLayoutStatus[select][kRSL]);
+}
+
+void AnalogDisturbanceView::OnComponendEnableChanged( StressComponent component,
+                                                     bool enable ) {
+  switch (component) {
+  case kCHL:
+    value_chl_.SetEnable(enable);
+    chl_enable_.SetChecked(enable);
+    break;
+  case kRH:
+    value_rh_.SetEnable(enable);
+    rh_enable_.SetChecked(enable);
+    break;
+  case kRHL:
+    value_rhl_.SetEnable(enable);
+    rhl_enable_.SetChecked(enable);
+    break;
+  case kRL:
+    value_rl_.SetEnable(enable);
+    rl_enable_.SetChecked(enable);
+    break;
+  case kRSH:
+    value_rsh_.SetEnable(enable);
+    rsh_enable_.SetChecked(enable);
+    break;
+  case kRSL:
+    value_rsl_.SetEnable(enable);
+    rsl_enable_.SetChecked(enable);
+    break;
+  default:
+    ASSERT(FALSE); // no exit
+  }
+}
+
+void AnalogDisturbanceView::OnComponendValueChanged(StressComponent component, double value)
+{
+  switch (component) {
+  case kCHL:
+    value_chl_.set_value(value); break;
+  case kRH:
+    value_rh_.set_value(value); break;
+  case kRHL:
+    value_rhl_.set_value(value); break;
+  case kRL:
+    value_rl_.set_value(value); break;
+  case kRSH:
+    value_rsh_.set_value(value); break;
+  case kRSL:
+    value_rsl_.set_value(value); break;
+  default:
+    ASSERT(FALSE); // no exit
+  }
+}
+
+void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
+                                                        DisturbanceVoltage volt) {
+  switch(chnl) {
+  case CAN_HIGH:
+    can_h_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_HIGH_VOLT_PLUS : ID_PNG_CAN_HIGH_VOLT_MINUS); 
+    can_high_dist_volt_.SetChecked(volt != VOLT_PLUS);
+    break;
+  case CAN_LOW:
+    can_l_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_LOW_VOLT_PLUS : ID_PNG_CAN_LOW_VOLT_MINUS); 
+    can_low_dist_volt_.SetChecked(volt != VOLT_PLUS);
+    break;
+  default:
+    ASSERT(FALSE);
+  }
 }
 

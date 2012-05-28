@@ -3,12 +3,13 @@
 // TODO add notify the port change or the value change or enable change.
 
 enum StressComponent {
-  kRH,
+  kRH = 0,
   kRHL,
   kRL,
   kRSH,
   kCHL,
   kRSL,
+  kComponentSize,
 };
 
 enum OscListenPort {
@@ -42,6 +43,15 @@ struct PORTCFG
   WORD resered:9; //保留位
 };
 
+class StressDeviceListener {
+public:
+  virtual void OnComponendEnableChanged(StressComponent component, bool enable) = 0;
+
+  virtual void OnComponendValueChanged(StressComponent component, double value) = 0;
+
+  virtual void OnDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) = 0;
+};
+
 // response for set the stress Device.
 // stress Device must live long then the View.
 // INFO no the input limit and restrict by the AnalogDisturbanceView.
@@ -49,7 +59,7 @@ struct PORTCFG
 class StressDevice
 {
 public:
-  StressDevice();
+  StressDevice(StressDeviceListener* listener);
   ~StressDevice() {};
 
 public:
@@ -57,6 +67,8 @@ public:
   void SetComponentValue(StressComponent component, const double value);
 
   // set Enable
+  // INFO the vector stress exe res and the config file show the 
+  // component no only two status.
   void SetComponentEnable(StressComponent component, const bool enable);
 
   // Get adjustable Resistor or Capacitor value
@@ -76,7 +88,32 @@ public:
   void SetCANBusType(CANBusType type);
   CANBusType GetCANBusType();
 
+  void set_listener(StressDeviceListener* listener) {
+    listener_ = listener;
+  }
+
 private:
+  void NotifyEnableChanged(StressComponent component, bool enable) {
+    if (listener_ == NULL)
+      return;
+    listener_->OnComponendEnableChanged(component, enable);
+  }
+
+  void NotifyValueChanged(StressComponent component, double value) {
+    if (listener_ == NULL)
+      return;
+    listener_->OnComponendValueChanged(component, value);
+  }
+
+  void NotifyDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) {
+    if (listener_ == NULL)
+      return;
+    listener_->OnDisturbanceVoltageChanged(chnl, volt);
+  }
+
+private:
+  StressDeviceListener* listener_;
+  
   BYTE chl;//终端可调电容，调节范围：0nF~15.75nF(15750pF)，步进：250pF
   WORD rhl;//终端可调电阻，调节范围：0Ω~10.2375kΩ(10237.5Ω)，步进：2.5Ω
   WORD rsl;//CANL串联电阻，调节范围：0Ω~10.2375kΩ(10237.5Ω)，步进：2.5Ω

@@ -201,6 +201,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\app\GdiplusH.h"
+					>
+				</File>
+				<File
 					RelativePath="..\app\stdafx.cpp"
 					>
 					<FileConfiguration
@@ -285,6 +289,30 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ui\layout_diagram.cc"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\ui\layout_diagram.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\ui\main_frame.cc"
 					>
 				</File>
@@ -300,6 +328,18 @@
 					RelativePath="..\ui\value_get_controls.h"
 					>
 				</File>
+				<Filter
+					Name="views"
+					>
+					<File
+						RelativePath="..\ui\views\picture_ctrl.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\ui\views\picture_ctrl.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="stress"
