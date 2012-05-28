@@ -15,10 +15,11 @@ namespace {
 // all windows below the control area.
 void InvalidateRight(CWnd* wnd) {
   wnd->Invalidate();
-  // TODO only invalidate the child rect.
-  wnd->GetParent()->Invalidate();
+  CRect Rect;
+  wnd->GetWindowRect(&Rect);
+  wnd->GetParent()->ScreenToClient(&Rect);
+  wnd->GetParent()->InvalidateRect(&Rect);
 }
-
 }
 
 //Macro to release COM Components
