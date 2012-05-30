@@ -241,6 +241,10 @@
 				Name="resources"
 				>
 				<File
+					RelativePath="..\resources\about_dialog.rc"
+					>
+				</File>
+				<File
 					RelativePath="..\resources\analog_disturbance_view.rc"
 					>
 				</File>
@@ -249,11 +253,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\resources\codejock_dlg.rc"
+					RelativePath="..\resources\config_view.rc"
 					>
 				</File>
 				<File
-					RelativePath="..\resources\config_view.rc"
+					RelativePath="..\resources\main_frame.rc"
+					>
+				</File>
+				<File
+					RelativePath="..\resources\mfc_res.rc"
 					>
 				</File>
 				<File
@@ -270,6 +278,10 @@
 				</File>
 				<File
 					RelativePath="..\resources\Toolbar.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\resources\version.rc"
 					>
 				</File>
 			</Filter>
@@ -358,7 +370,19 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\resources\bmp1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\bmp2.png"
+			>
+		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\workspace\codejock_dlg\resources\about_dialog.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

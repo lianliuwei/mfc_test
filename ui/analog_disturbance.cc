@@ -74,10 +74,6 @@ BEGIN_MESSAGE_MAP(AnalogDisturbanceView, CFormView)
   ON_COMMAND(IDC_CHECKBOX_RSH, OnRSHEnable)
   ON_COMMAND(IDC_CHECKBOX_CHL, OnCHLEnable)
   ON_COMMAND(IDC_CHECKBOX_RSL, OnRSLEnable)
-  ON_COMMAND(IDC_CHECKBOX_OSC_LISTEN_PORT, OnOscListenPort)
-  ON_COMMAND(IDC_CHECKBOX_CANH_DIS_VOLT, OnCANHDisturbVolt)
-  ON_COMMAND(IDC_CHECKBOX_CANL_DIS_VOLT, OnCANLDisturbVolt)
-  ON_COMMAND(IDC_CHECKBOX_CAN_BUS_TYPE, OnBusType)
   ON_CBN_SELCHANGE(IDC_COMBOX_LAYOUT, OnLayoutChange)
 END_MESSAGE_MAP()
 
@@ -131,11 +127,6 @@ void AnalogDisturbanceView::DoDataExchange( CDataExchange* pDX )
 
   DDX_Control(pDX, IDC_PICTURE_CAN_H_VOLT, can_h_volt_);
   DDX_Control(pDX, IDC_PICTURE_CAN_L_VOLT, can_l_volt_);
-
-  DDX_Control(pDX, IDC_CHECKBOX_OSC_LISTEN_PORT, osc_listen_port_);
-  DDX_Control(pDX, IDC_CHECKBOX_CANH_DIS_VOLT, can_high_dist_volt_);
-  DDX_Control(pDX, IDC_CHECKBOX_CANL_DIS_VOLT, can_low_dist_volt_);
-  DDX_Control(pDX, IDC_CHECKBOX_CAN_BUS_TYPE, bus_type_);
 
   if (init_ == false) {
     init_ = true;
@@ -211,34 +202,13 @@ void AnalogDisturbanceView::Init()
   OnComponendEnableChanged(kCHL, device_->ComponentEnable(kCHL));
   OnComponendEnableChanged(kRSL, device_->ComponentEnable(kRSL));
 
-  osc_listen_port_.SetChecked(device_->GetOscListenPort() != CAN_IN);
   OnDisturbanceVoltageChanged(CAN_HIGH, device_->GetDisturbanceVoltage(CAN_HIGH));
   OnDisturbanceVoltageChanged(CAN_LOW, device_->GetDisturbanceVoltage(CAN_LOW));
-  bus_type_.SetChecked(device_->GetCANBusType() != HIGH_SPEED);
 
   // listener the device_ get notify when device change.
   device_->set_listener(this);
 }
 
-void AnalogDisturbanceView::OnOscListenPort()
-{
-  device_->SetOscListenPort(!osc_listen_port_.GetChecked() ? CAN_IN : CAN_OUT);
-}
-
-void AnalogDisturbanceView::OnCANHDisturbVolt()
-{
-  device_->SetDisturbanceVoltage(CAN_HIGH, !can_high_dist_volt_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
-}
-
-void AnalogDisturbanceView::OnCANLDisturbVolt()
-{
-  device_->SetDisturbanceVoltage(CAN_LOW, !can_low_dist_volt_.GetChecked() ? VOLT_PLUS : VOLT_MINUS);
-}
-
-void AnalogDisturbanceView::OnBusType()
-{
-  device_->SetCANBusType(!bus_type_.GetChecked() ?  HIGH_SPEED : FAULT_TOLERANT);
-}
 
 void AnalogDisturbanceView::OnLayoutChange() {
   // the combobox select and the StressLayout are match.
@@ -309,11 +279,9 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
   switch(chnl) {
   case CAN_HIGH:
     can_h_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_HIGH_VOLT_PLUS : ID_PNG_CAN_HIGH_VOLT_MINUS); 
-    can_high_dist_volt_.SetChecked(volt != VOLT_PLUS);
     break;
   case CAN_LOW:
     can_l_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_LOW_VOLT_PLUS : ID_PNG_CAN_LOW_VOLT_MINUS); 
-    can_low_dist_volt_.SetChecked(volt != VOLT_PLUS);
     break;
   default:
     ASSERT(FALSE);

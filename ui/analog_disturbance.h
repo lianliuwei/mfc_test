@@ -66,11 +66,6 @@ private:
   afx_msg void OnCHLEnable();
   afx_msg void OnRSLEnable();
 
-  afx_msg void OnOscListenPort();
-  afx_msg void OnCANHDisturbVolt();
-  afx_msg void OnCANLDisturbVolt();
-  afx_msg void OnBusType();
-
   afx_msg void OnLayoutChange();
   DECLARE_MESSAGE_MAP()
 
@@ -99,12 +94,7 @@ private:
   // select specific layout.
   CComboBox layout_;
 
-  // Port Option
-  CXTPButton osc_listen_port_;
-  CXTPButton can_high_dist_volt_;
-  CXTPButton can_low_dist_volt_;
-  CXTPButton bus_type_;
-
+ 
   // init GUI trick
   bool init_;
 
