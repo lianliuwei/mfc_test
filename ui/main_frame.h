@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ui/analog_disturbance.h"
+#include "ui/config_view.h"
 
 #include "stress/stress_device.h"
 
@@ -33,6 +34,7 @@ private:
 
     // this is a view, view destory it self.
     AnalogDisturbanceView* analog_disturbance_view_;
+    ConfigView* config_view_;
 
     CXTPDockingPaneManager m_paneManager;
     

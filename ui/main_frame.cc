@@ -9,6 +9,9 @@ static const XTPPaintTheme kTheme = xtpThemeVisualStudio2010;
 static const XTPDockingPanePaintTheme kPaneTheme = xtpPaneThemeVisualStudio2010;
 static const int frame_height = 500;
 static const int frame_width = 640;
+
+static const unsigned int kDisturbViewID = 1U;
+static const unsigned int kConfigViewID = 2U;
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -21,6 +24,7 @@ END_MESSAGE_MAP()
 
 MainFrame::MainFrame()
     : analog_disturbance_view_(NULL)
+    , config_view_(NULL)
     , device_(NULL) {
 }
 
@@ -42,12 +46,21 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     analog_disturbance_view_ = new AnalogDisturbanceView(&device_);
     // create a view to occupy the client area of the frame
     if (!analog_disturbance_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-        CRect(0, 0, 0, 0), &tab_ctrl_, AFX_IDW_PANE_FIRST, NULL)) {
+        CRect(0, 0, 0, 0), &tab_ctrl_, kDisturbViewID, NULL)) {
+        TRACE0("Failed to create analog disturbance view tab page\n");
+        return -1;
+    }
+
+    config_view_ = new ConfigView(&device_);
+    // create a view to occupy the client area of the frame
+    if (!config_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+      CRect(0, 0, 0, 0), &tab_ctrl_, kConfigViewID, NULL)) {
         TRACE0("Failed to create analog disturbance view tab page\n");
         return -1;
     }
 
     tab_ctrl_.AddControl(_T("Analog disturbance"), analog_disturbance_view_);
+    tab_ctrl_.AddControl(_T("Config"), config_view_);
 
     if (CreateCommandBars()) {
         TRACE0("Failed to create command bars\n");

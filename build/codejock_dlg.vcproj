@@ -253,6 +253,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\resources\config_view.rc"
+					>
+				</File>
+				<File
 					RelativePath="..\resources\paneicons.bmp"
 					>
 				</File>
@@ -289,28 +293,12 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ui\layout_diagram.cc"
+					RelativePath="..\ui\config_view.cc"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\ui\layout_diagram.h"
+					RelativePath="..\ui\config_view.h"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ui\main_frame.cc"

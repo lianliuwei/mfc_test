@@ -2,7 +2,6 @@
 #define IDC_STATIC (-1)
 #endif
 
-#define IDR_MENU1                               100
 #define ID_PNG_RH_ENABLE                        103
 #define ID_PNG_RH_DISABLE                       104
 #define ID_PNG_RHL_ENABLE                        103
@@ -57,3 +56,8 @@
 #define IDC_CHECKBOX_CANL_DIS_VOLT              2033
 #define IDC_CHECKBOX_CAN_BUS_TYPE               2034
 #define IDC_PICTURE_CAN_L_VOLT                  2035
+#define IDC_COMBO_CANH_DIS_VOLT                 1009
+#define IDC_COMBO_CANL_DIS_VOLT                 1010
+#define IDC_COMBO_CAN_BUS_TYPE                  1013
+#define IDC_COMBO_OSC_LISTEN_PORT               1014
+#define IDD_CONFIG                              2036
