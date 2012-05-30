@@ -46,7 +46,7 @@ private:
   // implement StressDeviceListener
   virtual void OnComponendEnableChanged(StressComponent component, bool enable);
   virtual void OnComponendValueChanged(StressComponent component, double value);
-  virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt );
+  virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt);
 
   // init the gui there
   void Init();
@@ -59,7 +59,6 @@ private:
 
   virtual void DoDataExchange(CDataExchange* pDX);
   
-  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
   afx_msg void OnRHEnable();
   afx_msg void OnRHLEnable();
   afx_msg void OnRLEnable();

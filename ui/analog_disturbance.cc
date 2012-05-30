@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "ui/analog_disturbance.h"
-#include "stress/stress_device.h"
 
 namespace {
 const static double kRMin = 0.0;
@@ -320,4 +319,3 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
     ASSERT(FALSE);
   }
 }
-
