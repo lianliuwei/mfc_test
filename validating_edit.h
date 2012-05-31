@@ -2,6 +2,7 @@
 #define VALIDATING_EDIT_H_
 #pragma once
 
+
 // change for http://www.codeproject.com/Articles/7832/CFilterEdit-Use-Regular-Expressions-to-Filter-Your 
 // ValidatingEdit Provide validating framework and UI response for edit the
 // restrict the user input, and guide them. a extend class can using regex to 
@@ -9,16 +10,19 @@
 // using template technology for inherit from different Edit class(MFC is no 
 // welcome for template)
 
+#ifndef TTS_BALLOON
+#define TTS_BALLOON 0x40
+#endif
 
 template <typename TBaseEdit>
-class CBaseEdit : public TBaseEdit 
+class ValidatingEdit : public TBaseEdit 
 {
 public:
-  CBaseEdit (const bool bProcessChars = true)
+  ValidatingEdit (const bool bProcessChars = true)
     : m_bProcessChars (bProcessChars) {
     SetDefaults ();
   }
-  virtual ~CBaseEdit () {};
+  virtual ~ValidatingEdit () {};
 
   // Valid the Input. if the Text is Valid or allow Empty. if bSetInputValid is
   // true, change the UI Valid state.
@@ -112,7 +116,7 @@ public:
       m_ToolTip.FillInToolInfo (ti, this, 0);
       ti.uFlags |= TTF_TRACK | TTF_CENTERTIP | TTF_ABSOLUTE;
       ti.lpszText = (LPTSTR) pszText;
-#if _MSC_VER >= 1310
+#if _WIN32_IE >= 0x0500
       m_ToolTip.SetTitle (iIconType, pszTitle);
 #endif
       m_ToolTip.SendMessage (TTM_ADDTOOL, 0, reinterpret_cast<LPARAM>(&ti));
@@ -640,8 +644,8 @@ private:
     m_bDisplayTTonNull = true;
   }
 
-  CBaseEdit (CBaseEdit const &); // No copy construction.
-  CBaseEdit &operator = (CBaseEdit const &); // No assignment.
+  ValidatingEdit (ValidatingEdit const &); // No copy construction.
+  ValidatingEdit &operator = (ValidatingEdit const &); // No assignment.
 
 private:
   bool m_bProcessChars;
@@ -668,7 +672,7 @@ private:
   CToolTipCtrl m_ToolTip;
 };
 
-BEGIN_TEMPLATE_MESSAGE_MAP(CBaseEdit, TBaseEdit, TBaseEdit)
+BEGIN_TEMPLATE_MESSAGE_MAP(ValidatingEdit, TBaseEdit, TBaseEdit)
   ON_WM_CHAR()
   ON_WM_KEYDOWN()
   ON_WM_KILLFOCUS()

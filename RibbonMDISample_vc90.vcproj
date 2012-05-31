@@ -149,8 +149,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm200 "
 				Optimization="0"
-				AdditionalIncludeDirectories="third_party/chrome/;third_party/;third_party/pcre/files/"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;&quot;NOMINMAX&quot;;&quot;_HAS_EXCEPTIONS=0&quot;;&quot;_STATIC_CPPLIB&quot;;&quot;PCRE_STATIC&quot;"
+				AdditionalIncludeDirectories="third_party/chrome/"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;&quot;NOMINMAX&quot;;&quot;_HAS_EXCEPTIONS=0&quot;;&quot;_STATIC_CPPLIB&quot;"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
@@ -837,10 +837,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\quantity_edit.cc"
-				>
-			</File>
-			<File
 				RelativePath="RibbonMDISample.cpp"
 				>
 			</File>
@@ -925,6 +921,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\validating_edit.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\XTPConfigBar.cc"
 				>
 			</File>
@@ -967,14 +967,6 @@
 			</File>
 			<File
 				RelativePath=".\osc_command_ids.h"
-				>
-			</File>
-			<File
-				RelativePath=".\quantity_edit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\regex_validating_edit.h"
 				>
 			</File>
 			<File

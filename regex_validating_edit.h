@@ -14,7 +14,7 @@
 
 // using the pcre regex lib to check the input.
 template <class TBaseEdit>
-class RegexValidatingEdit : public CBaseEdit<TBaseEdit>
+class RegexValidatingEdit : public ValidatingEdit<TBaseEdit>
 {
 public:
   // match nothing.
