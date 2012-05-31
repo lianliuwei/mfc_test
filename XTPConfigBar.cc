@@ -7,10 +7,11 @@
 
 #include "osc_command_ids.h"
 #include "OnOffButton.h"
+#include "quantity_edit.h"
 
 namespace {
 
-static const int kControlWidth = 80;
+static const int kControlWidth = 120;
 
 void SetControlToManualUpdate(CXTPControl* control) {
   control->SetFlags(control->GetFlags()|xtpFlagManualUpdate);
@@ -56,10 +57,11 @@ bool XTPConfigBar::Init() {
   can_h_vertical_div_ = DYNAMIC_DOWNCAST(CXTPControlComboBox,
     pGroupCANH->Add(xtpControlComboBox, ID_COMBOX_CAN_HIGH_VERTICAL_DIV));
   SetControlShowStyle(can_h_vertical_div_);
-  can_h_vertical_offset_ = DYNAMIC_DOWNCAST(CXTPControlEdit,
-    pGroupCANH->Add(xtpControlEdit, ID_EDIT_CAN_HIGH_VERICAL_OFFSET));
+  can_h_vertical_offset_ = new CXTPQuantityEdit;
+  pGroupCANH->Add(can_h_vertical_offset_, ID_EDIT_CAN_HIGH_VERICAL_OFFSET);
   SetControlShowStyle(can_h_vertical_offset_);
-
+  SetControlToManualUpdate(can_h_vertical_offset_);
+  can_h_vertical_offset_->SetEnabled(TRUE);
   return true;
 }
 

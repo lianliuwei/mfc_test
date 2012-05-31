@@ -6,6 +6,7 @@
 
 class CXTPRibbonBar;
 class OnOffButton;
+class CXTPQuantityEdit;
 
 // this class using for create the Osc Config Controls. change control set for 
 // different Osc state. controls the show or hide of professional controls (it
@@ -57,7 +58,7 @@ private:
   
   CXTPControlComboBox* can_h_vertical_div_;
 
-  CXTPControlEdit* can_h_vertical_offset_;
+  CXTPQuantityEdit* can_h_vertical_offset_;
 
   // TODO need a self-verify textbox for input voltage and ampere.
   DISALLOW_COPY_AND_ASSIGN(XTPConfigBar);
