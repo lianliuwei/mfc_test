@@ -8,18 +8,9 @@
 // implement the Validating method.
 // using template technology for inherit from different Edit class(MFC is no 
 // welcome for template)
-// for using you need to define message handle struct
-// in cpp define this:
-// BEGIN_MESSAGE_MAP(CBaseEdit<TBaseEdit>, CEdit)
-//   ON_WM_CHAR()
-//   ON_WM_KEYDOWN()
-//   ON_WM_KILLFOCUS()
-//   ON_WM_SETFOCUS()
-//   ON_WM_CTLCOLOR_REFLECT()
-//   ON_WM_PAINT()
-// END_MESSAGE_MAP()
 
-template <class TBaseEdit>
+
+template <typename TBaseEdit>
 class CBaseEdit : public TBaseEdit 
 {
 public:
@@ -430,7 +421,7 @@ protected:
 
     if (bExecute)
     {
-      lResult = CEdit::WindowProc (message, wParam, lParam);
+      lResult = TBaseEdit::WindowProc (message, wParam, lParam);
     }
 
     if (bResetValid) ResetValid ();
@@ -442,7 +433,7 @@ protected:
   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
     if (!m_bProcessChars || ValidateChar (nChar))
     {
-      CEdit::OnChar (nChar, nRepCnt, nFlags);
+      TBaseEdit::OnChar (nChar, nRepCnt, nFlags);
     }
   }
 
@@ -484,7 +475,7 @@ protected:
 
     if (bExecute)
     {
-      CEdit::OnKeyDown (nChar, nRepCnt, nFlags);
+      TBaseEdit::OnKeyDown (nChar, nRepCnt, nFlags);
     }
   }
 
@@ -498,12 +489,12 @@ protected:
     // Don't allow cursor to disappear...
     if (pNewWnd && pNewWnd->m_hWnd != m_ToolTip.m_hWnd)
     {
-      CEdit::OnKillFocus (pNewWnd);
+      TBaseEdit::OnKillFocus (pNewWnd);
     }
   }
 
   afx_msg void OnSetFocus(CWnd* pOldWnd) {
-    CEdit::OnSetFocus (pOldWnd);
+    TBaseEdit::OnSetFocus (pOldWnd);
     Invalidate ();
 
     if (!m_bInputValid) DisplayToolTip (true);
@@ -543,7 +534,7 @@ protected:
   afx_msg void OnPaint() {
     if (GetStyle () & ES_READONLY)
     {
-      CEdit::OnPaint ();
+      TBaseEdit::OnPaint ();
     }
     else
     {
@@ -676,5 +667,14 @@ private:
   bool m_bDisplayTTonNull;
   CToolTipCtrl m_ToolTip;
 };
+
+BEGIN_TEMPLATE_MESSAGE_MAP(CBaseEdit, TBaseEdit, TBaseEdit)
+  ON_WM_CHAR()
+  ON_WM_KEYDOWN()
+  ON_WM_KILLFOCUS()
+  ON_WM_SETFOCUS()
+  ON_WM_CTLCOLOR_REFLECT()
+  ON_WM_PAINT()
+END_MESSAGE_MAP()
 
 #endif // VALIDATING_EDIT_H_
