@@ -2,6 +2,8 @@
 
 #include "stress/stress_device.h"
 
+#include "base/logging.h"
+
 // TODO this dup with the View. remove this dup.
 namespace {
 const static double kRMin = 0.0;
@@ -34,18 +36,18 @@ void StressDevice::SetComponentValue(StressComponent component,
     return;
   if (component == kCHL) { // capacitor
     unsigned char reg_value = 0U;
-    ASSERT(kCMin <= value && value <= kCMax);
+    CHECK(kCMin <= value && value <= kCMax);
     reg_value = static_cast<unsigned char>(value / kCStep);
     double remain = value - reg_value * kCStep;
-    ASSERT((-kDoubleMin) < remain && remain < kDoubleMin);
+    CHECK((-kDoubleMin) < remain && remain < kDoubleMin);
     // set to the hardware
     chl = reg_value;
   } else { // resistor
     unsigned short reg_value = 0U;
-    ASSERT(kRMin <= value && value <= kRMax);
+    CHECK(kRMin <= value && value <= kRMax);
     reg_value = static_cast<unsigned short>(value / kRStep);
     double remain = value - reg_value * kRStep;
-    ASSERT((-kDoubleMin) < remain && remain < kDoubleMin);
+    CHECK((-kDoubleMin) < remain && remain < kDoubleMin);
     // set to the hardware.
     switch (component) {
     case kRH:
@@ -59,7 +61,7 @@ void StressDevice::SetComponentValue(StressComponent component,
     case kRSL:
       rsl = reg_value; break;
     default:
-      ASSERT(FALSE); // no exit
+      NOTREACHED();; // no exit
     }
   }
   NotifyValueChanged(component, value);
