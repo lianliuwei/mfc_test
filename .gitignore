@@ -7,6 +7,7 @@ Debug/
 Release/
 Purify/
 unicode_Debug/
+unicode_Release/
 bin/
 #visual studio files
 *.user
@@ -30,3 +31,6 @@ bin/
 *.pch
 *.aps
 *.log
+*.opensdf
+*.sdf
+*.filters

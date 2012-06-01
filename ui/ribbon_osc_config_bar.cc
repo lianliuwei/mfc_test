@@ -1,13 +1,13 @@
 #include "StdAfx.h"
-#include "resource.h"
+#include "resources/resource.h"
 
-#include "XTPConfigBar.h"
+#include "ui/ribbon_osc_config_bar.h"
 
 #include "base/logging.h"
 
-#include "osc_command_ids.h"
-#include "OnOffButton.h"
-#include "quantity_edit.h"
+#include "ui/osc_command_ids.h"
+#include "ui/on_off_button.h"
+#include "ui/quantity_edit.h"
 
 namespace {
 
@@ -26,7 +26,7 @@ void SetControlShowStyle(CXTPControl* control) {
 static const SIZE gOffsetSize = {80, 22};
 }
 
-XTPConfigBar::XTPConfigBar(CXTPRibbonBar* ribbon_bar,
+RibbonOscConfigBar::RibbonOscConfigBar(CXTPRibbonBar* ribbon_bar,
                            CWnd* main_frame,
                            CommandUpdater* command_updater)
   : ribbon_bar_(ribbon_bar)
@@ -36,7 +36,7 @@ XTPConfigBar::XTPConfigBar(CXTPRibbonBar* ribbon_bar,
   , start_or_stop_(NULL)
   , auto_scale_(NULL) {}
 
-bool XTPConfigBar::Init() {
+bool RibbonOscConfigBar::Init() {
   if (ribbon_bar_ == NULL) {
     LOG(INFO) << "no RibbonBar" <<
       "continue without config bar.";
@@ -65,7 +65,7 @@ bool XTPConfigBar::Init() {
   return true;
 }
 
-void XTPConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
+void RibbonOscConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
   CXTPControl* control = NULL;
   switch (id) {
     case IDC_OSC_ON_OFF: 
@@ -84,7 +84,7 @@ void XTPConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
   }
 }
 
-void XTPConfigBar::ParamChangedForCommand(int id, const base::Value& param) {
+void RibbonOscConfigBar::ParamChangedForCommand(int id, const base::Value& param) {
   switch (id) {
     case IDC_OSC_ON_OFF: {
       bool on_off;

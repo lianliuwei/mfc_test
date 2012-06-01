@@ -15,7 +15,7 @@ class CXTPQuantityEdit;
 // INFO this method has risk, because the XTP has mechanism the clone the 
 // control obj to implement copy command UI and some other effect, that let the
 // ptr to control become invalid.
-class XTPConfigBar : public CommandUpdater::CommandObserver
+class RibbonOscConfigBar : public CommandUpdater::CommandObserver
 {
 public:
   enum OSC_STATE {
@@ -24,9 +24,9 @@ public:
   };
 
   // create the control ui.
-  XTPConfigBar(CXTPRibbonBar* ribbon_bar, CWnd* main_frame,
+  RibbonOscConfigBar(CXTPRibbonBar* ribbon_bar, CWnd* main_frame,
     CommandUpdater* command_updater);
-  ~XTPConfigBar() {};
+  ~RibbonOscConfigBar() {};
 
   // create the controls
   bool Init();
@@ -61,7 +61,7 @@ private:
   CXTPQuantityEdit* can_h_vertical_offset_;
 
   // TODO need a self-verify textbox for input voltage and ampere.
-  DISALLOW_COPY_AND_ASSIGN(XTPConfigBar);
+  DISALLOW_COPY_AND_ASSIGN(RibbonOscConfigBar);
 };
 
 #endif // XTPCONFIGBAR_H_

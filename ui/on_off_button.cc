@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "OnOffButton.h"
+#include "on_off_button.h"
 #include "base/memory/scoped_ptr.h"
 #include "base/values.h"
 #include "command_updater.h"
