@@ -386,6 +386,14 @@
 					RelativePath="..\ui\XTPToggleButton.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ui\XTPValidatingControlEdit.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\XTPValidatingControlEdit.h"
+					>
+				</File>
 				<Filter
 					Name="views"
 					>
