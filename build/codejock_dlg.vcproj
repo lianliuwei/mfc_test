@@ -75,7 +75,7 @@
 				AdditionalLibraryDirectories="C:\Program Files (x86)\Xtreme ToolkitPro v15.2.1.0221\Lib\vc90"
 				DelayLoadDLLs="dbghelp.dll;dwmapi.dll;uxtheme.dll"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -203,14 +203,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\app\app.h"
-					>
-				</File>
-				<File
-					RelativePath="..\app\GdiplusH.h"
-					>
-				</File>
-				<File
 					RelativePath="..\app\stdafx.cpp"
 					>
 					<FileConfiguration
@@ -240,150 +232,14 @@
 				>
 			</Filter>
 			<Filter
-				Name="third_party"
-				>
-			</Filter>
-			<Filter
 				Name="resources"
 				>
-				<File
-					RelativePath="..\resources\about_dialog.rc"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\analog_disturbance_view.rc"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\app.ico"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\config_view.rc"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\main_frame.rc"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\mfc_res.rc"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\paneicons.bmp"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\resource.h"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\stress_resource.h"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\Toolbar.bmp"
-					>
-				</File>
 				<File
 					RelativePath="..\resources\version.rc"
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="ui"
-				>
-				<File
-					RelativePath="..\ui\about_dialog.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\about_dialog.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\analog_disturbance.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\analog_disturbance.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\config_view.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\config_view.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\main_frame.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\main_frame.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\value_get_controls.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\ui\value_get_controls.h"
-					>
-				</File>
-				<Filter
-					Name="views"
-					>
-					<File
-						RelativePath="..\ui\views\picture_ctrl.cc"
-						>
-					</File>
-					<File
-						RelativePath="..\ui\views\picture_ctrl.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="stress"
-				>
-				<File
-					RelativePath="..\stress\stress_device.cc"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\stress\stress_device.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\resources\bmp1.png"
-			>
-		</File>
-		<File
-			RelativePath="..\resources\bmp2.png"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global
