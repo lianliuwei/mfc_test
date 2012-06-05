@@ -237,12 +237,12 @@ void AnalogDisturbanceView::Init()
   value_chl_.set_value(device_->ComponentValue(kCHL));
   value_rsl_.set_value(device_->ComponentValue(kRSL));
 
-  OnComponendEnableChanged(kRH, device_->ComponentEnable(kRH));
-  OnComponendEnableChanged(kRHL, device_->ComponentEnable(kRHL));
-  OnComponendEnableChanged(kRL, device_->ComponentEnable(kRL));
-  OnComponendEnableChanged(kRSH, device_->ComponentEnable(kRSH));
-  OnComponendEnableChanged(kCHL, device_->ComponentEnable(kCHL));
-  OnComponendEnableChanged(kRSL, device_->ComponentEnable(kRSL));
+  OnComponentEnableChanged(kRH, device_->ComponentEnable(kRH));
+  OnComponentEnableChanged(kRHL, device_->ComponentEnable(kRHL));
+  OnComponentEnableChanged(kRL, device_->ComponentEnable(kRL));
+  OnComponentEnableChanged(kRSH, device_->ComponentEnable(kRSH));
+  OnComponentEnableChanged(kCHL, device_->ComponentEnable(kCHL));
+  OnComponentEnableChanged(kRSL, device_->ComponentEnable(kRSL));
 
   OnDisturbanceVoltageChanged(CAN_HIGH, device_->GetDisturbanceVoltage(CAN_HIGH));
   OnDisturbanceVoltageChanged(CAN_LOW, device_->GetDisturbanceVoltage(CAN_LOW));
@@ -280,7 +280,7 @@ void AnalogDisturbanceView::OnLayoutChange() {
     kLayoutStatus[select][kRSL], kLayoutCanChange[select][kRSL]);  
 }
 
-void AnalogDisturbanceView::OnComponendEnableChanged( StressComponent component,
+void AnalogDisturbanceView::OnComponentEnableChanged( StressComponent component,
                                                      bool enable ) {
   switch (component) {
   case kCHL:
@@ -312,7 +312,7 @@ void AnalogDisturbanceView::OnComponendEnableChanged( StressComponent component,
   }
 }
 
-void AnalogDisturbanceView::OnComponendValueChanged(StressComponent component, double value)
+void AnalogDisturbanceView::OnComponentValueChanged(StressComponent component, double value)
 {
   switch (component) {
   case kCHL:

@@ -49,8 +49,8 @@ private:
   virtual void OnEnableChange( ComponentEnableControls* component, bool enable);
 
   // implement StressDeviceListener
-  virtual void OnComponendEnableChanged(StressComponent component, bool enable);
-  virtual void OnComponendValueChanged(StressComponent component, double value);
+  virtual void OnComponentEnableChanged(StressComponent component, bool enable);
+  virtual void OnComponentValueChanged(StressComponent component, double value);
   virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt);
 
   // init the gui there

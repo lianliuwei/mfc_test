@@ -45,9 +45,9 @@ struct PORTCFG
 
 class StressDeviceObserver {
 public:
-  virtual void OnComponendEnableChanged(StressComponent component, bool enable) = 0;
+  virtual void OnComponentEnableChanged(StressComponent component, bool enable) = 0;
 
-  virtual void OnComponendValueChanged(StressComponent component, double value) = 0;
+  virtual void OnComponentValueChanged(StressComponent component, double value) = 0;
 
   virtual void OnDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) = 0;
 };
@@ -98,12 +98,12 @@ public:
 private:
   void NotifyEnableChanged(StressComponent component, bool enable) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
-      OnComponendEnableChanged(component, enable));
+      OnComponentEnableChanged(component, enable));
   }
 
   void NotifyValueChanged(StressComponent component, double value) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
-      OnComponendValueChanged(component, value));
+      OnComponentValueChanged(component, value));
   }
 
   void NotifyDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) {
