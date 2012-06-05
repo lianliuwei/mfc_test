@@ -5,14 +5,11 @@
 #include "stress/stress_device.h"
 
 class ConfigView : public CFormView
-                 , public StressDeviceListener
+                 , public StressDeviceObserver
 {
 public:
-  ConfigView(StressDevice* device)
-    : CFormView(IDD)
-    , init_(false)
-    , device_(device) {}
-  virtual ~ConfigView() {}
+  ConfigView(StressDevice* device);
+  virtual ~ConfigView();
 
   virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, 
     DWORD dwRequestedStyle, const RECT& rect, CWnd* pParentWnd, 

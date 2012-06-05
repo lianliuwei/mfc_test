@@ -259,6 +259,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\resources\bmp1.png"
+					>
+				</File>
+				<File
+					RelativePath="..\resources\bmp2.png"
+					>
+				</File>
+				<File
 					RelativePath="..\resources\config_view.rc"
 					>
 				</File>
@@ -308,6 +316,14 @@
 				</File>
 				<File
 					RelativePath="..\ui\analog_disturbance.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\component_enable_controls.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\component_enable_controls.h"
 					>
 				</File>
 				<File
@@ -376,14 +392,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\resources\bmp1.png"
-			>
-		</File>
-		<File
-			RelativePath="..\resources\bmp2.png"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global

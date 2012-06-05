@@ -3,6 +3,7 @@
 #include "resources/stress_resource.h"
 
 #include "ui/value_get_controls.h"
+#include "ui/component_enable_controls.h"
 #include "ui/views/picture_ctrl.h"
 #include "stress/stress_device.h"
 
@@ -27,11 +28,12 @@ enum StressLayout {
 
 class AnalogDisturbanceView : public CFormView
                             , public ValueGetListener
-                            , public StressDeviceListener
+                            , public ComponentEnableListener
+                            , public StressDeviceObserver
 {
 public:
   AnalogDisturbanceView(StressDevice* device);
-  virtual ~AnalogDisturbanceView() {};
+  virtual ~AnalogDisturbanceView();;
 
   virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, 
     DWORD dwRequestedStyle, const RECT& rect, CWnd* pParentWnd, 
@@ -42,6 +44,9 @@ private:
 
   // implement ValueGetListener
   virtual void OnValueChange(ValueGetControls* value_get, double value);
+  
+  // implement ComponentEnableListener
+  virtual void OnEnableChange( ComponentEnableControls* component, bool enable);
 
   // implement StressDeviceListener
   virtual void OnComponendEnableChanged(StressComponent component, bool enable);
@@ -57,19 +62,13 @@ private:
   // void set_chnl_volt(CAN_CHNL);
   bool GetComponentEnable(StressComponent component) const;
 
+  void SetComponentEnable(StressComponent component, 
+    ComponentEnableControls* enable_controls, bool enable, bool can_change);
+
   virtual void DoDataExchange(CDataExchange* pDX);
-  
-  afx_msg void OnRHEnable();
-  afx_msg void OnRHLEnable();
-  afx_msg void OnRLEnable();
-  afx_msg void OnRSHEnable();
-  afx_msg void OnCHLEnable();
-  afx_msg void OnRSLEnable();
 
   afx_msg void OnLayoutChange();
   DECLARE_MESSAGE_MAP()
-
-
 private:
   // controls group
   ValueGetControls value_rh_;
@@ -79,21 +78,20 @@ private:
   ValueGetControls value_chl_;
   ValueGetControls value_rsl_;
   
-  // for temp test.
-  CXTPButton rh_enable_;
-  CXTPButton rhl_enable_;
-  CXTPButton rl_enable_;
-  CXTPButton rsh_enable_;
-  CXTPButton chl_enable_;
-  CXTPButton rsl_enable_;
+  // enable show and user click
+  ComponentEnableControls rh_enable_;
+  ComponentEnableControls rhl_enable_;
+  ComponentEnableControls rl_enable_;
+  ComponentEnableControls rsh_enable_;
+  ComponentEnableControls chl_enable_;
+  ComponentEnableControls rsl_enable_;
   
   // control to show what the CHNL input volt is.
-  CPictureCtrl can_h_volt_;
-  CPictureCtrl can_l_volt_;
+  ComponentEnableControls can_h_volt_;
+  ComponentEnableControls can_l_volt_;
 
   // select specific layout.
   CComboBox layout_;
-
  
   // init GUI trick
   bool init_;

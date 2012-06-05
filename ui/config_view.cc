@@ -19,8 +19,8 @@ namespace {
 
 BEGIN_MESSAGE_MAP(ConfigView, CFormView)
   ON_CBN_SELCHANGE(IDC_COMBO_OSC_LISTEN_PORT, OnOscListenPort)
-  ON_CBN_SELCHANGE(IDC_COMBO_CANH_DIS_VOLT, OnCANLDisturbVolt)
-  ON_CBN_SELCHANGE(IDC_COMBO_CANL_DIS_VOLT, OnCANHDisturbVolt)
+  ON_CBN_SELCHANGE(IDC_COMBO_CANH_DIS_VOLT, OnCANHDisturbVolt)
+  ON_CBN_SELCHANGE(IDC_COMBO_CANL_DIS_VOLT, OnCANLDisturbVolt)
   ON_CBN_SELCHANGE(IDC_COMBO_CAN_BUS_TYPE, OnCANBusType)
 END_MESSAGE_MAP()
 
@@ -60,6 +60,8 @@ void ConfigView::Init() {
   can_high_dist_volt_.SetCurSel(device_->GetDisturbanceVoltage(CAN_HIGH));
   can_low_dist_volt_.SetCurSel(device_->GetDisturbanceVoltage(CAN_LOW));
   can_bus_type_.SetCurSel(device_->GetCANBusType());
+
+  device_->AddObserver(this);
 }
 
 void ConfigView::OnOscListenPort() {
@@ -94,4 +96,15 @@ void ConfigView::OnDisturbanceVoltageChanged( CAN_CHNL chnl,
   default:
     ASSERT(0);
   }
+}
+
+ConfigView::ConfigView( StressDevice* device ) 
+    : CFormView(IDD)
+    , init_(false)
+    , device_(device) {
+    DCHECK(device_ != NULL);
+}
+
+ConfigView::~ConfigView() {
+  device_->RemoveObserver(this);
 }

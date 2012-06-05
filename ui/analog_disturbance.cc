@@ -15,35 +15,69 @@ const static int kCPrecision = 0;
 static const bool kLayoutStatus[][kComponentSize] = {
   // kRH kRHL   kRL   kRSH   kCHL    kRSL
   // kStandard
-  {true, true, false, false, false, false},
+  {false, false, false, false, false, false},
   // kR_H
-  {true, true, false, false, false, false},
+  {true, false, false, false, false, false},
   // kR_SH
-  {false, true, false, false, false, false},
-  // kR_HL_without_R_SH
   {false, false, false, true, false, false},
+  // kR_HL_without_R_SH
+  {false, true, false, false, false, false},
   // kR_HL_without_R_SL
   {false, true, false, false, false, false},
   // kR_SL
-  {false, true, false, false, false, true},
+  {false, false, false, false, false, true},
   // kR_L
-  {false, true, true, false, false, false},
+  {false, false, true, false, false, false},
   // kR_H_and_R_SL
-  {true, true, false, false, false, true},
+  {true, false, false, false, false, true},
   // kR_H_and_R_L
   {true, false, true, false, false, false},
   // kR_SH_and_R_HL
-  {false, true, true, true, false, false},
+  {false, true, false, true, false, false},
   // kR_SH_and_R_SL
-  {false, true, false, true, false, true},
+  {false, false, false, true, false, true},
   // kR_SH_and_R_L
-  {false, true, true, true, false, false},
+  {false, false, true, true, false, false},
   // kR_HL_and_R_SL
   {false, true, false, false, false, true},
   // kR_HL_and_R_H
   {true, true, false, false, false, false},
   // kR_HL_and_R_L
   {false, true, true, false, false, false},
+};
+
+static const bool kLayoutCanChange[][kComponentSize] = {
+  // kRH kRHL   kRL   kRSH   kCHL    kRSL
+  // kStandard
+  {true, true, true, true, true, true},
+  // kR_H
+  {false, true, true, false, true, true},
+  // kR_SH
+  {false, true, true, false, true, true},
+  // kR_HL_without_R_SH
+  {true, false, true, false, true, true},
+  // kR_HL_without_R_SL
+  {true, false, true, true, true, false},
+  // kR_SL
+  {true, true, false, true, true, false},
+  // kR_L
+  {true, true, false, true, true, false},
+  // kR_H_and_R_SL
+  {false, true, false, false, true, false},
+  // kR_H_and_R_L
+  {false, true, false, false, true, false},
+  // kR_SH_and_R_HL
+  {false, false, true, false, true, false},
+  // kR_SH_and_R_SL
+  {false, true, false, false, true, false},
+  // kR_SH_and_R_L
+  {false, true, false, false, true, false},
+  // kR_HL_and_R_SL
+  {true, false, false, false, true, false},
+  // kR_HL_and_R_H
+  {false, false, true, false, true, false},
+  // kR_HL_and_R_L
+  {true, false, false, false, true, false},
 };
 
 static const TCHAR* kLayoutString[] = {
@@ -68,34 +102,49 @@ static const TCHAR* kLayoutString[] = {
 
 
 BEGIN_MESSAGE_MAP(AnalogDisturbanceView, CFormView)
-  ON_COMMAND(IDC_CHECKBOX_RH, OnRHEnable)
-  ON_COMMAND(IDC_CHECKBOX_RHL, OnRHLEnable)
-  ON_COMMAND(IDC_CHECKBOX_RL, OnRLEnable)
-  ON_COMMAND(IDC_CHECKBOX_RSH, OnRSHEnable)
-  ON_COMMAND(IDC_CHECKBOX_CHL, OnCHLEnable)
-  ON_COMMAND(IDC_CHECKBOX_RSL, OnRSLEnable)
   ON_CBN_SELCHANGE(IDC_COMBOX_LAYOUT, OnLayoutChange)
 END_MESSAGE_MAP()
 
 AnalogDisturbanceView::AnalogDisturbanceView(StressDevice* device)
     : CFormView(AnalogDisturbanceView::IDD)
-    , value_rh_(IDC_SLIDER_RH, IDC_EDIT_RH, IDC_SPIN_RH, IDC_PICTURE_RH, ID_PNG_RH_ENABLE, ID_PNG_RH_DISABLE,
+    , value_rh_(IDC_SLIDER_RH, IDC_EDIT_RH, IDC_SPIN_RH,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rhl_(IDC_SLIDER_RHL, IDC_EDIT_RHL, IDC_SPIN_RHL, IDC_PICTURE_RHL, ID_PNG_RHL_ENABLE, ID_PNG_RHL_DISABLE,
+    , value_rhl_(IDC_SLIDER_RHL, IDC_EDIT_RHL, IDC_SPIN_RHL,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rl_(IDC_SLIDER_RL, IDC_EDIT_RL, IDC_SPIN_RL, IDC_PICTURE_RL, ID_PNG_RL_ENABLE, ID_PNG_RL_DISABLE,
+    , value_rl_(IDC_SLIDER_RL, IDC_EDIT_RL, IDC_SPIN_RL,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_rsh_(IDC_SLIDER_RSH, IDC_EDIT_RSH, IDC_SPIN_RSH, IDC_PICTURE_RSH, ID_PNG_RSH_ENABLE, ID_PNG_RSH_DISABLE,
+    , value_rsh_(IDC_SLIDER_RSH, IDC_EDIT_RSH, IDC_SPIN_RSH,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
-    , value_chl_(IDC_SLIDER_CHL, IDC_EDIT_CHL, IDC_SPIN_CHL, IDC_PICTURE_CHL, ID_PNG_CHL_ENABLE, ID_PNG_CHL_DISABLE,
+    , value_chl_(IDC_SLIDER_CHL, IDC_EDIT_CHL, IDC_SPIN_CHL,
     kCMin, kCMax, kCStep, 0.0, kCPrecision, this)
-    , value_rsl_(IDC_SLIDER_RSL, IDC_EDIT_RSL, IDC_SPIN_RSL, IDC_PICTURE_RSL, ID_PNG_RSL_ENABLE, ID_PNG_RSL_DISABLE,
+    , value_rsl_(IDC_SLIDER_RSL, IDC_EDIT_RSL, IDC_SPIN_RSL,
     kRMin, kRMax, kRStep, 0.0, kRPrecision, this)
+    , rh_enable_(IDC_BUTTON_RH, IDC_PICTURE_RH, 
+    ID_PNG_RH_ENABLE, ID_PNG_RH_DISABLE, this)
+    , rhl_enable_(IDC_BUTTON_RHL, IDC_PICTURE_RHL, 
+    ID_PNG_RHL_ENABLE, ID_PNG_RHL_DISABLE, this)
+    , rl_enable_(IDC_BUTTON_RL, IDC_PICTURE_RL,
+    ID_PNG_RL_ENABLE, ID_PNG_RL_DISABLE, this)
+    , rsh_enable_(IDC_BUTTON_RSH, IDC_PICTURE_RSH, 
+    ID_PNG_RSH_ENABLE, ID_PNG_RSH_DISABLE, this)
+    , chl_enable_(IDC_BUTTON_CHL, IDC_PICTURE_CHL, 
+    ID_PNG_CHL_ENABLE, ID_PNG_CHL_DISABLE, this)
+    , rsl_enable_(IDC_BUTTON_RSL, IDC_PICTURE_RSL, 
+    ID_PNG_RSL_ENABLE, ID_PNG_RSL_DISABLE, this)
+    , can_h_volt_(IDC_BUTTON_CAN_H_VOLT, IDC_PICTURE_CAN_H_VOLT, 
+    ID_PNG_CAN_HIGH_VOLT_PLUS, ID_PNG_CAN_HIGH_VOLT_MINUS, this)
+    , can_l_volt_(IDC_BUTTON_CAN_L_VOLT, IDC_PICTURE_CAN_L_VOLT, 
+    ID_PNG_CAN_LOW_VOLT_PLUS, ID_PNG_CAN_LOW_VOLT_MINUS, this)
     , init_(false)
     , device_(device) {
   ASSERT(device != NULL);
 
 }
+
+AnalogDisturbanceView::~AnalogDisturbanceView() {
+  device_->RemoveObserver(this);
+}
+
 
 BOOL AnalogDisturbanceView::Create( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, 
                                    DWORD dwRequestedStyle, const RECT& rect,
@@ -116,17 +165,17 @@ void AnalogDisturbanceView::DoDataExchange( CDataExchange* pDX )
   value_chl_.DoDataExchange(pDX);
   value_rsl_.DoDataExchange(pDX);
 
-  DDX_Control(pDX, IDC_CHECKBOX_RH, rh_enable_);
-  DDX_Control(pDX, IDC_CHECKBOX_RHL, rhl_enable_);
-  DDX_Control(pDX, IDC_CHECKBOX_RL, rl_enable_);
-  DDX_Control(pDX, IDC_CHECKBOX_RSH, rsh_enable_);
-  DDX_Control(pDX, IDC_CHECKBOX_CHL, chl_enable_);
-  DDX_Control(pDX, IDC_CHECKBOX_RSL, rsl_enable_);
+  rh_enable_.DoDataExchange(pDX);
+  rhl_enable_.DoDataExchange(pDX);
+  rl_enable_.DoDataExchange(pDX);
+  rsh_enable_.DoDataExchange(pDX);
+  chl_enable_.DoDataExchange(pDX);
+  rsl_enable_.DoDataExchange(pDX);
+
+  can_h_volt_.DoDataExchange(pDX);
+  can_l_volt_.DoDataExchange(pDX);
 
   DDX_Control(pDX, IDC_COMBOX_LAYOUT, layout_);
-
-  DDX_Control(pDX, IDC_PICTURE_CAN_H_VOLT, can_h_volt_);
-  DDX_Control(pDX, IDC_PICTURE_CAN_L_VOLT, can_l_volt_);
 
   if (init_ == false) {
     init_ = true;
@@ -153,35 +202,28 @@ void AnalogDisturbanceView::OnValueChange(ValueGetControls* value_get, double va
   }
 } 
 
-void AnalogDisturbanceView::OnRHEnable() {
-  bool enable = (rh_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kRH, enable);
-}
-
-void AnalogDisturbanceView::OnRHLEnable() {
-  bool enable = (rhl_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kRHL, enable);
-}
-
-void AnalogDisturbanceView::OnRLEnable() {
-  bool enable = (rl_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kRL, enable);
-}
-
-void AnalogDisturbanceView::OnRSHEnable() {
-  bool enable = (rsh_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kRSH, enable);
-}
-
-void AnalogDisturbanceView::OnCHLEnable() {
-  bool enable = (chl_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kCHL, enable);
-}
-
-void AnalogDisturbanceView::OnRSLEnable() {
-  bool enable = (rsl_enable_.GetChecked() == TRUE);
-  device_->SetComponentEnable(kRSL, enable);
-}
+void AnalogDisturbanceView::OnEnableChange(ComponentEnableControls* component, bool enable)
+{
+  if (component == &rh_enable_) {
+    device_->SetComponentEnable(kRH, enable);
+  } else if (component == &rhl_enable_) {
+    device_->SetComponentEnable(kRHL, enable);
+  } else if (component == &rl_enable_) {
+    device_->SetComponentEnable(kRL, enable);
+  } else if (component == &rsh_enable_) {
+    device_->SetComponentEnable(kRSH, enable);
+  } else if (component == &chl_enable_) {
+    device_->SetComponentEnable(kCHL, enable);
+  } else if (component == &rsl_enable_) {
+    device_->SetComponentEnable(kRSL, enable);
+  } else if (component == &can_h_volt_) {
+    device_->SetDisturbanceVoltage(CAN_HIGH, enable ? VOLT_PLUS : VOLT_MINUS);
+  } else if (component == &can_l_volt_) {
+    device_->SetDisturbanceVoltage(CAN_LOW, enable ? VOLT_PLUS : VOLT_MINUS);
+  }else {
+    ASSERT(FALSE); // no exist ComponentEnableControls
+  }
+} 
 
 void AnalogDisturbanceView::Init()
 {
@@ -206,20 +248,36 @@ void AnalogDisturbanceView::Init()
   OnDisturbanceVoltageChanged(CAN_LOW, device_->GetDisturbanceVoltage(CAN_LOW));
 
   // listener the device_ get notify when device change.
-  device_->set_listener(this);
+  device_->AddObserver(this);
 }
 
+void AnalogDisturbanceView::SetComponentEnable(
+    StressComponent component, 
+    ComponentEnableControls* enable_controls,
+    bool enable,
+    bool can_change) {
+  // if can_change using the old state.
+  if (!can_change)
+    device_->SetComponentEnable(component, enable);
+  enable_controls->set_can_change(can_change);
+}
 
 void AnalogDisturbanceView::OnLayoutChange() {
   // the combobox select and the StressLayout are match.
   StressLayout select = static_cast<StressLayout>(layout_.GetCurSel());
   ASSERT(0 <= select && select < kLayoutSize);
-  device_->SetComponentEnable(kRH, kLayoutStatus[select][kRH]);
-  device_->SetComponentEnable(kRHL, kLayoutStatus[select][kRHL]);
-  device_->SetComponentEnable(kRL, kLayoutStatus[select][kRL]);
-  device_->SetComponentEnable(kRSH, kLayoutStatus[select][kRSH]);
-  device_->SetComponentEnable(kCHL, kLayoutStatus[select][kCHL]);
-  device_->SetComponentEnable(kRSL, kLayoutStatus[select][kRSL]);
+  SetComponentEnable(kRH, &rh_enable_, 
+    kLayoutStatus[select][kRH], kLayoutCanChange[select][kRH]);  
+  SetComponentEnable(kRHL, &rhl_enable_, 
+    kLayoutStatus[select][kRHL], kLayoutCanChange[select][kRHL]);  
+  SetComponentEnable(kRL, &rl_enable_, 
+    kLayoutStatus[select][kRL], kLayoutCanChange[select][kRL]);  
+  SetComponentEnable(kRSH, &rsh_enable_, 
+    kLayoutStatus[select][kRSH], kLayoutCanChange[select][kRSH]);  
+  SetComponentEnable(kCHL, &chl_enable_, 
+    kLayoutStatus[select][kCHL], kLayoutCanChange[select][kCHL]);  
+  SetComponentEnable(kRSL, &rsl_enable_, 
+    kLayoutStatus[select][kRSL], kLayoutCanChange[select][kRSL]);  
 }
 
 void AnalogDisturbanceView::OnComponendEnableChanged( StressComponent component,
@@ -227,27 +285,27 @@ void AnalogDisturbanceView::OnComponendEnableChanged( StressComponent component,
   switch (component) {
   case kCHL:
     value_chl_.SetEnable(enable);
-    chl_enable_.SetChecked(enable);
+    chl_enable_.set_enable(enable, false);
     break;
   case kRH:
     value_rh_.SetEnable(enable);
-    rh_enable_.SetChecked(enable);
+    rh_enable_.set_enable(enable, false);
     break;
   case kRHL:
     value_rhl_.SetEnable(enable);
-    rhl_enable_.SetChecked(enable);
+    rhl_enable_.set_enable(enable, false);
     break;
   case kRL:
     value_rl_.SetEnable(enable);
-    rl_enable_.SetChecked(enable);
+    rl_enable_.set_enable(enable, false);
     break;
   case kRSH:
     value_rsh_.SetEnable(enable);
-    rsh_enable_.SetChecked(enable);
+    rsh_enable_.set_enable(enable, false);
     break;
   case kRSL:
     value_rsl_.SetEnable(enable);
-    rsl_enable_.SetChecked(enable);
+    rsl_enable_.set_enable(enable, false);
     break;
   default:
     ASSERT(FALSE); // no exit
@@ -278,12 +336,13 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
                                                         DisturbanceVoltage volt) {
   switch(chnl) {
   case CAN_HIGH:
-    can_h_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_HIGH_VOLT_PLUS : ID_PNG_CAN_HIGH_VOLT_MINUS); 
+    can_h_volt_.set_enable(volt == VOLT_PLUS);
     break;
   case CAN_LOW:
-    can_l_volt_.Load( volt== VOLT_PLUS ? ID_PNG_CAN_LOW_VOLT_PLUS : ID_PNG_CAN_LOW_VOLT_MINUS); 
+    can_l_volt_.set_enable(volt == VOLT_PLUS);
     break;
   default:
     ASSERT(FALSE);
   }
 }
+

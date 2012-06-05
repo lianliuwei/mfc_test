@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-#include "ui/views/picture_ctrl.h"
-
 #ifndef UDM_SETPOS32
 #define CUSTOM_POS32_FUN
 #define UDM_SETPOS32            (WM_USER+113)
@@ -146,9 +144,6 @@ public:
   ValueGetControls(unsigned int slider_id, 
                    unsigned int edit_id, 
                    unsigned int spin_id,
-                   unsigned int picture_id,
-                   unsigned int enable_picture_id,
-                   unsigned int disable_picture_id,
                    double min,
                    double max,
                    double step,
@@ -158,9 +153,6 @@ public:
     : slider_id_(slider_id)
     , edit_id_(edit_id)
     , spin_id_(spin_id)
-    , picture_id_(picture_id)
-    , enable_picture_id_(enable_picture_id)
-    , disable_picture_id_(disable_picture_id)
     , init_min_(min)
     , init_max_(max)
     , step_(step)
@@ -202,7 +194,6 @@ public:
 
   void SetEnable(bool enable) {
     BOOL e = enable ? TRUE : FALSE;
-    picture_.Load(enable ? enable_picture_id_ : disable_picture_id_);
     slider_.EnableWindow(e);
     edit_.EnableWindow(e);
     spin_.EnableWindow(e);
@@ -214,16 +205,10 @@ public:
   ValueGetEdit edit_;
   ValueGetSpinCtrl spin_;
 
-  // show the component is enable or disable
-  CPictureCtrl picture_;
-  
   // need id to subclass.
   const unsigned int slider_id_;
   const unsigned int edit_id_;
   const unsigned int spin_id_;
-  const unsigned int picture_id_;
-  const unsigned int enable_picture_id_;
-  const unsigned int disable_picture_id_;
 
   // notify when the value change.
   ValueGetListener* listener_;

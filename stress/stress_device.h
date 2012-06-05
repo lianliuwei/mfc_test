@@ -1,6 +1,6 @@
 #pragma once
 
-// TODO add notify the port change or the value change or enable change.
+#include "base/observer_list.h"
 
 enum StressComponent {
   kRH = 0,
@@ -43,7 +43,7 @@ struct PORTCFG
   WORD resered:9; //保留位
 };
 
-class StressDeviceListener {
+class StressDeviceObserver {
 public:
   virtual void OnComponendEnableChanged(StressComponent component, bool enable) = 0;
 
@@ -59,7 +59,7 @@ public:
 class StressDevice
 {
 public:
-  StressDevice(StressDeviceListener* listener);
+  StressDevice(StressDeviceObserver* listener);
   ~StressDevice() {};
 
 public:
@@ -88,31 +88,31 @@ public:
   void SetCANBusType(CANBusType type);
   CANBusType GetCANBusType();
 
-  void set_listener(StressDeviceListener* listener) {
-    listener_ = listener;
+  void AddObserver(StressDeviceObserver* observer) {
+    observer_list_.AddObserver(observer);
   }
 
+  void RemoveObserver(StressDeviceObserver* observer) {
+    observer_list_.RemoveObserver(observer);
+  }
 private:
   void NotifyEnableChanged(StressComponent component, bool enable) {
-    if (listener_ == NULL)
-      return;
-    listener_->OnComponendEnableChanged(component, enable);
+    FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
+      OnComponendEnableChanged(component, enable));
   }
 
   void NotifyValueChanged(StressComponent component, double value) {
-    if (listener_ == NULL)
-      return;
-    listener_->OnComponendValueChanged(component, value);
+    FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
+      OnComponendValueChanged(component, value));
   }
 
   void NotifyDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) {
-    if (listener_ == NULL)
-      return;
-    listener_->OnDisturbanceVoltageChanged(chnl, volt);
+    FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_,
+      OnDisturbanceVoltageChanged(chnl, volt));
   }
 
 private:
-  StressDeviceListener* listener_;
+  ObserverList<StressDeviceObserver> observer_list_;
   
   BYTE chl;//终端可调电容，调节范围：0nF~15.75nF(15750pF)，步进：250pF
   WORD rhl;//终端可调电阻，调节范围：0Ω~10.2375kΩ(10237.5Ω)，步进：2.5Ω

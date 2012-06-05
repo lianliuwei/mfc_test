@@ -15,8 +15,7 @@ const static double kCStep = 250.0;
 const static double kDoubleMin = 0.000001;
 }
 
-StressDevice::StressDevice(StressDeviceListener* listener)
-    : listener_(listener) {
+StressDevice::StressDevice(StressDeviceObserver* listener) {
   cfg_.portcfg3 = false;
   cfg_.portcfg4 = true;
   cfg_.portcfg5 = true;
