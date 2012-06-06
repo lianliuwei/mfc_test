@@ -226,6 +226,14 @@
 					RelativePath="..\app\stdafx.h"
 					>
 				</File>
+				<File
+					RelativePath="..\app\TcxUnitConverter.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\app\TcxUnitConverter.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="build"
