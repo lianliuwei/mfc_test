@@ -21,7 +21,7 @@ public:
   ComponentEnableButton(ComponentEnableControls* component_enable);
 
 private:
-  afx_msg void OnClick();;
+  afx_msg void OnClick();
   DECLARE_MESSAGE_MAP();
   
 private:

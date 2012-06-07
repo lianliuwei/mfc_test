@@ -18,10 +18,12 @@ public:
 private:
   enum { IDD = IDD_CONFIG };
 
-  // implement StressDeviceListener
+  // implement StressDeviceObserver
   virtual void OnComponentEnableChanged(StressComponent component, bool enable) {}
   virtual void OnComponentValueChanged(StressComponent component, double value) {}
   virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt);
+  virtual void OnStart() {}; // may be need to disable something.
+  virtual void OnStop() {};
 
   virtual void DoDataExchange(CDataExchange* pDX);
 

@@ -45,6 +45,11 @@ struct PORTCFG
 
 class StressDeviceObserver {
 public:
+  // one on OnStart one OnStop
+  virtual void OnStart() = 0;
+  
+  virtual void OnStop() = 0;
+
   virtual void OnComponentEnableChanged(StressComponent component, bool enable) = 0;
 
   virtual void OnComponentValueChanged(StressComponent component, double value) = 0;
@@ -95,6 +100,17 @@ public:
   void RemoveObserver(StressDeviceObserver* observer) {
     observer_list_.RemoveObserver(observer);
   }
+
+  bool start() {
+    return start_;
+  }
+
+  void set_start(bool start) {
+    if (start == start_)
+      return;
+    start_ = start;
+    NotifyStartChanged(start_);
+  }
 private:
   void NotifyEnableChanged(StressComponent component, bool enable) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
@@ -111,6 +127,14 @@ private:
       OnDisturbanceVoltageChanged(chnl, volt));
   }
 
+  void NotifyStartChanged(bool start) {
+    if (start) {
+      FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, OnStart());
+    } else {
+      FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, OnStop());
+    }
+  }
+
 private:
   ObserverList<StressDeviceObserver> observer_list_;
   
@@ -122,4 +146,6 @@ private:
   WORD rl;//CANL上拉电阻，调节范围：0Ω~10.2375kΩ(10237.5Ω)，步进：2.5Ω
 
   PORTCFG cfg_;
+
+  bool start_;
 };

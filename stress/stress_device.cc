@@ -26,6 +26,7 @@ StressDevice::StressDevice(StressDeviceObserver* listener) {
   rsh = 0x0003;
   rh = 0x0004;
   rl = 0x8005;
+  start_ = false; // init as stop.
 }
 
 void StressDevice::SetComponentValue(StressComponent component,

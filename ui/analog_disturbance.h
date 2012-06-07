@@ -48,10 +48,12 @@ private:
   // implement ComponentEnableListener
   virtual void OnEnableChange( ComponentEnableControls* component, bool enable);
 
-  // implement StressDeviceListener
+  // implement StressDeviceObserver
   virtual void OnComponentEnableChanged(StressComponent component, bool enable);
   virtual void OnComponentValueChanged(StressComponent component, double value);
   virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt);
+  virtual void OnStart();
+  virtual void OnStop();
 
   // init the gui there
   void Init();
@@ -65,10 +67,15 @@ private:
   void SetComponentEnable(StressComponent component, 
     ComponentEnableControls* enable_controls, bool enable, bool can_change);
 
+  // helper.
+  StressComponent ValueGetControlsToStressComponent(ValueGetControls* value_get);
+  StressComponent ComponentEnableControlsToStressComponent(ComponentEnableControls* component);
+
   virtual void DoDataExchange(CDataExchange* pDX);
 
   afx_msg void OnLayoutChange();
   DECLARE_MESSAGE_MAP()
+
 private:
   // controls group
   ValueGetControls value_rh_;

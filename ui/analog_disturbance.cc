@@ -98,6 +98,11 @@ static const TCHAR* kLayoutString[] = {
   _T("R_HL and R_L"),
 };
 
+static const TCHAR* StartStandardEnableError = _T("on Standard layout when \
+device is Started the Component can not be ENABLE.");
+
+static const TCHAR* StartStandardValueError = _T("on Standard layout when \
+device is Started the Component Value can not be changed.");
 }
 
 
@@ -185,57 +190,51 @@ void AnalogDisturbanceView::DoDataExchange( CDataExchange* pDX )
 
 void AnalogDisturbanceView::OnValueChange(ValueGetControls* value_get, double value)
 {
-  if (value_get == &value_rh_) {
-    device_->SetComponentValue(kRH, value);
-  } else if (value_get == &value_rhl_) {
-    device_->SetComponentValue(kRHL, value);
-  } else if (value_get == &value_rl_) {
-    device_->SetComponentValue(kRL, value);
-  } else if (value_get == &value_rsh_) {
-    device_->SetComponentValue(kRSH, value);
-  } else if (value_get == &value_chl_) {
-    device_->SetComponentValue(kCHL, value);
-  } else if (value_get == &value_rsl_) {
-    device_->SetComponentValue(kRSL, value);
-  } else {
-    ASSERT(FALSE); // no exist ValueGetControls
+  StressComponent comp = ValueGetControlsToStressComponent(value_get);
+
+  // OnStart in Standard layout component can no by change
+  if (layout_.GetCurSel() == kStandard && device_->start()) { 
+    value_get->set_value(device_->ComponentValue(comp)); // restore.
+    AfxMessageBox(StartStandardValueError, MB_OK | MB_ICONINFORMATION | MB_APPLMODAL);
+    return;
   }
+
+  device_->SetComponentValue(comp, value);
 } 
+
 
 void AnalogDisturbanceView::OnEnableChange(ComponentEnableControls* component, bool enable)
 {
-  if (component == &rh_enable_) {
-    device_->SetComponentEnable(kRH, enable);
-  } else if (component == &rhl_enable_) {
-    device_->SetComponentEnable(kRHL, enable);
-  } else if (component == &rl_enable_) {
-    device_->SetComponentEnable(kRL, enable);
-  } else if (component == &rsh_enable_) {
-    device_->SetComponentEnable(kRSH, enable);
-  } else if (component == &chl_enable_) {
-    device_->SetComponentEnable(kCHL, enable);
-  } else if (component == &rsl_enable_) {
-    device_->SetComponentEnable(kRSL, enable);
-  } else if (component == &can_h_volt_) {
+  if (component == &can_h_volt_) {
     device_->SetDisturbanceVoltage(CAN_HIGH, enable ? VOLT_PLUS : VOLT_MINUS);
+    return;
   } else if (component == &can_l_volt_) {
     device_->SetDisturbanceVoltage(CAN_LOW, enable ? VOLT_PLUS : VOLT_MINUS);
-  }else {
-    ASSERT(FALSE); // no exist ComponentEnableControls
+    return;
   }
+  StressComponent comp = ComponentEnableControlsToStressComponent(component);
+  // OnStart in Standard layout component can no by change
+  if (layout_.GetCurSel() == kStandard && device_->start()) { 
+    component->set_enable(device_->ComponentEnable(comp), false); // restore.
+    AfxMessageBox(StartStandardEnableError, MB_OK | MB_ICONINFORMATION | MB_APPLMODAL);
+    return;
+  }
+  device_->SetComponentEnable(comp, enable);
 } 
 
 void AnalogDisturbanceView::Init()
 {
   for (int i = 0; i < kLayoutSize; ++i)
     layout_.AddString(kLayoutString[i]);
+  // the ComponentEnableControls is init as can change so no need to set them.
+  layout_.SetCurSel(kStandard);
 
-  value_rh_.set_value(device_->ComponentValue(kRH));
-  value_rhl_.set_value(device_->ComponentValue(kRHL));
-  value_rl_.set_value(device_->ComponentValue(kRL));
-  value_rsh_.set_value(device_->ComponentValue(kRSH));
-  value_chl_.set_value(device_->ComponentValue(kCHL));
-  value_rsl_.set_value(device_->ComponentValue(kRSL));
+  OnComponentValueChanged(kRH, device_->ComponentValue(kRH));
+  OnComponentValueChanged(kRHL, device_->ComponentValue(kRHL));
+  OnComponentValueChanged(kRL, device_->ComponentValue(kRL));
+  OnComponentValueChanged(kRSH, device_->ComponentValue(kRSH));
+  OnComponentValueChanged(kCHL, device_->ComponentValue(kCHL));
+  OnComponentValueChanged(kRSL, device_->ComponentValue(kRSL));
 
   OnComponentEnableChanged(kRH, device_->ComponentEnable(kRH));
   OnComponentEnableChanged(kRHL, device_->ComponentEnable(kRHL));
@@ -343,6 +342,78 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
     break;
   default:
     ASSERT(FALSE);
+  }
+}
+
+void AnalogDisturbanceView::OnStart()
+{
+  layout_.EnableWindow(FALSE);
+  if (layout_.GetCurSel() == kStandard) {
+    value_rh_.SetEnable(false); // value can no change.
+    value_rhl_.SetEnable(false);
+    value_rl_.SetEnable(false);
+    value_rsh_.SetEnable(false);
+    value_chl_.SetEnable(false);
+    value_rsl_.SetEnable(false);
+
+    rh_enable_.set_can_change(false); // enable state can no change.
+    rhl_enable_.set_can_change(false);
+    rl_enable_.set_can_change(false);
+    rsh_enable_.set_can_change(false);
+    chl_enable_.set_can_change(false);
+    rsl_enable_.set_can_change(false);
+  }
+}
+
+void AnalogDisturbanceView::OnStop()
+{
+  layout_.EnableWindow(TRUE);
+  if (layout_.GetCurSel() == kStandard) {
+    // restore enable
+    OnComponentEnableChanged(kRH, device_->ComponentEnable(kRH));
+    OnComponentEnableChanged(kRHL, device_->ComponentEnable(kRHL));
+    OnComponentEnableChanged(kRL, device_->ComponentEnable(kRL));
+    OnComponentEnableChanged(kRSH, device_->ComponentEnable(kRSH));
+    OnComponentEnableChanged(kCHL, device_->ComponentEnable(kCHL));
+    OnComponentEnableChanged(kRSL, device_->ComponentEnable(kRSL));
+    // restore can_change
+    OnLayoutChange();
+  }
+}
+
+StressComponent AnalogDisturbanceView::ValueGetControlsToStressComponent(ValueGetControls* value_get) {
+  if (value_get == &value_rh_) {
+    return kRH;
+  } else if (value_get == &value_rhl_) {
+    return kRHL;
+  } else if (value_get == &value_rl_) {
+    return kRL;
+  } else if (value_get == &value_rsh_) {
+    return kRSH;
+  } else if (value_get == &value_chl_) {
+    return kCHL;
+  } else if (value_get == &value_rsl_) {
+    return kRSL;
+  } else {
+    ASSERT(FALSE); // no exist ValueGetControls
+  }
+}
+
+StressComponent AnalogDisturbanceView::ComponentEnableControlsToStressComponent(ComponentEnableControls* component) {
+  if (component == &rh_enable_) {
+    return kRH;
+  } else if (component == &rhl_enable_) {
+    return kRHL;
+  } else if (component == &rl_enable_) {
+    return kRL;
+  } else if (component == &rsh_enable_) {
+    return kRSH;
+  } else if (component == &chl_enable_) {
+    return kCHL;
+  } else if (component == &rsl_enable_) {
+    return kRSL;
+  }else {
+    ASSERT(FALSE); // no exist ComponentEnableControls
   }
 }
 
