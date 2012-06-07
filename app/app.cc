@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "app/command_bar_ids.h"
 
 // The one and only application object
 CWinApp theApp;
@@ -14,6 +15,6 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
     return 1;
   } 
 
-
+  _tprintf(_T("%s"), kCommandBarXML);
   return 0;
 }

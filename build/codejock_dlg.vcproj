@@ -203,6 +203,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\app\comand_bar_xml.cc"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							IgnoreStandardIncludePath="false"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\app\command_bar_ids.h"
+					>
+				</File>
+				<File
 					RelativePath="..\app\stdafx.cpp"
 					>
 					<FileConfiguration
