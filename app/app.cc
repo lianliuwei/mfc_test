@@ -40,6 +40,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
   ConvertValue(0.00000001,_T("uV"));
   ConvertValue(-0.00000001,_T("V"));
   ConvertValue(0,_T("V"));
+  ConvertValue(1,_T("V"));
 
   return 0;
 }
@@ -58,7 +59,7 @@ void ConvertValue(double value, TCHAR* unit) {
   string16 dst_unit(unit);
   BOOL ret = TcxConvertUnitForEasyRead(&value, &dst_unit);
   if (ret)
-    _tprintf(_T("%f%s = %f%s\n"), origin_value, unit, value, dst_unit.c_str());
+    _tprintf(_T("%.9lf%s = %lf%s\n"), origin_value, unit, value, dst_unit.c_str());
   else
     _tprintf(_T("false convert\n"));
 }
