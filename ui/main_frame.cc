@@ -61,6 +61,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     tab_ctrl_.AddControl(_T("Analog disturbance"), analog_disturbance_view_);
     tab_ctrl_.AddControl(_T("Config"), config_view_);
+    tab_ctrl_.SetCurFocus(0);
 
     if (CreateCommandBars()) {
         TRACE0("Failed to create command bars\n");
