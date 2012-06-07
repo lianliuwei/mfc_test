@@ -24,6 +24,17 @@ private:
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSetFocus(CWnd *pOldWnd);
     afx_msg void OnClose();
+    afx_msg void OnAnalogDisturbanceView();
+    afx_msg void OnConfigView();
+    afx_msg void AlwaysEnable(CCmdUI* cmd) {
+      cmd->Enable(TRUE);
+    }
+    afx_msg void OnDeviceStart();
+    afx_msg void OnDeviceStop();
+    afx_msg void OnUpdateDeviceStart(CCmdUI* cmd);
+    afx_msg void OnUpdateDeviceStop(CCmdUI* cmd);
+    afx_msg void OnUpdateDeviceConnect(CCmdUI* cmd);
+
     DECLARE_MESSAGE_MAP()
 
 private:

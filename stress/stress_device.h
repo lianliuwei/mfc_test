@@ -105,6 +105,10 @@ public:
     return start_;
   }
 
+  bool connect() {
+    return false;
+  };
+
   void set_start(bool start) {
     if (start == start_)
       return;

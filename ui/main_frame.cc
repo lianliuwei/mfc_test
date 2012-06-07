@@ -9,9 +9,6 @@ static const XTPPaintTheme kTheme = xtpThemeVisualStudio2010;
 static const XTPDockingPanePaintTheme kPaneTheme = xtpPaneThemeVisualStudio2010;
 static const int frame_height = 500;
 static const int frame_width = 640;
-
-static const unsigned int kDisturbViewID = 1U;
-static const unsigned int kConfigViewID = 2U;
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -20,6 +17,15 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
     ON_WM_CREATE()
     ON_WM_SETFOCUS()
     ON_WM_CLOSE()
+    ON_COMMAND(ID_VIEW_ANALOG_DISTURBANCE, OnAnalogDisturbanceView)
+    ON_COMMAND(ID_VIEW_CONFIG, OnConfigView)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_ANALOG_DISTURBANCE, AlwaysEnable)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_CONFIG, AlwaysEnable)
+    ON_COMMAND(ID_DEVICE_START, OnDeviceStart)
+    ON_COMMAND(ID_DEVICE_STOP, OnDeviceStop)
+    ON_UPDATE_COMMAND_UI(ID_DEVICE_START, OnUpdateDeviceStart)
+    ON_UPDATE_COMMAND_UI(ID_DEVICE_STOP, OnUpdateDeviceStop)
+    ON_UPDATE_COMMAND_UI(ID_INDICATOR_DEVICE_CONNECT, OnUpdateDeviceConnect)
 END_MESSAGE_MAP()
 
 MainFrame::MainFrame()
@@ -46,7 +52,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     analog_disturbance_view_ = new AnalogDisturbanceView(&device_);
     // create a view to occupy the client area of the frame
     if (!analog_disturbance_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-        CRect(0, 0, 0, 0), &tab_ctrl_, kDisturbViewID, NULL)) {
+        CRect(0, 0, 0, 0), &tab_ctrl_, ID_VIEW_ANALOG_DISTURBANCE, NULL)) {
         TRACE0("Failed to create analog disturbance view tab page\n");
         return -1;
     }
@@ -54,7 +60,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     config_view_ = new ConfigView(&device_);
     // create a view to occupy the client area of the frame
     if (!config_view_->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-      CRect(0, 0, 0, 0), &tab_ctrl_, kConfigViewID, NULL)) {
+      CRect(0, 0, 0, 0), &tab_ctrl_, ID_VIEW_CONFIG, NULL)) {
         TRACE0("Failed to create analog disturbance view tab page\n");
         return -1;
     }
@@ -87,9 +93,8 @@ int MainFrame::CreateCommandBars()
 {
      UINT indicators[] = {
         ID_SEPARATOR,           // status line indicator
-        ID_INDICATOR_CAPS,
+        ID_INDICATOR_DEVICE_CONNECT,
         ID_INDICATOR_NUM,
-        ID_INDICATOR_SCRL,
     };
 
     if (!m_wndStatusBar.Create(this) ||
@@ -195,3 +200,34 @@ void MainFrame::OnClose()
 {
     CFrameWnd::OnClose();
 }
+
+void MainFrame::OnAnalogDisturbanceView() {
+    tab_ctrl_.SetCurFocus(0);
+}
+
+void MainFrame::OnConfigView() {
+    tab_ctrl_.SetCurFocus(1);
+}
+
+void MainFrame::OnDeviceStart() {
+  device_.set_start(true);
+}
+
+void MainFrame::OnDeviceStop() {
+  device_.set_start(false);
+}
+
+void MainFrame::OnUpdateDeviceStart( CCmdUI* cmd ) {
+  cmd->Enable(device_.start() ? FALSE : TRUE);
+}
+
+void MainFrame::OnUpdateDeviceStop( CCmdUI* cmd )
+{
+  cmd->Enable(device_.start() ? TRUE : FALSE);
+}
+
+void MainFrame::OnUpdateDeviceConnect( CCmdUI* cmd ) {
+  cmd->Enable(TRUE);
+  cmd->SetText(device_.connect() ? _T("Connected") : _T("Disconnected"));
+}
+

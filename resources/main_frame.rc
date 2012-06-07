@@ -46,17 +46,22 @@ IDR_MAINFRAME_STRESS MENU
 BEGIN
 	POPUP "&View"
 	BEGIN
-		POPUP "&Toolbars"
-		BEGIN
-			MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-			MENUITEM SEPARATOR
-			MENUITEM "&Customize...",                  35001
-		END
+		MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+		MENUITEM SEPARATOR
+    MENUITEM "&Analog disturbance"          ID_VIEW_ANALOG_DISTURBANCE
+    MENUITEM "&Config"                      ID_VIEW_CONFIG
 		MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
 	END
-	POPUP "&Help"
+
+  POPUP "&Disturbance"
+  BEGIN
+    MENUITEM "&Start"                     ID_DEVICE_START
+    MENUITEM "Sto&p"                      ID_DEVICE_STOP
+  END
+
+  POPUP "&Help"
 	BEGIN
-		MENUITEM "&About mfc_test...",          ID_APP_ABOUT
+		MENUITEM "&About CANStress",          ID_APP_ABOUT
 	END
 END
 
@@ -67,12 +72,15 @@ BEGIN
 	"V",            ID_EDIT_PASTE,          VIRTKEY,CONTROL,NOINVERT
 	VK_BACK,        ID_EDIT_UNDO,           VIRTKEY,ALT,NOINVERT
 	VK_DELETE,      ID_EDIT_CUT,            VIRTKEY,SHIFT,NOINVERT
-	VK_F6,          ID_NEXT_PANE,           VIRTKEY ,NOINVERT
+	VK_F6,          ID_NEXT_PANE,           VIRTKEY,NOINVERT
 	VK_F6,          ID_PREV_PANE,           VIRTKEY,SHIFT,NOINVERT
 	VK_INSERT,      ID_EDIT_COPY,           VIRTKEY,CONTROL,NOINVERT
 	VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY,SHIFT,NOINVERT
 	"X",            ID_EDIT_CUT,            VIRTKEY,CONTROL,NOINVERT
 	"Z",            ID_EDIT_UNDO,           VIRTKEY,CONTROL,NOINVERT
+  
+  VK_F9,           ID_DEVICE_START,         VIRTKEY,NOINVERT
+  VK_ESCAPE,       ID_DEVICE_STOP,          VIRTKEY,NOINVERT
 END
 
 
@@ -83,7 +91,11 @@ END
 STRINGTABLE   
 BEGIN
 // Non-mac-targeting apps remove the two extra substrings
-	IDR_MAINFRAME_STRESS           "mfc_test"
+	IDR_MAINFRAME_STRESS           "CANStress"
 END
 
+STRINGTABLE   
+BEGIN
+  ID_INDICATOR_DEVICE_CONNECT    "Device Connect State"
+END
 #endif // !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
