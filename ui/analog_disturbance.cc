@@ -98,6 +98,34 @@ static const TCHAR* kLayoutString[] = {
   _T("R_HL and R_L"),
 };
 
+// the coord is the layout show contorls local, need to may to the dialog
+// coord.
+// ClickRect coord is related to the Picture Control.
+static const RECT kRHRect = {0, 0, 100, 50};
+static const RECT kRHClickRect = {55, 14, 88, 32};
+static const RECT kRHLRect = {0 + 10, 50, 50 + 10, 50 + 65};
+static const RECT kRHLClickRect = {21, 12, 39, 45};
+static const RECT kRLRect = {0, 50 + 65, 100, 50 + 65 + 50};
+static const RECT kRLClickRect = {55, 17, 88, 35};
+static const RECT kCANHVOLTRect = {100, 0, 100 + 75, 50};
+static const RECT kCANHVOLTClickRect = {1, 10, 33 , 34};
+static const RECT kCANLVOLTRect = {100, 50 + 65, 100 + 75, 50 + 65 + 50};
+static const RECT kCANLVOLTClickRect = {1, 15, 33, 34};
+static const RECT kRSHRect = {100 + 75, 0, 100 + 75 + 80, 50};
+static const RECT kRSHClickRect = {23, 12, 54, 47};
+static const RECT kCHLRect = {100 + 75 + 80 - 50 + 11, 50, 100 + 75 + 80 + 11, 50 + 60};
+static const RECT kCHLClickRect = {17, 6, 44, 55};
+static const RECT kRSLRect = {100 + 75, 50 + 65 + 50 - 45 - 10, 100 + 75 + 80, 50 + 65 + 50 - 10};
+static const RECT kRSLClickRect = {22, 4, 56, 40};
+
+
+void MoveEnableControls(ComponentEnableControls* controls, 
+                        CRect start_rect, CRect picture_rect, CRect button_rect) {
+  picture_rect.OffsetRect(start_rect.TopLeft());
+  button_rect.OffsetRect(picture_rect.TopLeft()); // related to the picture.
+  controls->MoveWindow(picture_rect, button_rect);
+}
+
 static const TCHAR* StartStandardEnableError = _T("on Standard layout when \
 device is Started the Component can not be ENABLE.");
 
@@ -228,6 +256,9 @@ void AnalogDisturbanceView::Init()
     layout_.AddString(kLayoutString[i]);
   // the ComponentEnableControls is init as can change so no need to set them.
   layout_.SetCurSel(kStandard);
+
+  // place the show layout control in pixel, the DLU is suck.
+  LayoutControls();
 
   OnComponentValueChanged(kRH, device_->ComponentValue(kRH));
   OnComponentValueChanged(kRHL, device_->ComponentValue(kRHL));
@@ -417,3 +448,18 @@ StressComponent AnalogDisturbanceView::ComponentEnableControlsToStressComponent(
   }
 }
 
+void AnalogDisturbanceView::LayoutControls() {
+  CWnd* start_wnd = GetDlgItem(IDC_PICTURE_RH);
+  CRect start_rect;
+  start_wnd->GetWindowRect(&start_rect);
+  ScreenToClient(&start_rect);
+
+  MoveEnableControls(&rh_enable_, start_rect, kRHRect, kRHClickRect);
+  MoveEnableControls(&rhl_enable_, start_rect, kRHLRect, kRHLClickRect);
+  MoveEnableControls(&rl_enable_, start_rect, kRLRect, kRLClickRect);
+  MoveEnableControls(&rsh_enable_, start_rect, kRSHRect, kRSHClickRect);
+  MoveEnableControls(&chl_enable_, start_rect, kCHLRect, kCHLClickRect);
+  MoveEnableControls(&rsl_enable_, start_rect, kRSLRect, kRSLClickRect);
+  MoveEnableControls(&can_h_volt_, start_rect, kCANHVOLTRect, kCANHVOLTClickRect);
+  MoveEnableControls(&can_l_volt_, start_rect, kCANLVOLTRect, kCANLVOLTClickRect);
+}

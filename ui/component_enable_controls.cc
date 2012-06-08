@@ -3,10 +3,20 @@
 #include "ui/component_enable_controls.h"
 
 
+namespace {
+  void MoveWindowByRect(CWnd* wnd, CRect rect) {
+    int x = rect.left;
+    int y = rect.top;
+    int cx = rect.Width();
+    int cy = rect.Height();
+    wnd->SetWindowPos(NULL, x, y, cx, cy, 
+      SWP_NOSENDCHANGING |SWP_NOACTIVATE | SWP_NOZORDER);
+  }
+}
+
 BEGIN_MESSAGE_MAP(ComponentEnableButton, CButton)
   ON_CONTROL_REFLECT(BN_CLICKED, OnClick)
 END_MESSAGE_MAP()
-
 
 ComponentEnableButton::ComponentEnableButton(
   ComponentEnableControls* component_enable)
@@ -38,4 +48,10 @@ void ComponentEnableControls::DoDataExchange( CDataExchange* pDX ) {
     picture_.Load(enable() ? enable_picture_id_ : disable_picture_id_);
     button_.EnableWindow(TRUE);
   }
+}
+
+
+void ComponentEnableControls::MoveWindow( RECT picture_rect, RECT button_rect ) {
+  MoveWindowByRect(&picture_, picture_rect);
+  MoveWindowByRect(&button_, button_rect);
 }

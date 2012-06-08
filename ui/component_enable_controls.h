@@ -15,6 +15,7 @@ public:
   virtual void OnEnableChange(ComponentEnableControls* component, bool enable) = 0;
 };
 
+// the button need BS_OWNERDRAW style.
 class ComponentEnableButton : public CButton
 {
 public:
@@ -23,7 +24,11 @@ public:
 private:
   afx_msg void OnClick();
   DECLARE_MESSAGE_MAP();
-  
+
+private:
+  // no show the button
+  virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) {};
+
 private:
   ComponentEnableControls* component_enable_;
 };
@@ -64,6 +69,8 @@ public:
     // no enable windows so no click.
     button_.EnableWindow(enable ? TRUE : FALSE);
   }
+
+  void MoveWindow(RECT picture_rect, RECT button_rect);
 
   void DoDataExchange(CDataExchange* pDX);
 

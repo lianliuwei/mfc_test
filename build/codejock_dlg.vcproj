@@ -259,14 +259,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\resources\bmp1.png"
-					>
-				</File>
-				<File
-					RelativePath="..\resources\bmp2.png"
-					>
-				</File>
-				<File
 					RelativePath="..\resources\config_view.rc"
 					>
 				</File>
@@ -298,6 +290,10 @@
 					RelativePath="..\resources\version.rc"
 					>
 				</File>
+				<Filter
+					Name="layout"
+					>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="ui"
@@ -392,6 +388,74 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\resources\layout\CHL1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\CHL3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RH1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RH3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RHL1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RHL3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RL1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RL3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RSH1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RSH3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RSL1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\RSL3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\VD1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\VD3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\VDD1.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\VDD3.png"
+			>
+		</File>
+		<File
+			RelativePath="..\resources\layout\VDD4.png"
+			>
+		</File>
 	</Files>
 	<Globals>
 		<Global

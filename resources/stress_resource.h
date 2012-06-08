@@ -3,23 +3,23 @@
 // Used by analog_disturbance_view.rc
 //
 #define ID_PNG_RH_ENABLE                103
-#define ID_PNG_RHL_ENABLE               103
-#define ID_PNG_RL_ENABLE                103
-#define ID_PNG_RSH_ENABLE               103
-#define ID_PNG_CHL_ENABLE               103
-#define ID_PNG_RSL_ENABLE               103
-#define ID_PNG_CAN_HIGH_VOLT_PLUS       103
-#define ID_PNG_CAN_LOW_VOLT_PLUS        103
-#define ID_PNG_RH_DISABLE               104
-#define ID_PNG_RHL_DISABLE              104
-#define ID_PNG_RL_DISABLE               104
-#define ID_PNG_RSH_DISABLE              104
-#define ID_PNG_CHL_DISABLE              104
-#define ID_PNG_RSL_DISABLE              104
-#define ID_PNG_CAN_HIGH_VOLT_MINUS      104
-#define ID_PNG_CAN_LOW_VOLT_MINUS       104
-#define IDD_CONFIG                      105
-#define IDD_ANALOG_DISTURBANCE          106
+#define ID_PNG_RHL_ENABLE               104
+#define ID_PNG_RL_ENABLE                105
+#define ID_PNG_RSH_ENABLE               106
+#define ID_PNG_CHL_ENABLE               107
+#define ID_PNG_RSL_ENABLE               108
+#define ID_PNG_CAN_HIGH_VOLT_PLUS       109
+#define ID_PNG_CAN_LOW_VOLT_PLUS        110
+#define ID_PNG_RH_DISABLE               111
+#define ID_PNG_RHL_DISABLE              112
+#define ID_PNG_RL_DISABLE               113
+#define ID_PNG_RSH_DISABLE              114
+#define ID_PNG_CHL_DISABLE              115
+#define ID_PNG_RSL_DISABLE              116
+#define ID_PNG_CAN_HIGH_VOLT_MINUS      117
+#define ID_PNG_CAN_LOW_VOLT_MINUS       118
+#define IDD_CONFIG                      119
+#define IDD_ANALOG_DISTURBANCE          120
 #define IDC_PICTURE_RH                  1000
 #define IDC_COMBOX_LAYOUT               1001
 #define IDC_PICTURE_RHL                 1002
@@ -64,7 +64,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_RESOURCE_VALUE        120
 #define _APS_NEXT_COMMAND_VALUE         40000
 #define _APS_NEXT_CONTROL_VALUE         2037
 #define _APS_NEXT_SYMED_VALUE           201

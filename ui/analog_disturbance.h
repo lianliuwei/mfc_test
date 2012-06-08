@@ -58,6 +58,8 @@ private:
   // init the gui there
   void Init();
 
+  void LayoutControls();
+
   void set_stress_layout(StressLayout layout);
   StressLayout stress_layout(StressLayout layout) const;
 
