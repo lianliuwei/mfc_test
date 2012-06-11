@@ -44,6 +44,13 @@ IDR_MAINFRAME_STRESS           ICON         "resources\\app.ico"
 
 IDR_MAINFRAME_STRESS MENU   
 BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "&New"                       ID_FILE_NEW
+    MENUITEM "&Open"                      ID_FILE_OPEN
+    MENUITEM "&Save"                      ID_FILE_SAVE
+    MENUITEM "Sava &as..."                ID_FILE_SAVE_AS
+  END
 	POPUP "&View"
 	BEGIN
 		MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
@@ -81,6 +88,10 @@ BEGIN
   
   VK_F9,           ID_DEVICE_START,         VIRTKEY,NOINVERT
   VK_ESCAPE,       ID_DEVICE_STOP,          VIRTKEY,NOINVERT
+
+  "N",             ID_FILE_NEW,          VIRTKEY,CONTROL,NOINVERT
+  "O",             ID_FILE_OPEN,         VIRTKEY,CONTROL,NOINVERT
+  "S",             ID_FILE_SAVE,         VIRTKEY,CONTROL,NOINVERT
 END
 
 

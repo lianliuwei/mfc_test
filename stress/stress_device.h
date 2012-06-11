@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/observer_list.h"
+#include "base/file_path.h"
 
 enum StressComponent {
   kRH = 0,
@@ -115,6 +116,13 @@ public:
     start_ = start;
     NotifyStartChanged(start_);
   }
+
+  void Save(FilePath& file) {}
+  void Load(FilePath& file) {}
+  void Reset() {}
+  // changed for last save.
+  bool Changed() { return false; }
+
 private:
   void NotifyEnableChanged(StressComponent component, bool enable) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 

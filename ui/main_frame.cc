@@ -2,6 +2,7 @@
 
 #include "ui/main_frame.h"
 
+#include "base/memory/scoped_ptr.h"
 #include "resources/Resource.h"
 
 namespace {
@@ -9,6 +10,10 @@ static const XTPPaintTheme kTheme = xtpThemeVisualStudio2010;
 static const XTPDockingPanePaintTheme kPaneTheme = xtpPaneThemeVisualStudio2010;
 static const int frame_height = 500;
 static const int frame_width = 640;
+static const TCHAR* kSaveChanges = _T("Save Changs to %s?");
+static const TCHAR* kDefaultExt = _T(".cst");
+static const TCHAR* kDefaultFileName = _T("stress.cst");
+static const TCHAR* kFilter = _T("CANStress (*.cst)|*.cst|All Files (*.*)|*.*||");
 }
 
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
@@ -17,6 +22,16 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
     ON_WM_CREATE()
     ON_WM_SETFOCUS()
     ON_WM_CLOSE()
+  
+    ON_COMMAND(ID_FILE_NEW, OnNew)
+    ON_COMMAND(ID_FILE_OPEN, OnOpen)
+    ON_COMMAND(ID_FILE_SAVE, OnSave)
+    ON_COMMAND(ID_FILE_SAVE_AS, OnSaveAs)
+    ON_UPDATE_COMMAND_UI(ID_FILE_NEW, AlwaysEnable)
+    ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, AlwaysEnable)
+    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, AlwaysEnable)
+    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, AlwaysEnable)
+
     ON_COMMAND(ID_VIEW_ANALOG_DISTURBANCE, OnAnalogDisturbanceView)
     ON_COMMAND(ID_VIEW_CONFIG, OnConfigView)
     ON_UPDATE_COMMAND_UI(ID_VIEW_ANALOG_DISTURBANCE, AlwaysEnable)
@@ -231,3 +246,89 @@ void MainFrame::OnUpdateDeviceConnect( CCmdUI* cmd ) {
   cmd->SetText(device_.connect() ? _T("Connected") : _T("Disconnected"));
 }
 
+void MainFrame::OnNew() {
+  bool reset = SaveChanged();
+  if (reset) {
+    device_.Reset();
+    last_file_path_.clear();
+    OnUpdateFrameTitle(TRUE);
+  }
+}
+
+bool MainFrame::SaveChanged() {
+  if(!device_.Changed())
+    return true; // no need to save.
+ 
+  CString text;
+  text.Format(kSaveChanges, 
+    last_file_path_.empty() ? _T("Untitled") : last_file_path_.BaseName().value());
+  int id = AfxMessageBox(text, 
+    MB_YESNOCANCEL | MB_ICONQUESTION | MB_DEFBUTTON1);
+  switch (id) {
+    case IDOK: {
+      CFileDialog dlg(FALSE, _T("ini"), _T("stress.ini"), 
+        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, 
+        _T("Ini Files (*.ini)|*.ini|All Files (*.*)|*.*||"), this);
+      if (dlg.DoModal() == IDOK) {
+        FilePath path = FilePath(string16(dlg.GetPathName().GetString())); 
+        device_.Save(path);
+        return true; // save success.
+      } else {
+        return false; // no when to save.
+      }
+    }
+    case IDCANCEL:
+      return false; // no when to close this file
+    case IDNO:
+      return true; // no save
+    default:
+      NOTREACHED();
+      return false;
+  }
+}
+
+void MainFrame::OnOpen() {
+   scoped_ptr<CFileDialog> dlg(CreateFileDialog(true));
+  if (dlg->DoModal() == IDOK && SaveChanged()) {
+    last_file_path_ = FilePath(string16(dlg->GetPathName().GetString()));
+    device_.Load(last_file_path_);
+    OnUpdateFrameTitle(TRUE);
+  }
+}
+
+void MainFrame::OnSave() {
+  if (last_file_path_.empty())
+    OnSaveAs();
+  else
+    device_.Save(last_file_path_);
+}
+
+void MainFrame::OnSaveAs() {
+  scoped_ptr<CFileDialog> dlg(CreateFileDialog(false));
+  if (dlg->DoModal() == IDOK && SaveChanged()) {
+    last_file_path_ = FilePath(string16(dlg->GetPathName().GetString()));
+    device_.Save(last_file_path_);
+    OnUpdateFrameTitle(TRUE);
+  }
+}
+
+CFileDialog* MainFrame::CreateFileDialog(bool open) {
+  if (open) {
+    return new CFileDialog(TRUE, kDefaultExt, NULL, // no default file. 
+      OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, kFilter, this);
+  } else {
+    return new CFileDialog(FALSE, kDefaultExt, kDefaultFileName, 
+      OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, kFilter, this);
+  }
+}
+void MainFrame::OnUpdateFrameTitle( BOOL bAddToTitle )
+{
+  CString title;
+  title.LoadString(IDR_MAINFRAME_STRESS);
+  title += _T(" - ");
+  if (last_file_path_.empty())
+    title += _T("(New)");
+  else
+    title += CString(last_file_path_.value().c_str());
+  SetWindowText(title);
+}
