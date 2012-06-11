@@ -61,7 +61,7 @@ bool RibbonOscConfigBar::Init() {
   pGroupCANH->Add(can_h_vertical_offset_, ID_EDIT_CAN_HIGH_VERICAL_OFFSET);
   SetControlShowStyle(can_h_vertical_offset_);
   SetControlToManualUpdate(can_h_vertical_offset_);
-  can_h_vertical_offset_->SetEnabled(TRUE);
+
   return true;
 }
 
