@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "ui/regex_validating_edit.h"
+
 #ifndef UDM_SETPOS32
 #define CUSTOM_POS32_FUN
 #define UDM_SETPOS32            (WM_USER+113)
@@ -100,13 +102,10 @@ private:
 };
 
 // TODO using validate edit to limit the using input
-class ValueGetEdit : public CXTPEdit
+class ValueGetEdit : public RegexValidatingEdit<CEdit>
 {
 public:
-  ValueGetEdit(ValueGetControls* value_get)
-    : value_get_(value_get) {
-      ASSERT(value_get != NULL);
-  }
+  ValueGetEdit(ValueGetControls* value_get);
 
   double GetValue() {
     CString text;
@@ -126,7 +125,11 @@ public:
   }
 
 private:
-  afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+  virtual bool SemanticCheck(const CString &strText, 
+    CString *pstrErrorMsg = 0);
+
+  // set to value_get if validate
+  afx_msg void OnKillFocus(CWnd* pNewWnd);
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -184,13 +187,7 @@ public:
 
   void ValueChange(double val);
 
-  void SetRangeAndStep(double min, double max, double step) {
-    ASSERT(max > min);
-    ASSERT(step > 0);
-    slider_.SetRangeAndStep(min, max, step);
-    edit_.SetRangeAndStep(min, max, step);
-    spin_.SetRangeAndStep(min, max, step);
-  }
+  void SetRangeAndStep(double min, double max, double step);
 
   void SetEnable(bool enable) {
     BOOL e = enable ? TRUE : FALSE;

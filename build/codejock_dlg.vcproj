@@ -467,6 +467,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ui\regex_validating_edit.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\validating_edit.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ui\value_get_controls.cc"
 					>
 				</File>

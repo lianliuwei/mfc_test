@@ -1,0 +1,3 @@
+ui/validating_edit.h
+ui/regex_validating_edit.h
+from OscConfigBar branch df6aaec9396fbe2ddd92941e8e2b24e58492b54b
