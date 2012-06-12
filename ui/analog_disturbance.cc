@@ -429,7 +429,8 @@ StressComponent AnalogDisturbanceView::ValueGetControlsToStressComponent(ValueGe
   } else if (value_get == &value_rsl_) {
     return kRSL;
   } else {
-    ASSERT(FALSE); // no exist ValueGetControls
+    NOTREACHED(); // no exist ValueGetControls
+    return kRH;
   }
 }
 
@@ -447,7 +448,8 @@ StressComponent AnalogDisturbanceView::ComponentEnableControlsToStressComponent(
   } else if (component == &rsl_enable_) {
     return kRSL;
   }else {
-    ASSERT(FALSE); // no exist ComponentEnableControls
+    NOTREACHED(); // no exist ComponentEnableControls
+    return kRH;
   }
 }
 

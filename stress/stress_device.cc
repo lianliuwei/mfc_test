@@ -2,6 +2,8 @@
 
 #include "base/logging.h"
 
+#include "common/Ini.h"
+
 // TODO this dup with the View. remove this dup.
 namespace {
 const static double kRMin = 0.0;
@@ -11,6 +13,36 @@ const static double kCMin = 0.0;
 const static double kCMax = 15750.0;
 const static double kCStep = 250.0;
 const static double kDoubleMin = 0.000001;
+
+const static int kVersionMain = 2;
+const static int kVersionSub = 1;
+const static TCHAR* kVersionSection = _T("Verison");
+const static TCHAR* kMainKey = _T("Main");
+const static TCHAR* kSubKey = _T("Sub");
+
+const static TCHAR* kAnalogDisturbSection = _T("AnalogDistConfig");
+const static TCHAR* kRHKey = _T("R_H");
+const static TCHAR* kRHLKey = _T("R_HL");
+const static TCHAR* kRLKey = _T("R_L");
+const static TCHAR* kRSHKey = _T("R_SH");
+const static TCHAR* kRSLKey = _T("R_SL");
+const static TCHAR* kCHLKey = _T("C_HL");
+const static TCHAR* kRHEnableKey = _T("R_H_State");
+const static TCHAR* kRSHEnableKey = _T("R_SH_State");
+const static TCHAR* kRLEnableKey = _T("R_L_State");
+const static TCHAR* kRSLEnableKey = _T("R_SL_State");
+const static TCHAR* kRHLEnableKey = _T("R_HL_State");
+const static TCHAR* kCHLEnableKey = _T("C_HL_State");
+const static TCHAR* kLayoutKey = _T("ResLayoutType");
+
+int EnableToConfigKey(bool enable) {
+  return enable ? 3 : 1;
+}
+
+int LayoutToConfigKey(StressLayout layout) {
+  return layout + 1;
+}
+
 }
 
 StressDevice::StressDevice(StressDeviceObserver* listener) {
@@ -64,6 +96,7 @@ void StressDevice::SetComponentValue(StressComponent component,
     }
   }
   NotifyValueChanged(component, value);
+  SetToDevice();
 }
 
 void StressDevice::SetComponentEnable(StressComponent component,
@@ -89,6 +122,7 @@ void StressDevice::SetComponentEnable(StressComponent component,
     }
   }
   NotifyEnableChanged(component, enable);
+  SetToDevice();
 }
 
 double StressDevice::ComponentValue(StressComponent component) {
@@ -149,6 +183,7 @@ bool StressDevice::ComponentEnable(StressComponent component) {
 
 void StressDevice::SetOscListenPort(OscListenPort listen_port) {
   cfg_.portcfg3 = (listen_port != CAN_IN);
+  SetToDevice();
 }
 
 OscListenPort StressDevice::GetOscListenPort() {
@@ -165,6 +200,7 @@ void StressDevice::SetDisturbanceVoltage(CAN_CHNL chnl,
     NOTREACHED();
   }
   NotifyDisturbanceVoltageChanged(chnl, volt);
+  SetToDevice();
 }
 
 DisturbanceVoltage StressDevice::GetDisturbanceVoltage(CAN_CHNL chnl) {
@@ -180,6 +216,7 @@ DisturbanceVoltage StressDevice::GetDisturbanceVoltage(CAN_CHNL chnl) {
 
 void StressDevice::SetCANBusType(CANBusType type) {
   cfg_.portcfg6 = (type != HIGH_SPEED);
+  SetToDevice();
 }
 
 CANBusType StressDevice::GetCANBusType() {
@@ -192,4 +229,33 @@ void StressDevice::set_stress_layout(StressLayout layout) {
     return;
   layout_ = layout;
   NotifyLayoutChanged(layout_);
+}
+
+void StressDevice::Save(FilePath& file) {
+  CIni ini(file.value().c_str());
+  // version section.
+  ini.WriteInt(kVersionSection, kMainKey, kVersionMain);
+  ini.WriteInt(kVersionSection, kSubKey, kVersionSub);
+  // analog disturbance config section.
+  ini.WriteDouble(kAnalogDisturbSection, kRHKey, ComponentValue(kRH));
+  ini.WriteDouble(kAnalogDisturbSection, kRHLKey, ComponentValue(kRHL));
+  ini.WriteDouble(kAnalogDisturbSection, kRLKey, ComponentValue(kRL));
+  ini.WriteDouble(kAnalogDisturbSection, kRSHKey, ComponentValue(kRSH));
+  ini.WriteDouble(kAnalogDisturbSection, kRSLKey, ComponentValue(kRSL));
+  ini.WriteDouble(kAnalogDisturbSection, kCHLKey, ComponentValue(kCHL));
+
+  ini.WriteInt(kAnalogDisturbSection, kRHEnableKey, 
+    EnableToConfigKey(ComponentEnable(kRH)));
+  ini.WriteInt(kAnalogDisturbSection, kRSHEnableKey, 
+    EnableToConfigKey(ComponentEnable(kRSH)));
+  ini.WriteInt(kAnalogDisturbSection, kRLEnableKey, 
+    EnableToConfigKey(ComponentEnable(kRL)));
+  ini.WriteInt(kAnalogDisturbSection, kRSLEnableKey, 
+    EnableToConfigKey(ComponentEnable(kRSL)));
+  ini.WriteInt(kAnalogDisturbSection, kRHLEnableKey, 
+    EnableToConfigKey(ComponentEnable(kRHL)));
+  ini.WriteInt(kAnalogDisturbSection, kCHLEnableKey, 
+    EnableToConfigKey(ComponentEnable(kCHL)));
+
+  ini.WriteInt(kAnalogDisturbSection, kLayoutKey, LayoutToConfigKey(stress_layout()));
 }

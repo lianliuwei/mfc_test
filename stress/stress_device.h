@@ -142,15 +142,22 @@ public:
       return;
     start_ = start;
     NotifyStartChanged(start_);
+    SetToDevice();
   }
 
-  void Save(FilePath& file) {}
+  void Save(FilePath& file);
   void Load(FilePath& file) {}
   void Reset() {}
   // changed for last save.
   bool Changed() { return true; }
 
 private:
+  void SetToDevice() {
+    if (!start_) // only in start state set to the device.
+      return;
+    // TODO add set to Device
+  }
+
   void NotifyEnableChanged(StressComponent component, bool enable) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
       OnComponentEnableChanged(component, enable));
