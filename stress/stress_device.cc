@@ -45,26 +45,39 @@ int LayoutToConfigKey(StressLayout layout) {
 
 }
 
-StressDevice::StressDevice(StressDeviceObserver* listener) {
-  cfg_.portcfg3 = false;
-  cfg_.portcfg4 = true;
-  cfg_.portcfg5 = true;
-  cfg_.portcfg6 = false;
-  chl = 0x41;
-  rhl = 0x0001;
-  rsl = 0x0002;
-  rsh = 0x0003;
-  rh = 0x0004;
-  rl = 0x8005;
-  start_ = false; // init as stop.
-  layout_ = kStandard;
+StressDevice::StressDevice() {
+  Reset();
+}
+
+void StressDevice::Reset() {
+  set_start(false); // init as stop.
+
+  SetOscListenPort(CAN_IN);
+  SetDisturbanceVoltage(CAN_HIGH, VOLT_MINUS);
+  SetDisturbanceVoltage(CAN_LOW, VOLT_MINUS);
+  SetCANBusType(HIGH_SPEED);
+  
+  SetComponentValue(kRH, 0);
+  SetComponentValue(kRHL, 0);
+  SetComponentValue(kRL, 0);
+  SetComponentValue(kRSH, 0);
+  SetComponentValue(kCHL, 0);
+  SetComponentValue(kRSL, 0);
+
+  SetComponentEnable(kRH, false);
+  SetComponentEnable(kRHL, false);
+  SetComponentEnable(kRL, false);
+  SetComponentEnable(kRSH, false);
+  SetComponentEnable(kCHL, false);
+  SetComponentEnable(kRSL, false);
+
+  set_stress_layout(kStandard); // after value and enable
+
+  MarkNoChanged(); // init no need to save.
 }
 
 void StressDevice::SetComponentValue(StressComponent component,
                                      const double value) {
-  // no enable no set the value.
-  if (ComponentEnable(component) == false)
-    return;
   if (component == kCHL) { // capacitor
     unsigned char reg_value = 0U;
     CHECK(kCMin <= value && value <= kCMax);
@@ -96,6 +109,7 @@ void StressDevice::SetComponentValue(StressComponent component,
     }
   }
   NotifyValueChanged(component, value);
+  MarkChanged();
   SetToDevice();
 }
 
@@ -122,6 +136,7 @@ void StressDevice::SetComponentEnable(StressComponent component,
     }
   }
   NotifyEnableChanged(component, enable);
+  MarkChanged();
   SetToDevice();
 }
 
@@ -183,6 +198,7 @@ bool StressDevice::ComponentEnable(StressComponent component) {
 
 void StressDevice::SetOscListenPort(OscListenPort listen_port) {
   cfg_.portcfg3 = (listen_port != CAN_IN);
+  MarkChanged();
   SetToDevice();
 }
 
@@ -200,6 +216,7 @@ void StressDevice::SetDisturbanceVoltage(CAN_CHNL chnl,
     NOTREACHED();
   }
   NotifyDisturbanceVoltageChanged(chnl, volt);
+  MarkChanged();
   SetToDevice();
 }
 
@@ -216,6 +233,7 @@ DisturbanceVoltage StressDevice::GetDisturbanceVoltage(CAN_CHNL chnl) {
 
 void StressDevice::SetCANBusType(CANBusType type) {
   cfg_.portcfg6 = (type != HIGH_SPEED);
+  MarkChanged();
   SetToDevice();
 }
 
@@ -228,6 +246,7 @@ void StressDevice::set_stress_layout(StressLayout layout) {
   if (layout_ == layout)
     return;
   layout_ = layout;
+  MarkChanged();
   NotifyLayoutChanged(layout_);
 }
 
@@ -258,4 +277,6 @@ void StressDevice::Save(FilePath& file) {
     EnableToConfigKey(ComponentEnable(kCHL)));
 
   ini.WriteInt(kAnalogDisturbSection, kLayoutKey, LayoutToConfigKey(stress_layout()));
+
+  MarkNoChanged();
 }

@@ -86,7 +86,7 @@ public:
 class StressDevice
 {
 public:
-  StressDevice(StressDeviceObserver* listener);
+  StressDevice();
   ~StressDevice() {};
 
 public:
@@ -147,9 +147,9 @@ public:
 
   void Save(FilePath& file);
   void Load(FilePath& file) {}
-  void Reset() {}
+  void Reset();
   // changed for last save.
-  bool Changed() { return true; }
+  bool Changed() { return changed_; }
 
 private:
   void SetToDevice() {
@@ -157,7 +157,9 @@ private:
       return;
     // TODO add set to Device
   }
-
+  
+  void MarkChanged() { changed_ = true; }
+  void MarkNoChanged() { changed_ = false;}
   void NotifyEnableChanged(StressComponent component, bool enable) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_, 
       OnComponentEnableChanged(component, enable));
@@ -199,4 +201,5 @@ private:
 
   StressLayout layout_;
   bool start_;
+  bool changed_;
 };

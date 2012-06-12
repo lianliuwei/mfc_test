@@ -45,8 +45,7 @@ END_MESSAGE_MAP()
 
 MainFrame::MainFrame()
     : analog_disturbance_view_(NULL)
-    , config_view_(NULL)
-    , device_(NULL) {
+    , config_view_(NULL) {
 }
 
 
