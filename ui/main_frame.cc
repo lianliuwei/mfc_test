@@ -308,7 +308,7 @@ void MainFrame::OnSave() {
 
 void MainFrame::OnSaveAs() {
   scoped_ptr<CFileDialog> dlg(CreateFileDialog(false));
-  if (dlg->DoModal() == IDOK && SaveChanged()) {
+  if (dlg->DoModal() == IDOK) {
     last_file_path_ = FilePath(string16(dlg->GetPathName().GetString()));
     device_.Save(last_file_path_);
     OnUpdateFrameTitle(TRUE);
