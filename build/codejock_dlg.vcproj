@@ -523,6 +523,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="common"
+				>
+				<File
+					RelativePath="..\common\Ini.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\common\Ini.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
