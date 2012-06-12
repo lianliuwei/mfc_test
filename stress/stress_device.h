@@ -32,6 +32,25 @@ enum CANBusType {
   FAULT_TOLERANT,
 };
 
+enum StressLayout {
+  kStandard = 0,
+  kR_H,
+  kR_SH,
+  kR_HL_without_R_SH,
+  kR_HL_without_R_SL,
+  kR_SL,
+  kR_L,
+  kR_H_and_R_SL,
+  kR_H_and_R_L,
+  kR_SH_and_R_HL,
+  kR_SH_and_R_SL,
+  kR_SH_and_R_L,
+  kR_HL_and_R_SL,
+  kR_HL_and_R_H,
+  kR_HL_and_R_L,
+  kLayoutSize,
+};
+
 struct PORTCFG
 {
   WORD portcfg0:1; //1—启用示波器；0—禁用示波器
@@ -56,6 +75,8 @@ public:
   virtual void OnComponentValueChanged(StressComponent component, double value) = 0;
 
   virtual void OnDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) = 0;
+
+  virtual void OnStressLayoutChanged(StressLayout layout) = 0;
 };
 
 // response for set the stress Device.
@@ -83,6 +104,12 @@ public:
 
   // Get Enable
   bool ComponentEnable(StressComponent component);
+
+
+  void set_stress_layout(StressLayout layout);
+  StressLayout stress_layout() const {
+    return layout_;
+  }
 
   // Stress Port Cfg
   void SetOscListenPort(OscListenPort listen_port);
@@ -121,7 +148,7 @@ public:
   void Load(FilePath& file) {}
   void Reset() {}
   // changed for last save.
-  bool Changed() { return false; }
+  bool Changed() { return true; }
 
 private:
   void NotifyEnableChanged(StressComponent component, bool enable) {
@@ -134,6 +161,10 @@ private:
       OnComponentValueChanged(component, value));
   }
 
+  void NotifyLayoutChanged(StressLayout layout) {
+    FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_,
+      OnStressLayoutChanged(layout));
+  }
   void NotifyDisturbanceVoltageChanged(CAN_CHNL chnl, DisturbanceVoltage volt) {
     FOR_EACH_OBSERVER(StressDeviceObserver, observer_list_,
       OnDisturbanceVoltageChanged(chnl, volt));
@@ -159,5 +190,6 @@ private:
 
   PORTCFG cfg_;
 
+  StressLayout layout_;
   bool start_;
 };

@@ -506,7 +506,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -514,7 +514,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 				</File>

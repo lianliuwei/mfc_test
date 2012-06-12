@@ -295,19 +295,7 @@ void AnalogDisturbanceView::SetComponentEnable(
 void AnalogDisturbanceView::OnLayoutChange() {
   // the combobox select and the StressLayout are match.
   StressLayout select = static_cast<StressLayout>(layout_.GetCurSel());
-  ASSERT(0 <= select && select < kLayoutSize);
-  SetComponentEnable(kRH, &rh_enable_, 
-    kLayoutStatus[select][kRH], kLayoutCanChange[select][kRH]);  
-  SetComponentEnable(kRHL, &rhl_enable_, 
-    kLayoutStatus[select][kRHL], kLayoutCanChange[select][kRHL]);  
-  SetComponentEnable(kRL, &rl_enable_, 
-    kLayoutStatus[select][kRL], kLayoutCanChange[select][kRL]);  
-  SetComponentEnable(kRSH, &rsh_enable_, 
-    kLayoutStatus[select][kRSH], kLayoutCanChange[select][kRSH]);  
-  SetComponentEnable(kCHL, &chl_enable_, 
-    kLayoutStatus[select][kCHL], kLayoutCanChange[select][kCHL]);  
-  SetComponentEnable(kRSL, &rsl_enable_, 
-    kLayoutStatus[select][kRSL], kLayoutCanChange[select][kRSL]);  
+  device_->set_stress_layout(select);
 }
 
 void AnalogDisturbanceView::OnComponentEnableChanged( StressComponent component,
@@ -374,6 +362,21 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
   default:
     ASSERT(FALSE);
   }
+}
+
+void AnalogDisturbanceView::OnStressLayoutChanged(StressLayout layout) {
+  SetComponentEnable(kRH, &rh_enable_, 
+    kLayoutStatus[layout][kRH], kLayoutCanChange[layout][kRH]);  
+  SetComponentEnable(kRHL, &rhl_enable_, 
+    kLayoutStatus[layout][kRHL], kLayoutCanChange[layout][kRHL]);  
+  SetComponentEnable(kRL, &rl_enable_, 
+    kLayoutStatus[layout][kRL], kLayoutCanChange[layout][kRL]);  
+  SetComponentEnable(kRSH, &rsh_enable_, 
+    kLayoutStatus[layout][kRSH], kLayoutCanChange[layout][kRSH]);  
+  SetComponentEnable(kCHL, &chl_enable_, 
+    kLayoutStatus[layout][kCHL], kLayoutCanChange[layout][kCHL]);  
+  SetComponentEnable(kRSL, &rsl_enable_, 
+    kLayoutStatus[layout][kRSL], kLayoutCanChange[layout][kRSL]);  
 }
 
 void AnalogDisturbanceView::OnStart()

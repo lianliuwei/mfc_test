@@ -7,24 +7,6 @@
 #include "ui/views/picture_ctrl.h"
 #include "stress/stress_device.h"
 
-enum StressLayout {
-  kStandard = 0,
-  kR_H,
-  kR_SH,
-  kR_HL_without_R_SH,
-  kR_HL_without_R_SL,
-  kR_SL,
-  kR_L,
-  kR_H_and_R_SL,
-  kR_H_and_R_L,
-  kR_SH_and_R_HL,
-  kR_SH_and_R_SL,
-  kR_SH_and_R_L,
-  kR_HL_and_R_SL,
-  kR_HL_and_R_H,
-  kR_HL_and_R_L,
-  kLayoutSize,
-};
 
 class AnalogDisturbanceView : public CFormView
                             , public ValueGetListener
@@ -49,19 +31,17 @@ private:
   virtual void OnEnableChange( ComponentEnableControls* component, bool enable);
 
   // implement StressDeviceObserver
+  virtual void OnStart();
+  virtual void OnStop();
   virtual void OnComponentEnableChanged(StressComponent component, bool enable);
   virtual void OnComponentValueChanged(StressComponent component, double value);
   virtual void OnDisturbanceVoltageChanged( CAN_CHNL chnl, DisturbanceVoltage volt);
-  virtual void OnStart();
-  virtual void OnStop();
+  virtual void OnStressLayoutChanged( StressLayout layout );
 
   // init the gui there
   void Init();
 
   void LayoutControls();
-
-  void set_stress_layout(StressLayout layout);
-  StressLayout stress_layout(StressLayout layout) const;
 
   // void set_chnl_volt(CAN_CHNL);
   bool GetComponentEnable(StressComponent component) const;

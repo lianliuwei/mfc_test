@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "stress/stress_device.h"
 
 #include "base/logging.h"
@@ -27,6 +25,7 @@ StressDevice::StressDevice(StressDeviceObserver* listener) {
   rh = 0x0004;
   rl = 0x8005;
   start_ = false; // init as stop.
+  layout_ = kStandard;
 }
 
 void StressDevice::SetComponentValue(StressComponent component,
@@ -61,7 +60,7 @@ void StressDevice::SetComponentValue(StressComponent component,
     case kRSL:
       rsl = reg_value; break;
     default:
-      NOTREACHED();; // no exit
+      NOTREACHED(); // no exist
     }
   }
   NotifyValueChanged(component, value);
@@ -86,7 +85,7 @@ void StressDevice::SetComponentEnable(StressComponent component,
     case kRSL:
       enable ? rsl &= 0x7FFF : rsl |= 0x8000; break;
     default:
-      ASSERT(FALSE); // no exit
+      NOTREACHED(); // no exist
     }
   }
   NotifyEnableChanged(component, enable);
@@ -113,7 +112,7 @@ double StressDevice::ComponentValue(StressComponent component) {
     case kRSL:
       value = rsl & 0x7FFF; break;
     default:
-      ASSERT(FALSE); // no exit
+      NOTREACHED(); // no exist
     }
 
     return static_cast<double>(value) * kRStep;
@@ -141,7 +140,7 @@ bool StressDevice::ComponentEnable(StressComponent component) {
     case kRSL:
       enable = !((rsl & 0x8000) != 0U); break;
     default:
-      ASSERT(FALSE); // no exit
+      NOTREACHED(); // no exist
     }
 
     return enable;
@@ -163,7 +162,7 @@ void StressDevice::SetDisturbanceVoltage(CAN_CHNL chnl,
   } else if (chnl == CAN_LOW) {
     cfg_.portcfg5 = (volt != VOLT_PLUS);
   } else {
-    ASSERT(FALSE);
+    NOTREACHED();
   }
   NotifyDisturbanceVoltageChanged(chnl, volt);
 }
@@ -174,7 +173,7 @@ DisturbanceVoltage StressDevice::GetDisturbanceVoltage(CAN_CHNL chnl) {
   } else if (chnl == CAN_LOW) {
     return !cfg_.portcfg5 ? VOLT_PLUS : VOLT_MINUS;
   } else {
-    ASSERT(FALSE);
+    NOTREACHED();
     return VOLT_MINUS;
   }
 }
@@ -185,4 +184,12 @@ void StressDevice::SetCANBusType(CANBusType type) {
 
 CANBusType StressDevice::GetCANBusType() {
   return !cfg_.portcfg6 ? HIGH_SPEED : FAULT_TOLERANT;
+}
+
+void StressDevice::set_stress_layout(StressLayout layout) {
+  CHECK(0 <= layout && layout < kLayoutSize);
+  if (layout_ == layout)
+    return;
+  layout_ = layout;
+  NotifyLayoutChanged(layout_);
 }
