@@ -4,14 +4,9 @@
 
 #include "common/Ini.h"
 
-// TODO this dup with the View. remove this dup.
+#include "stress/stress_constants.h"
+
 namespace {
-const static double kRMin = 0.0;
-const static double kRMax = 10237.5;
-const static double kRStep = 2.5;
-const static double kCMin = 0.0;
-const static double kCMax = 15750.0;
-const static double kCStep = 250.0;
 const static double kDoubleMin = 0.000001;
 
 const static int kVersionMain = 2;

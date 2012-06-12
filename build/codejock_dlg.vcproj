@@ -499,6 +499,10 @@
 				Name="stress"
 				>
 				<File
+					RelativePath="..\stress\stress_constants.h"
+					>
+				</File>
+				<File
 					RelativePath="..\stress\stress_device.cc"
 					>
 					<FileConfiguration

@@ -2,15 +2,12 @@
 
 #include "ui/analog_disturbance.h"
 
+#include "stress/stress_constants.h"
+
 namespace {
-const static double kRMin = 0.0;
-const static double kRMax = 10237.5;
-const static double kRStep = 2.5;
-const static int kRPrecision = 1;
-const static double kCMin = 0.0;
-const static double kCMax = 15750.0;
-const static double kCStep = 250.0;
-const static int kCPrecision = 0;
+
+static const int kRPrecision = 1;
+static const int kCPrecision = 0;
 
 static const bool kLayoutStatus[][kComponentSize] = {
   // kRH kRHL   kRL   kRSH   kCHL    kRSL
