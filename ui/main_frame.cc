@@ -261,16 +261,19 @@ bool MainFrame::SaveChanged() {
  
   CString text;
   text.Format(kSaveChanges, 
-    last_file_path_.empty() ? _T("Untitled") : last_file_path_.BaseName().value());
+    last_file_path_.empty() ? _T("Untitled") : 
+      last_file_path_.BaseName().value().c_str());
   int id = AfxMessageBox(text, 
     MB_YESNOCANCEL | MB_ICONQUESTION | MB_DEFBUTTON1);
   switch (id) {
-    case IDOK: {
-      CFileDialog dlg(FALSE, _T("ini"), _T("stress.ini"), 
-        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, 
-        _T("Ini Files (*.ini)|*.ini|All Files (*.*)|*.*||"), this);
-      if (dlg.DoModal() == IDOK) {
-        FilePath path = FilePath(string16(dlg.GetPathName().GetString())); 
+    case IDYES: {
+      if(!last_file_path_.empty()) {
+        device_.Save(last_file_path_);
+        return true;
+      }
+      scoped_ptr<CFileDialog> dlg(CreateFileDialog(false));
+      if (dlg->DoModal() == IDOK) {
+        FilePath path = FilePath(string16(dlg->GetPathName().GetString())); 
         device_.Save(path);
         return true; // save success.
       } else {
