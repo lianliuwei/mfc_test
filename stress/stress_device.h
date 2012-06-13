@@ -146,7 +146,7 @@ public:
   }
 
   void Save(FilePath& file);
-  void Load(FilePath& file) {}
+  void Load(FilePath& file);
   void Reset();
   // changed for last save.
   bool Changed() { return changed_; }

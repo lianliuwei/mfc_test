@@ -7,31 +7,49 @@
 #include "stress/stress_constants.h"
 
 namespace {
-const static double kDoubleMin = 0.000001;
+static const double kDoubleMin = 0.000001;
 
-const static int kVersionMain = 2;
-const static int kVersionSub = 1;
-const static TCHAR* kVersionSection = _T("Verison");
-const static TCHAR* kMainKey = _T("Main");
-const static TCHAR* kSubKey = _T("Sub");
+static const int kVersionMain = 2;
+static const int kVersionSub = 1;
+static const TCHAR* kVersionSection = _T("Version");
+static const TCHAR* kMainKey = _T("Main");
+static const TCHAR* kSubKey = _T("Sub");
 
-const static TCHAR* kAnalogDisturbSection = _T("AnalogDistConfig");
-const static TCHAR* kRHKey = _T("R_H");
-const static TCHAR* kRHLKey = _T("R_HL");
-const static TCHAR* kRLKey = _T("R_L");
-const static TCHAR* kRSHKey = _T("R_SH");
-const static TCHAR* kRSLKey = _T("R_SL");
-const static TCHAR* kCHLKey = _T("C_HL");
-const static TCHAR* kRHEnableKey = _T("R_H_State");
-const static TCHAR* kRSHEnableKey = _T("R_SH_State");
-const static TCHAR* kRLEnableKey = _T("R_L_State");
-const static TCHAR* kRSLEnableKey = _T("R_SL_State");
-const static TCHAR* kRHLEnableKey = _T("R_HL_State");
-const static TCHAR* kCHLEnableKey = _T("C_HL_State");
-const static TCHAR* kLayoutKey = _T("ResLayoutType");
+static const TCHAR* kAnalogDisturbSection = _T("AnalogDistConfig");
+static const TCHAR* kRHKey = _T("R_H");
+static const TCHAR* kRHLKey = _T("R_HL");
+static const TCHAR* kRLKey = _T("R_L");
+static const TCHAR* kRSHKey = _T("R_SH");
+static const TCHAR* kRSLKey = _T("R_SL");
+static const TCHAR* kCHLKey = _T("C_HL");
+static const TCHAR* kRHEnableKey = _T("R_H_State");
+static const TCHAR* kRSHEnableKey = _T("R_SH_State");
+static const TCHAR* kRLEnableKey = _T("R_L_State");
+static const TCHAR* kRSLEnableKey = _T("R_SL_State");
+static const TCHAR* kRHLEnableKey = _T("R_HL_State");
+static const TCHAR* kCHLEnableKey = _T("C_HL_State");
+static const TCHAR* kLayoutKey = _T("ResLayoutType");
+
+static const int kEnableKeyDefault = 1;
+static const int kLayoutKeyDefault = 1;
 
 int EnableToConfigKey(bool enable) {
   return enable ? 3 : 1;
+}
+
+bool ConfigKeyToEnable(int key) {
+   if (key == 3)
+     return true;
+   LOG_IF(ERROR, key != 1) << "no support key value "<< key <<". treat as 1 (false)";
+   return false; // other return 
+}
+
+StressLayout ConfigKeyToLayout(int key) {
+  if (key < 1 || key > kLayoutSize) {
+    LOG(ERROR) << "no support key value " << key << ". treat as 1 (kStandard)";
+    return kStandard;
+  }
+  return static_cast<StressLayout>(key -1);
 }
 
 int LayoutToConfigKey(StressLayout layout) {
@@ -272,6 +290,42 @@ void StressDevice::Save(FilePath& file) {
     EnableToConfigKey(ComponentEnable(kCHL)));
 
   ini.WriteInt(kAnalogDisturbSection, kLayoutKey, LayoutToConfigKey(stress_layout()));
+
+  MarkNoChanged();
+}
+
+void StressDevice::Load( FilePath& file )
+{
+  CIni ini(file.value().c_str());
+  
+  int main = ini.GetInt(kVersionSection, kMainKey, 0);
+  int sub = ini.GetInt(kVersionSection, kSubKey, 0);
+  if (main != kVersionMain && sub != kVersionSub) {
+    LOG(ERROR) << "version of load file is no support.";
+    return; 
+  }
+  SetComponentValue(kRH, ini.GetDouble(kAnalogDisturbSection, kRHKey, 0.0));
+  SetComponentValue(kRHL, ini.GetDouble(kAnalogDisturbSection, kRHLKey, 0.0));
+  SetComponentValue(kRL, ini.GetDouble(kAnalogDisturbSection, kRLKey, 0.0));
+  SetComponentValue(kRSH, ini.GetDouble(kAnalogDisturbSection, kRSHKey, 0.0));
+  SetComponentValue(kRSL, ini.GetDouble(kAnalogDisturbSection, kRSLKey, 0.0));
+  SetComponentValue(kCHL, ini.GetDouble(kAnalogDisturbSection, kCHLKey, 0.0));
+
+  SetComponentEnable(kRH, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kRHEnableKey, kEnableKeyDefault)));
+  SetComponentEnable(kRHL, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kRHLEnableKey, kEnableKeyDefault)));
+  SetComponentEnable(kRL, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kRLEnableKey, kEnableKeyDefault)));
+  SetComponentEnable(kRSH, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kRSHEnableKey, kEnableKeyDefault)));
+  SetComponentEnable(kRSL, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kRSLEnableKey, kEnableKeyDefault)));
+  SetComponentEnable(kCHL, 
+    ConfigKeyToEnable(ini.GetInt(kAnalogDisturbSection, kCHLEnableKey, kEnableKeyDefault)));
+
+  set_stress_layout(
+    ConfigKeyToLayout(ini.GetInt(kAnalogDisturbSection, kLayoutKey, kLayoutKeyDefault)));
 
   MarkNoChanged();
 }
