@@ -4,6 +4,11 @@
 
 #include "ui/views/picture_ctrl.h"
 
+// INFO fix the GDI+ and WS_EX_COMPOSITED compatibility in XP
+#include "base/win/windows_version.h"
+#include "common/MemDC.h"
+
+
 using namespace Gdiplus;
 
 BEGIN_MESSAGE_MAP(CPictureCtrl, CStatic)
@@ -273,11 +278,23 @@ void CPictureCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if(m_bIsPicLoaded)
 	{
 		//Get control measures
-		RECT rc;
+		CRect rc;
 		this->GetClientRect(&rc);
-		Graphics graphics(lpDrawItemStruct->hDC);
-		Image image(m_pStream);
-		graphics.DrawImage(&image, (INT)rc.left, (INT)rc.top, (INT)(rc.right-rc.left), (INT)(rc.bottom-rc.top));	
+    // GDI+ and WS_EX_COMPOSITED has problem in XP system
+    // see http://stackoverflow.com/questions/9549631/gdi-problems-on-windows-xp 
+    // for more information
+    if (base::win::GetVersion() <= base::win::VERSION_XP) {
+      CMemDC dc(CDC::FromHandle(lpDrawItemStruct->hDC));
+      Graphics graphics(dc);
+      Image image(m_pStream);
+      graphics.DrawImage(&image, 
+        (INT)rc.left, (INT)rc.top, (INT)(rc.Width()), (INT)(rc.Height()));	
+    } else {
+      Graphics graphics(lpDrawItemStruct->hDC);
+      Image image(m_pStream);
+      graphics.DrawImage(&image, 
+        (INT)rc.left, (INT)rc.top, (INT)(rc.Width()), (INT)(rc.Height()));	
+    }
 	}
 }
 

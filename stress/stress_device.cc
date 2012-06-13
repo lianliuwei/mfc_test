@@ -280,7 +280,7 @@ void StressDevice::Save(FilePath& file) {
     EnableToConfigKey(ComponentEnable(kRH)));
   ini.WriteInt(kAnalogDisturbSection, kRSHEnableKey, 
     EnableToConfigKey(ComponentEnable(kRSH)));
-  ini.WriteInt(kAnalogDisturbSection, kRLEnableKey, 
+  ini.WriteInt(kAnalogDisturbSection, kRLEnableKey,
     EnableToConfigKey(ComponentEnable(kRL)));
   ini.WriteInt(kAnalogDisturbSection, kRSLEnableKey, 
     EnableToConfigKey(ComponentEnable(kRSL)));
