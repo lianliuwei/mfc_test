@@ -77,7 +77,7 @@ static const bool kLayoutCanChange[][kComponentSize] = {
   {true, false, false, false, true, false},
 };
 
-static const TCHAR* kLayoutString[] = {
+static const TCHAR* kLayoutString[] = { // one match one in stress layout.
   _T("Standard Layout"),
   _T("R_H"),
   _T("R_SH"),
@@ -362,6 +362,7 @@ void AnalogDisturbanceView::OnDisturbanceVoltageChanged(CAN_CHNL chnl,
 }
 
 void AnalogDisturbanceView::OnStressLayoutChanged(StressLayout layout) {
+  layout_.SetCurSel(layout); 
   SetComponentEnable(kRH, &rh_enable_, 
     kLayoutStatus[layout][kRH], kLayoutCanChange[layout][kRH]);  
   SetComponentEnable(kRHL, &rhl_enable_, 
@@ -373,7 +374,7 @@ void AnalogDisturbanceView::OnStressLayoutChanged(StressLayout layout) {
   SetComponentEnable(kCHL, &chl_enable_, 
     kLayoutStatus[layout][kCHL], kLayoutCanChange[layout][kCHL]);  
   SetComponentEnable(kRSL, &rsl_enable_, 
-    kLayoutStatus[layout][kRSL], kLayoutCanChange[layout][kRSL]);  
+    kLayoutStatus[layout][kRSL], kLayoutCanChange[layout][kRSL]); 
 }
 
 void AnalogDisturbanceView::OnStart()
