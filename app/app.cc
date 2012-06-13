@@ -5,8 +5,9 @@
 
 #include "app/app.h"
 
+#include "base/logging.h"
+#include "base/command_line.h"
 #include "ui/main_frame.h"
-
 
 BEGIN_MESSAGE_MAP(App, CWinApp)
   ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
@@ -60,5 +61,17 @@ BOOL App::InitInstance()
     pFrame->UpdateWindow();
     // call DragAcceptFiles only if there's a suffix
     //  In an SDI app, this should occur after ProcessShellCommand
+      
+    using namespace logging;
+
+    CommandLine::Init(0, NULL);
+    InitLogging(L"xtp.log", 
+      LOG_TO_BOTH_FILE_AND_SYSTEM_DEBUG_LOG,
+      LOCK_LOG_FILE,
+      DELETE_OLD_LOG_FILE,
+      DISABLE_DCHECK_FOR_NON_OFFICIAL_RELEASE_BUILDS);
+
+    VLOG(1) << "log init";
+
     return TRUE;
 }
