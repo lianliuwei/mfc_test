@@ -1,7 +1,6 @@
 #define IDD_ABOUTBOX                100
 #define IDP_OLE_INIT_FAILED         100
 #define IDR_MAINFRAME_STRESS        128
-#define IDB_BITMAP_ICONS            129
 
 #define ID_VIEW_ANALOG_DISTURBANCE  130
 #define ID_VIEW_CONFIG              131
