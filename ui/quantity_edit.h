@@ -6,13 +6,20 @@
 class QuantityEdit : public CXTPValidatingEditCtrl
 {
 public:
-  QuantityEdit() 
-    : CXTPValidatingEditCtrl(
-      "^([+-]?(\\d+|\\d+\\.\\d+)([eE][+-]?\\d+)?)\\s*(\\w*)$",
-      "^[+-]?((\\d*)|(\\d+\\.)|((\\d+|\\d+\\.\\d+)[eE][+-]?)|((\\d+|\\d+\\.\\d+)([eE][+-]?\\d+)?\\s*([a-zA-Z]*)))$",
-      _T("type \"double( unit)\"")) {};
+  QuantityEdit();
 
   virtual ~QuantityEdit() {};
+  
+private:
+  virtual void OnValidatedText(CString text);
+
+private:
+  // get the value or unit from the user input string using regex extract.
+  double value();
+  string16 unit();
+
+  double value_;
+  string16 unit_;
 };
 
 class CXTPQuantityEdit : public CXTPValidatingControlEdit
