@@ -164,6 +164,8 @@ protected:
     CString *pstrErrorMsg = 0) { return true; }
   // check the strText is march so far, may be in the middle of input
   virtual bool MarchSoFar (const CString &strText) { return true; }
+  // notify the text has be Validated.
+  virtual void OnValidatedText(CString text) {};
 
   // Validate char for OnChar
   bool ValidateChar (UINT nChar, const bool bDisplayToolTip = true) {
@@ -481,6 +483,12 @@ protected:
     {
       TBaseEdit::OnKeyDown (nChar, nRepCnt, nFlags);
     }
+    if (nChar == VK_EXECUTE && m_bInputValid)
+    {
+      CString text;
+      GetWindowText(text);
+      OnValidatedText(text);
+    }
   }
 
   afx_msg void OnKillFocus(CWnd* pNewWnd) {
@@ -494,6 +502,12 @@ protected:
     if (pNewWnd && pNewWnd->m_hWnd != m_ToolTip.m_hWnd)
     {
       TBaseEdit::OnKillFocus (pNewWnd);
+    }
+    if (m_bInputValid) 
+    {
+      CString text;
+      GetWindowText(text);
+      OnValidatedText(text);
     }
   }
 
