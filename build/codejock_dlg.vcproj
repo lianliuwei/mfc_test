@@ -407,6 +407,18 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="common"
+				>
+				<File
+					RelativePath="..\common\TcxUnitConverter.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\common\TcxUnitConverter.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
