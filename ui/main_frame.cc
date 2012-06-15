@@ -12,6 +12,8 @@ namespace {
   static const int frame_width = 640;
 }
 
+using namespace std;
+
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
@@ -124,8 +126,7 @@ BOOL MainFrame::CreateRibbonBar()
   LOG_ASSERT(config_bar_->Init());
   command_updater_->AddCommandObserver(IDC_OSC_ON_OFF, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_AUTOSCALE, config_bar_.get());
-  InitCommandState();
-
+  command_updater_->AddCommandObserver(IDC_CHNL_WAVE_VOLT_OFFSET, config_bar_.get());
 
   // home Tab
   CXTPRibbonTab* pTabHome = pRibbonBar->AddTab(ID_TAB_HOME);
@@ -196,6 +197,13 @@ BOOL MainFrame::CreateRibbonBar()
   pRibbonBar->GetQuickAccessControls()->CreateOriginalControls();
 
   pRibbonBar->EnableFrameTheme();
+
+  // INFO need to put InitCommandState() here. if you put InitCommandState() right
+  // after the "config_bar_->Init()" will no set the windows text right. because
+  // the after XTPTab create may change the commandBar, and the commmandBar may
+  // recreate the EditCtrl in the ControlEdit, so the text is losted.
+  InitCommandState();
+
   return TRUE;
 }
 
@@ -305,7 +313,7 @@ void MainFrame::OnClose()
 void MainFrame::ExecuteCommand(int id, const base::Value& param)
 {
   switch (id) {
-   case IDC_OSC_ON_OFF:
+   case IDC_OSC_ON_OFF: {
      bool on_off;
      CHECK(param.GetAsBoolean(&on_off));
      LOG_ASSERT(osc_on_off_ != on_off);
@@ -314,6 +322,23 @@ void MainFrame::ExecuteCommand(int id, const base::Value& param)
        base::Value::CreateBooleanValue(osc_on_off_));
      command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
      break;
+     }
+   
+   case IDC_CHNL_WAVE_VOLT_OFFSET: {
+     double value;
+     string16 unit;
+     const base::DictionaryValue* dict;
+     CHECK(param.GetAsDictionary(&dict));
+     CHECK(dict->GetDouble(string(kValuePath), &value));
+     CHECK(dict->GetString(string(kUnitPath), &unit));
+     CHECK(unit == string16(_T("V")));
+     value += 1.0;
+     scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
+     quantity->SetDouble(string(kValuePath), value);
+     quantity->SetString(string(kUnitPath), string16(_T("V")));
+     command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
+     break;
+     }
   }
 }
 
@@ -323,7 +348,14 @@ void MainFrame::InitCommandState()
     IDC_OSC_ON_OFF, true);
   command_updater_->UpdateCommandEnabled(
     IDC_AUTOSCALE, true);
+  command_updater_->UpdateCommandEnabled(
+    IDC_CHNL_WAVE_VOLT_OFFSET, true);
   scoped_ptr<base::Value> value(
     base::Value::CreateBooleanValue(osc_on_off_));
   command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
+  
+  scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
+  quantity->SetDouble(string(kValuePath), 1);
+  quantity->SetString(string(kUnitPath), string16(_T("V")));
+  command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
 }

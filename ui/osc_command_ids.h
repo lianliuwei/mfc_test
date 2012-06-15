@@ -13,6 +13,10 @@
 // wave control
 #define IDC_CHNL_WAVE_VOLT_RANGE 12
 #define IDC_CHNL_WAVE_VOLT_OFFSET 13
+// notify with value and unit, save in a DictionaryValue.
+extern const char kValuePath[];
+extern const char kUnitPath[];
+
 #define IDC_CHNL_WAVE_COUPLING 16
 #define IDC_TIME_RANGE 18
 #define IDC_TIME_OFFSET 19

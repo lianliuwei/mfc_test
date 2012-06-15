@@ -57,7 +57,8 @@ bool RibbonOscConfigBar::Init() {
   can_h_vertical_div_ = DYNAMIC_DOWNCAST(CXTPControlComboBox,
     pGroupCANH->Add(xtpControlComboBox, ID_COMBOX_CAN_HIGH_VERTICAL_DIV));
   SetControlShowStyle(can_h_vertical_div_);
-  can_h_vertical_offset_ = new CXTPQuantityEdit;
+  can_h_vertical_offset_ = 
+    new CXTPQuantityEdit(command_updater_, IDC_CHNL_WAVE_VOLT_OFFSET, _T("V"));
   pGroupCANH->Add(can_h_vertical_offset_, ID_EDIT_CAN_HIGH_VERICAL_OFFSET);
   SetControlShowStyle(can_h_vertical_offset_);
   SetControlToManualUpdate(can_h_vertical_offset_);
@@ -74,6 +75,9 @@ void RibbonOscConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
     case IDC_AUTOSCALE:
       control = auto_scale_;
       break;
+
+    case IDC_CHNL_WAVE_VOLT_OFFSET:
+      control = can_h_vertical_offset_;
 
     default:
       NOTREACHED();
@@ -99,6 +103,17 @@ void RibbonOscConfigBar::ParamChangedForCommand(int id, const base::Value& param
     case IDC_AUTOSCALE:
       break;
 
+    case IDC_CHNL_WAVE_VOLT_OFFSET: {
+      double value;
+      string16 unit;
+      const base::DictionaryValue* dict;
+      CHECK(param.GetAsDictionary(&dict));
+      CHECK(dict->GetDouble(string(kValuePath), &value));
+      CHECK(dict->GetString(string(kUnitPath), &unit));
+      CHECK(unit == string16(_T("V"))); // no only allow set value, unit no change.
+      can_h_vertical_offset_->set_value(value);
+      break;
+    }
     default:
       NOTREACHED();
   }

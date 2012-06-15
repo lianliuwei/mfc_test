@@ -4,6 +4,10 @@
 
 #include "base/utf_string_conversions.h"
 #include "base/stringprintf.h"
+#include "base/memory/scoped_ptr.h"
+#include "base/values.h"
+#include "ui/command_updater.h"
+#include "ui/osc_command_ids.h"
 #include "common/TcxUnitConverter.h"
 
 namespace {
@@ -16,15 +20,20 @@ static const TCHAR* kQuantityInitTooltip =
 
 static const TCHAR* kShowQuantity = _T("%g %ls");
 }
+
+const char kValuePath[] = "value";
+const char kUnitPath[] = "unit";
+
 // RE need null ptr, NULL is wrong.
 #define NULL_PTR ((void*)(0))
 
-QuantityEdit::QuantityEdit() 
+QuantityEdit::QuantityEdit(CommandUpdater* command_updater, int id, string16 unit) 
     : CXTPValidatingEditCtrl(
       kQuantityFullMatch, kQuantityPartMatch, kQuantityInitTooltip)
     , value_(0.0)
-    , set_unit_(false) {
-  
+    , command_updater_(command_updater)
+    , id_(id) {
+  set_unit(unit);
 }
 
 double QuantityEdit::value() {
@@ -35,7 +44,24 @@ string16 QuantityEdit::unit() {
   return unit_;
 }
 
-void QuantityEdit::OnValidatedText( CString text )
+void QuantityEdit::UpdateWindowText(double value, string16 unit)
+{
+  string16 show;
+  if (unit == EmptyString16()) {
+    show = StringPrintf(kShowQuantity, value, unit.c_str());
+  } else {
+    if (!TcxConvertUnitForEasyRead(&value, &unit)) {
+      LOG(INFO) << "value is too large or too small. can no be convert.";
+      return; // left the user typein.
+    } else {
+      show = StringPrintf(kShowQuantity, value, unit.c_str());
+    }
+  }
+  SetWindowText(show.c_str());
+}
+
+
+void QuantityEdit::OnValidatedText(CString text)
 {
   double value;
   string unit;
@@ -45,7 +71,7 @@ void QuantityEdit::OnValidatedText( CString text )
     LOG(WARNING) <<  "Validated text is no validated: " << text.GetString();
     return;
   }
-  if (!set_unit_) {
+  if (!HasSetUnit()) {
     // update value and unit
     value_ = value;
     unit_ = ASCIIToUTF16(unit);
@@ -59,17 +85,13 @@ void QuantityEdit::OnValidatedText( CString text )
       return;
     }
     value_ = value;
-    double value_show =  value_;
-    string16 unit_show = unit_;
-    if (!TcxConvertUnitForEasyRead(&value_show, &unit_show)) {
-      LOG(ERROR) << "value is too large or too small. can no be convert.";
-    } else {
-      string16 show;
-      show = StringPrintf(kShowQuantity, value_show, unit_show.c_str());
-      SetWindowText(show.c_str());
-    }
   }
+  UpdateWindowText(value_, unit_);
   // set to the commandupdater.
+  scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
+  quantity->SetDouble(string(kValuePath), value_);
+  quantity->SetString(string(kUnitPath), unit_);
+  command_updater_->ExecuteCommand(id_, *(quantity.get()));
 }
 
 bool QuantityEdit::SemanticCheck( const CString &strText, 
@@ -82,7 +104,7 @@ bool QuantityEdit::SemanticCheck( const CString &strText,
                   this must be true if pass syntax check.";
     return false;
   }
-  if (set_unit_) {
+  if (HasSetUnit()) {
     if (unit == EmptyString()) return true; // using default unit.
 
     double value = 0; // dump value
@@ -96,6 +118,10 @@ bool QuantityEdit::SemanticCheck( const CString &strText,
 }
 
 void QuantityEdit::set_unit(string16 unit) {
-  set_unit_ = (unit != EmptyString16());
   unit_ = unit;
+}
+
+void QuantityEdit::set_value(double value) {
+  value_ = value;
+  UpdateWindowText(value_, unit_);
 }
