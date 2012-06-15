@@ -79,27 +79,33 @@ public:
     m_crWavyLineColour = crWavyLine;
   }
   void SetBackgroundColourFocus (const COLORREF crBkFocus) {
+    m_setCrBkFocus = true;
     m_crBkFocus = crBkFocus;
     m_brFocus.DeleteObject ();
     m_brFocus.CreateSolidBrush (m_crBkFocus);
   }
   void SetForegroundColourFocus (const COLORREF crFgFocus) {
+    m_setCrFgFocus = true;
     m_crFgFocus = crFgFocus;
   }
   void SetBackgroundColourOK (const COLORREF crBkOK) {
+    m_setCrBkOk = true;
     m_crBkOK = crBkOK;
     m_brOK.DeleteObject ();
     m_brOK.CreateSolidBrush (m_crBkOK);
   }
   void SetForegroundColourOK (const COLORREF crFgOK) {
+    m_setCrFgOK = true;
     m_crFgOK = crFgOK;
   }
   void SetBackgroundColourError (const COLORREF crBkError) {
+    m_setCrBkError = true;
     m_crBkError = crBkError;
     m_brError.DeleteObject ();
     m_brError.CreateSolidBrush (m_crBkError);
   }
   void SetForegroundColourError (const COLORREF crFgError) {
+    m_setCrFgError = true;
     m_crFgError = crFgError;
   }
 
@@ -527,22 +533,31 @@ protected:
       {
         if (GetFocus () == this)
         {
-          hbr = m_brFocus;
-          pDC->SetBkColor (m_crBkFocus);
-          pDC->SetTextColor (m_crFgFocus);
+          if (m_crBkFocus) {
+            hbr = m_brFocus;
+            pDC->SetBkColor (m_crBkFocus);
+          }
+          if (m_setCrFgFocus)
+            pDC->SetTextColor (m_crFgFocus);
         }
         else
         {
-          hbr = m_brOK;
-          pDC->SetBkColor (m_crBkOK);
-          pDC->SetTextColor (m_crFgOK);
+          if (m_setCrBkOk) {
+            hbr = m_brOK;
+            pDC->SetBkColor (m_crBkOK);
+          }
+          if (m_setCrFgOK)
+            pDC->SetTextColor (m_crFgOK);
         }
       }
       else
       {
-        hbr = m_brError;
-        pDC->SetBkColor (m_crBkError);
-        pDC->SetTextColor (m_crFgError);
+        if (m_setCrBkError) {
+          hbr = m_brError;
+          pDC->SetBkColor (m_crBkError);
+        }
+        if (m_setCrFgError)
+          pDC->SetTextColor (m_crFgError);
       }
     }
 
@@ -655,6 +670,14 @@ private:
     SetForegroundColourOK (::GetSysColor(COLOR_WINDOWTEXT));
     SetBackgroundColourError (::GetSysColor(COLOR_WINDOW));
     SetForegroundColourError (::GetSysColor(COLOR_WINDOWTEXT));
+    // must after SetColor or will be set to true.
+    m_setCrFgFocus = false;
+    m_setCrBkFocus = false;
+    m_setCrFgOK = false;
+    m_setCrBkOk = false;
+    m_setCrFgError = false;
+    m_setCrBkError = false;
+
     m_bDisplayTTonNull = true;
   }
 
@@ -673,11 +696,17 @@ private:
   // Display related members
   bool m_bWavyLineOnError;
   COLORREF m_crWavyLineColour;
+  bool m_setCrFgFocus;
   COLORREF m_crFgFocus;
+  bool m_setCrBkFocus;
   COLORREF m_crBkFocus;
+  bool m_setCrFgOK;
   COLORREF m_crFgOK;
+  bool m_setCrBkOk;
   COLORREF m_crBkOK;
+  bool m_setCrFgError;
   COLORREF m_crFgError;
+  bool m_setCrBkError;
   COLORREF m_crBkError;
   CBrush m_brFocus;
   CBrush m_brOK;
