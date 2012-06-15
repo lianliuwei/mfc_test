@@ -1,10 +1,11 @@
 #include "StdAfx.h"
 
-#include "on_off_button.h"
+#include "ui/on_off_button.h"
+
 #include "base/memory/scoped_ptr.h"
 #include "base/values.h"
-#include "command_updater.h"
-#include "osc_command_ids.h"
+#include "ui/command_updater.h"
+#include "ui/osc_command_ids.h"
 
 IMPLEMENT_XTP_CONTROL(OnOffButton, CXTPToggleButton)
 

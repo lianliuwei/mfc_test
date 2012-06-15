@@ -2,7 +2,7 @@
 #define ONOFFBUTTON_
 #pragma once
 
-#include "XTPToggleButton.h"
+#include "ui/XTPToggleButton.h"
 #include "base/compiler_specific.h"
 
 class CommandUpdater;
