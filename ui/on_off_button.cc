@@ -38,7 +38,7 @@ void OnOffButton::DoPropExchange( CXTPPropExchange* pPX ) {
 
 void OnOffButton::Copy( CXTPControl* pControl, BOOL bRecursive ) {
   OnOffButton* button = DYNAMIC_DOWNCAST(OnOffButton, pControl);
-  ASSERT(button);
+  DCHECK(button);
   CXTPToggleButton::Copy(pControl, bRecursive);
   command_updater_ = button->command_updater_;
 }
