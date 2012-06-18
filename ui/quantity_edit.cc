@@ -51,6 +51,7 @@ private:
 
 }
 
+// TODO put in some define protocol file.
 const char kValuePath[] = "value";
 const char kUnitPath[] = "unit";
 
