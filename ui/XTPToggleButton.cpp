@@ -33,7 +33,7 @@ void CXTPToggleButton::ChangeState(State state, bool notify) {
   state_ = state;
   // notify the change
   if (notify)
-    OnChangeState(state);
+    OnChangeState(state_);
 
   SetIconId(state_ == STATE_SET ? set_icon_id_ : unset_icon_id_);
 }
@@ -54,8 +54,12 @@ void CXTPToggleButton::OnClick(BOOL bKeyboard, CPoint pt) {
 }
 
 void CXTPToggleButton::Copy(CXTPControl* pControl, BOOL bRecursive) {
-  // NO IMPLEMENT
-  VERIFY(FALSE);
+  CXTPToggleButton* button = DYNAMIC_DOWNCAST(CXTPToggleButton, pControl);
+  ASSERT(button);
+  CXTPControlButton::Copy(pControl, bRecursive);
+  set_icon_id_ = button->set_icon_id_;
+  unset_icon_id_ = button->unset_icon_id_;
+  ChangeState(button->state_, false); // only the same, no need to notify.
 }
 
 void CXTPToggleButton::DoPropExchange( CXTPPropExchange* pPX )
@@ -67,7 +71,7 @@ void CXTPToggleButton::DoPropExchange( CXTPPropExchange* pPX )
   PX_Enum(pPX, _T("state"), state_, STATE_SET);
 
   if (pPX->IsLoading()) {
-    ChangeState(state_ == STATE_SET ? STATE_UNSET : STATE_SET, true);
+    ChangeState(state_, true);
   }
 }
 

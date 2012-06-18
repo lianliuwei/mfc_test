@@ -20,6 +20,13 @@ public:
 
   // 
   void UpdateState(bool on_off);
+
+protected:
+  virtual void Copy(CXTPControl* pControl, BOOL bRecursive);
+
+private:
+  virtual void DoPropExchange(CXTPPropExchange* pPX);
+
 private:
   CommandUpdater* command_updater_;
 

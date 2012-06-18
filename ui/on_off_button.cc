@@ -4,6 +4,7 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "base/values.h"
+#include "base/logging.h"
 #include "ui/command_updater.h"
 #include "ui/osc_command_ids.h"
 
@@ -29,4 +30,15 @@ void OnOffButton::OnChangeState(State new_sate) {
 
 void OnOffButton::UpdateState( bool on_off ) {
   ChangeState(on_off ? STATE_UNSET : STATE_SET, false);
+}
+
+void OnOffButton::DoPropExchange( CXTPPropExchange* pPX ) {
+  NOTREACHED() << "no support XML create.";
+}
+
+void OnOffButton::Copy( CXTPControl* pControl, BOOL bRecursive ) {
+  OnOffButton* button = DYNAMIC_DOWNCAST(OnOffButton, pControl);
+  ASSERT(button);
+  CXTPToggleButton::Copy(pControl, bRecursive);
+  command_updater_ = button->command_updater_;
 }
