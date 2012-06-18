@@ -28,7 +28,7 @@ public:
   virtual void OnChangeState(State new_sate);
 
 protected:
-  // when using 
+  // when popup the commandbars will copy controls.
   virtual void Copy(CXTPControl* pControl, BOOL bRecursive);
 
   // get call when using XML to config
