@@ -127,6 +127,7 @@ BOOL MainFrame::CreateRibbonBar()
   command_updater_->AddCommandObserver(IDC_OSC_ON_OFF, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_AUTOSCALE, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_CHNL_WAVE_VOLT_OFFSET, config_bar_.get());
+  InitCommandState();
 
   // home Tab
   CXTPRibbonTab* pTabHome = pRibbonBar->AddTab(ID_TAB_HOME);
@@ -197,12 +198,6 @@ BOOL MainFrame::CreateRibbonBar()
   pRibbonBar->GetQuickAccessControls()->CreateOriginalControls();
 
   pRibbonBar->EnableFrameTheme();
-
-  // INFO need to put InitCommandState() here. if you put InitCommandState() right
-  // after the "config_bar_->Init()" will no set the windows text right. because
-  // the after XTPTab create may change the commandBar, and the commmandBar may
-  // recreate the EditCtrl in the ControlEdit, so the text is losted.
-  InitCommandState();
 
   return TRUE;
 }

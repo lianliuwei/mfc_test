@@ -27,24 +27,86 @@ const char kUnitPath[] = "unit";
 // RE need null ptr, NULL is wrong.
 #define NULL_PTR ((void*)(0))
 
-QuantityEdit::QuantityEdit(CommandUpdater* command_updater, int id, string16 unit) 
+QuantityEdit::QuantityEdit() 
     : CXTPValidatingEditCtrl(
-      kQuantityFullMatch, kQuantityPartMatch, kQuantityInitTooltip)
-    , value_(0.0)
-    , command_updater_(command_updater)
-    , id_(id) {
-  set_unit(unit);
+      kQuantityFullMatch, kQuantityPartMatch, kQuantityInitTooltip) {
 }
 
 double QuantityEdit::value() {
-  return value_;
+  return static_cast<CXTPQuantityEdit*>(m_pControl)->value_;
 }
 
 string16 QuantityEdit::unit() {
-  return unit_;
+  return static_cast<CXTPQuantityEdit*>(m_pControl)->unit_;
 }
 
-void QuantityEdit::UpdateWindowText(double value, string16 unit)
+int QuantityEdit::id() {
+  return static_cast<CXTPQuantityEdit*>(m_pControl)->id_;
+}
+
+CommandUpdater* QuantityEdit::command_updater() {
+  return static_cast<CXTPQuantityEdit*>(m_pControl)->command_updater_;
+}
+
+void QuantityEdit::OnValidatedText(CString text)
+{
+  double input_value;
+  string input_unit;
+  bool ret = pcrecpp::RE(full_match()).FullMatch(
+        UTF16ToASCII(text.GetString()), 
+          &input_value, NULL_PTR, NULL_PTR, &input_unit);
+  if (ret == false) {
+    LOG(WARNING) <<  "Validated text is no validated: " << text.GetString();
+    return;
+  }
+  if (!HasSetUnit()) {
+    // update value and unit
+    static_cast<CXTPQuantityEdit*>(m_pControl)->value_ = input_value;
+    static_cast<CXTPQuantityEdit*>(m_pControl)->unit_ = ASCIIToUTF16(input_unit);
+  } else {
+    string16 unit16 = ASCIIToUTF16(input_unit);
+    if (unit16 == EmptyString16()) // if no unit using default unit.
+      unit16 = unit();
+    BOOL ret = TcxConvertUnit(input_value, unit16.c_str(), unit().c_str());
+    if (!ret) {
+      LOG(ERROR) << "SematicCheck is fault. unit no match.";
+      return;
+    }
+    static_cast<CXTPQuantityEdit*>(m_pControl)->value_ = input_value;
+  }
+  static_cast<CXTPQuantityEdit*>(m_pControl)->UpdateWindowText(value(), unit());
+  // set to the commandupdater.
+  scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
+  quantity->SetDouble(string(kValuePath), value());
+  quantity->SetString(string(kUnitPath), unit());
+  command_updater()->ExecuteCommand(id(), *(quantity.get()));
+}
+
+bool QuantityEdit::SemanticCheck(const CString &strText, 
+                                 CString *pstrErrorMsg /*= 0*/ ) {
+  string input_unit;
+  bool ret = pcrecpp::RE(full_match()).FullMatch(
+        UTF16ToASCII(strText.GetString()),
+          NULL_PTR, NULL_PTR, NULL_PTR, &input_unit);
+  if (ret == false) {
+    LOG(ERROR) << "check the regex pattern, \
+                  this must be true if pass syntax check.";
+    return false;
+  }
+  if (HasSetUnit()) {
+    if (input_unit == EmptyString()) return true; // using default unit.
+
+    double dump = 0; // dump value
+    string16 unit16 = ASCIIToUTF16(input_unit);
+    // check if the same unit.
+    return !!TcxConvertUnit(dump, unit16.c_str(), unit().c_str());
+  } else {
+    // if default is no set, user must type the unit.
+    return input_unit != EmptyString();
+  }
+}
+
+void CXTPQuantityEdit::UpdateWindowText(double value, string16 unit)
 {
   string16 show;
   if (unit == EmptyString16()) {
@@ -57,71 +119,7 @@ void QuantityEdit::UpdateWindowText(double value, string16 unit)
       show = StringPrintf(kShowQuantity, value, unit.c_str());
     }
   }
-  SetWindowText(show.c_str());
-}
-
-
-void QuantityEdit::OnValidatedText(CString text)
-{
-  double value;
-  string unit;
-  bool ret = pcrecpp::RE(full_match()).FullMatch(
-        UTF16ToASCII(text.GetString()), &value, NULL_PTR, NULL_PTR, &unit);
-  if (ret == false) {
-    LOG(WARNING) <<  "Validated text is no validated: " << text.GetString();
-    return;
-  }
-  if (!HasSetUnit()) {
-    // update value and unit
-    value_ = value;
-    unit_ = ASCIIToUTF16(unit);
-  } else {
-    string16 unit16 = ASCIIToUTF16(unit);
-    if (unit16 == EmptyString16()) // if no unit using default unit.
-      unit16 = unit_;
-    BOOL ret = TcxConvertUnit(value, unit16.c_str(), unit_.c_str());
-    if (!ret) {
-      LOG(ERROR) << "SematicCheck is fault. unit no match.";
-      return;
-    }
-    value_ = value;
-  }
-  UpdateWindowText(value_, unit_);
-  // set to the commandupdater.
-  scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
-  quantity->SetDouble(string(kValuePath), value_);
-  quantity->SetString(string(kUnitPath), unit_);
-  command_updater_->ExecuteCommand(id_, *(quantity.get()));
-}
-
-bool QuantityEdit::SemanticCheck( const CString &strText, 
-                                 CString *pstrErrorMsg /*= 0*/ ) {
-  string unit;
-  bool ret = pcrecpp::RE(full_match()).FullMatch(
-        UTF16ToASCII(strText.GetString()), NULL_PTR, NULL_PTR, NULL_PTR, &unit);
-  if (ret == false) {
-    LOG(ERROR) << "check the regex pattern, \
-                  this must be true if pass syntax check.";
-    return false;
-  }
-  if (HasSetUnit()) {
-    if (unit == EmptyString()) return true; // using default unit.
-
-    double value = 0; // dump value
-    string16 unit16 = ASCIIToUTF16(unit);
-    // check if the same unit.
-    return !!TcxConvertUnit(value, unit16.c_str(), unit_.c_str());
-  } else {
-    // if default is no set, user must type the unit.
-    return unit != EmptyString();
-  }
-}
-
-void QuantityEdit::set_unit(string16 unit) {
-  unit_ = unit;
-}
-
-void QuantityEdit::set_value(double value) {
-  value_ = value;
-  UpdateWindowText(value_, unit_);
+  // using the father set function, or cause many problem, 
+  // has inner state to change.
+  _SetEditText(show.c_str()); 
 }
