@@ -19,6 +19,36 @@ static const TCHAR* kQuantityInitTooltip =
   _T("type \"double( unit)\"");
 
 static const TCHAR* kShowQuantity = _T("%g %ls");
+
+
+// set to CommandUpdter a double for value, a string for unit.
+// the unit is equal to the set unit. save the unit for future use.
+class QuantityEdit : public CXTPValidatingEditCtrl
+{
+public:
+  friend class CXTPQuantityEdit;
+
+public:
+  QuantityEdit();
+  virtual ~QuantityEdit() {};
+
+private:
+  virtual bool SemanticCheck(const CString &strText, 
+    CString *pstrErrorMsg = 0) OVERRIDE;
+
+  virtual void OnValidatedText(CString text) OVERRIDE;
+
+  bool HasSetUnit() {
+    return unit() != EmptyString16();
+  };
+
+private:
+  int id();
+  double value();
+  string16 unit();  
+  CommandUpdater* command_updater();
+};
+
 }
 
 const char kValuePath[] = "value";
@@ -106,6 +136,7 @@ bool QuantityEdit::SemanticCheck(const CString &strText,
   }
 }
 
+
 IMPLEMENT_XTP_CONTROL(CXTPQuantityEdit, CXTPControlEdit)
 
 void CXTPQuantityEdit::UpdateWindowText(double value, string16 unit)
@@ -139,4 +170,8 @@ void CXTPQuantityEdit::Copy(CXTPControl* pControl, BOOL bRecursive) {
 
 void CXTPQuantityEdit::DoPropExchange( CXTPPropExchange* pPX ) {
   NOTREACHED() << "no support XML create.";
+}
+
+CXTPControlEditCtrl* CXTPQuantityEdit::CreateEditControl() {
+  return new QuantityEdit;
 }
