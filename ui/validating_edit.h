@@ -419,7 +419,7 @@ protected:
           const TCHAR *psz = reinterpret_cast<const TCHAR *>
             (lParam);
 
-          bExecute = bResetValid = !*psz || IsTextValid (psz);
+          bExecute = bResetValid = psz == NULL || !*psz || IsTextValid (psz);
           break;
         }
       default:
