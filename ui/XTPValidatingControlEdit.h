@@ -38,6 +38,7 @@ private:
 
 // Validating Edit assist class, it set the color and show tooltip for the
 // embed control.
+// no member no implement clone.
 class CXTPValidatingControlEdit : public CXTPControlEdit
 {
 public:
