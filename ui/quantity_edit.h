@@ -46,6 +46,7 @@ public:
     , unit_(unit) {
       CHECK(command_updater_ != NULL);
    };
+
   virtual ~CXTPQuantityEdit(){};
 
   void set_value(double value) {
@@ -54,6 +55,10 @@ public:
   }
 
 private:
+  CXTPQuantityEdit() {};
+  virtual void Copy(CXTPControl* pControl, BOOL bRecursive);
+  virtual void DoPropExchange(CXTPPropExchange* pPX);
+
   virtual CXTPControlEditCtrl* CreateEditControl() {
     return new QuantityEdit;
   }
@@ -64,7 +69,8 @@ private:
   CommandUpdater* command_updater_;
   double value_;
   string16 unit_;
-  const int id_;
+  int id_;
 
+  DECLARE_XTP_CONTROL(CXTPQuantityEdit)
 };
 

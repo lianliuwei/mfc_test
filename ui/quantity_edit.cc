@@ -106,6 +106,8 @@ bool QuantityEdit::SemanticCheck(const CString &strText,
   }
 }
 
+IMPLEMENT_XTP_CONTROL(CXTPQuantityEdit, CXTPControlEdit)
+
 void CXTPQuantityEdit::UpdateWindowText(double value, string16 unit)
 {
   string16 show;
@@ -122,4 +124,19 @@ void CXTPQuantityEdit::UpdateWindowText(double value, string16 unit)
   // using the father set function, or cause many problem, 
   // has inner state to change.
   _SetEditText(show.c_str()); 
+}
+
+void CXTPQuantityEdit::Copy(CXTPControl* pControl, BOOL bRecursive) {
+  CXTPQuantityEdit* edit = DYNAMIC_DOWNCAST(CXTPQuantityEdit, pControl);
+  DCHECK(edit);
+  CXTPValidatingControlEdit::Copy(pControl, bRecursive);
+  command_updater_ = edit->command_updater_;
+  value_ = edit->value_;
+  unit_ = edit->unit_;
+  id_ = edit->id_;
+  UpdateWindowText(value_, unit_);
+}
+
+void CXTPQuantityEdit::DoPropExchange( CXTPPropExchange* pPX ) {
+  NOTREACHED() << "no support XML create.";
 }
