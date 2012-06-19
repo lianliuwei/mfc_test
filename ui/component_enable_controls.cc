@@ -2,7 +2,6 @@
 
 #include "ui/component_enable_controls.h"
 
-
 namespace {
   void MoveWindowByRect(CWnd* wnd, CRect rect) {
     int x = rect.left;
@@ -12,10 +11,13 @@ namespace {
     wnd->SetWindowPos(NULL, x, y, cx, cy, 
       SWP_NOSENDCHANGING |SWP_NOACTIVATE | SWP_NOZORDER);
   }
+
+  static const LPTSTR kCursorID = IDC_HAND;
 }
 
 BEGIN_MESSAGE_MAP(ComponentEnableButton, CButton)
   ON_CONTROL_REFLECT(BN_CLICKED, OnClick)
+  ON_WM_SETCURSOR()
 END_MESSAGE_MAP()
 
 ComponentEnableButton::ComponentEnableButton(
@@ -24,6 +26,11 @@ ComponentEnableButton::ComponentEnableButton(
 
 void ComponentEnableButton::OnClick() {
   component_enable_->toggle_enable(true);
+}
+
+BOOL ComponentEnableButton::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) {
+  ::SetCursor(LoadCursor(NULL, kCursorID));
+  return TRUE;
 }
 
 ComponentEnableControls::ComponentEnableControls(unsigned int button_id,
