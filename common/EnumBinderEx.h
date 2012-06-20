@@ -16,3 +16,14 @@ public:
 
 #define BIND_ENUM_RES(originalEnumName, boundEnumClassName) \
   BIND_ENUM_CUSTOM(originalEnumName, boundEnumClassName, ResID<originalEnumName>)
+
+template <typename EnumClass>
+bool LoadResource() {
+  for (int i = 0; i < EnumClass::GetSize(); i++) {
+    UINT ID = EnumClass::GetAt(i).id;
+    BOOL ret = EnumClass::ElementAt(i).m_stringUser.LoadString(ID);
+    if (ret == FALSE) // can no load string.
+      return false;
+  }
+  return true;
+}
