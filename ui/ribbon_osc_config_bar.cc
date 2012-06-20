@@ -26,6 +26,8 @@ void SetControlShowStyle(CXTPControl* control) {
 static const SIZE gOffsetSize = {80, 22};
 }
 
+IMPLEMENT_ENUM_COMMBOBOX(CouplingCommboBox)
+
 RibbonOscConfigBar::RibbonOscConfigBar(CXTPRibbonBar* ribbon_bar,
                            CWnd* main_frame,
                            CommandUpdater* command_updater)
@@ -63,6 +65,12 @@ bool RibbonOscConfigBar::Init() {
   SetControlShowStyle(can_h_vertical_offset_);
   SetControlToManualUpdate(can_h_vertical_offset_);
 
+  can_h_coupling_ = new CouplingCommboBox(command_updater_, 
+    IDC_CHNL_WAVE_COUPLING, ribbon_bar_->GetCommandBars());
+  pGroupCANH->Add(can_h_coupling_, ID_COMBOX_CAN_HIGH_VERTICAL_COUPLING);
+  SetControlShowStyle(can_h_coupling_);
+  SetControlToManualUpdate(can_h_coupling_);
+
   return true;
 }
 
@@ -78,6 +86,9 @@ void RibbonOscConfigBar::EnabledStateChangedForCommand( int id, bool enabled ) {
 
     case IDC_CHNL_WAVE_VOLT_OFFSET:
       control = can_h_vertical_offset_;
+
+    case IDC_CHNL_WAVE_COUPLING:
+      control = can_h_coupling_;
 
     default:
       NOTREACHED();
@@ -112,6 +123,13 @@ void RibbonOscConfigBar::ParamChangedForCommand(int id, const base::Value& param
       CHECK(dict->GetString(string(kUnitPath), &unit));
       CHECK(unit == string16(_T("V"))); // no only allow set value, unit no change.
       can_h_vertical_offset_->set_value(value);
+      break;
+    }
+    
+    case IDC_CHNL_WAVE_COUPLING: {
+      int select;
+      CHECK(param.GetAsInteger(&select));
+      can_h_coupling_->SetSelect(static_cast<ChnlWaveCoupling>(select), false);
       break;
     }
     default:

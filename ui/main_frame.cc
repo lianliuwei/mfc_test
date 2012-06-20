@@ -5,7 +5,7 @@
 #include "base/logging.h"
 #include "resources/Resource.h"
 #include "ui/osc_command_ids.h"
-
+#include "ui/enum_define.h"
 
 namespace {
   static const int frame_height = 500;
@@ -127,6 +127,7 @@ BOOL MainFrame::CreateRibbonBar()
   command_updater_->AddCommandObserver(IDC_OSC_ON_OFF, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_AUTOSCALE, config_bar_.get());
   command_updater_->AddCommandObserver(IDC_CHNL_WAVE_VOLT_OFFSET, config_bar_.get());
+  command_updater_->AddCommandObserver(IDC_CHNL_WAVE_COUPLING, config_bar_.get());
   InitCommandState();
 
   // home Tab
@@ -334,6 +335,24 @@ void MainFrame::ExecuteCommand(int id, const base::Value& param)
      command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
      break;
      }
+   case IDC_CHNL_WAVE_COUPLING: {
+     int select;
+     CHECK(param.GetAsInteger(&select));
+     switch (select) {
+       case AC:
+         select = DC;
+         break;
+       case DC:
+         select = AC;
+         break;
+       default:
+         NOTREACHED();
+     };
+     scoped_ptr<base::Value> coupling(
+       base::Value::CreateIntegerValue(select));
+     command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_COUPLING, *(coupling.get()));
+     break;
+     }
   }
 }
 
@@ -345,6 +364,9 @@ void MainFrame::InitCommandState()
     IDC_AUTOSCALE, true);
   command_updater_->UpdateCommandEnabled(
     IDC_CHNL_WAVE_VOLT_OFFSET, true);
+  command_updater_->UpdateCommandEnabled(
+    IDC_CHNL_WAVE_COUPLING, true);
+
   scoped_ptr<base::Value> value(
     base::Value::CreateBooleanValue(osc_on_off_));
   command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
@@ -353,4 +375,8 @@ void MainFrame::InitCommandState()
   quantity->SetDouble(string(kValuePath), 1);
   quantity->SetString(string(kUnitPath), string16(_T("V")));
   command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
+
+  scoped_ptr<base::Value> coupling(
+    base::Value::CreateIntegerValue(AC));
+  command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_COUPLING, *(coupling.get()));
 }

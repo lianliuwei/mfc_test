@@ -2,11 +2,15 @@
 #define XTPCONFIGBAR_H_
 
 #include "base/compiler_specific.h"
-#include "command_updater.h"
+#include "ui/command_updater.h"
+#include "ui/enum_define.h"
+#include "ui/enum_combobox.h"
 
 class CXTPRibbonBar;
 class OnOffButton;
 class CXTPQuantityEdit;
+
+DECLARE_ENUM_COMMBOBOX(EnumChnlWaveCoupling, CouplingCommboBox)
 
 // this class using for create the Osc Config Controls. change control set for 
 // different Osc state. controls the show or hide of professional controls (it
@@ -26,7 +30,7 @@ public:
   // create the control ui.
   RibbonOscConfigBar(CXTPRibbonBar* ribbon_bar, CWnd* main_frame,
     CommandUpdater* command_updater);
-  ~RibbonOscConfigBar() {};
+  ~RibbonOscConfigBar() {}
 
   // create the controls
   bool Init();
@@ -59,6 +63,8 @@ private:
   CXTPControlComboBox* can_h_vertical_div_;
 
   CXTPQuantityEdit* can_h_vertical_offset_;
+
+  CouplingCommboBox* can_h_coupling_;
 
   // TODO need a self-verify textbox for input voltage and ampere.
   DISALLOW_COPY_AND_ASSIGN(RibbonOscConfigBar);
