@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common/EnumBinderEx.h"
 
 #include "resources/resource.h"
