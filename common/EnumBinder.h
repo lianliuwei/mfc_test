@@ -97,6 +97,9 @@ template <typename Tenum, typename Tproperties>
 class CEnumBinder
 {
 public:
+  typedef Tenum EnumType;
+
+public:
 	static int GetSize()
 	{
 		CENUMBINDER_AUTO_UNIT_TEST;
