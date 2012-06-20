@@ -31,21 +31,21 @@
 #define ID_START_STOP_OSC               181
 #define ID_AUTOSCALE                    182
 #define ID_GROUP_CAN_HIGH               305
-#define ID_LABEL_CAN_HIGH_VERTICAL_DIV   301
 #define ID_COMBOX_CAN_HIGH_VERTICAL_DIV  302
-#define ID_LABEL_CAN_HIGH_VERICAL_OFFSET 303
+#define ID_COMBOX_CAN_HIGH_VERTICAL_COUPLING 303
 #define ID_EDIT_CAN_HIGH_VERICAL_OFFSET  304
 #define ID_DUMP_1                       183
 #define IDB_GEAR                        300
 #define ID_CANCEL_EDIT_CNTR             32768
 #define ID_VIEW_WORKSPACE               59394
-
+#define ID_STR_DC                      183
+#define ID_STR_AC                      184
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                1
-#define _APS_NEXT_RESOURCE_VALUE        133
+#define _APS_NEXT_RESOURCE_VALUE        185
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101

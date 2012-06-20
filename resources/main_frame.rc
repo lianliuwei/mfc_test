@@ -276,4 +276,10 @@ BEGIN
     ID_CUSTOM_CONTROL       "test the custom"
 END
 
+STRINGTABLE 
+BEGIN
+    ID_STR_AC          "AC"
+    ID_STR_DC          "DC"
+END
+
 #endif // !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
