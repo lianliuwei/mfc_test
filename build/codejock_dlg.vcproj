@@ -303,6 +303,14 @@
 				Name="ui"
 				>
 				<File
+					RelativePath="..\ui\command_button.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\ui\command_button.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ui\command_updater.cc"
 					>
 					<FileConfiguration
