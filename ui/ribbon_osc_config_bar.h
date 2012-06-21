@@ -2,6 +2,7 @@
 #define XTPCONFIGBAR_H_
 
 #include "base/compiler_specific.h"
+
 #include "ui/command_updater.h"
 #include "ui/enum_define.h"
 #include "ui/enum_combobox.h"
@@ -9,6 +10,7 @@
 class CXTPRibbonBar;
 class OnOffButton;
 class CXTPQuantityEdit;
+class CommandButton;
 
 DECLARE_ENUM_COMMBOBOX(EnumChnlWaveCoupling, CouplingCommboBox)
 
@@ -58,7 +60,7 @@ private:
   // the button switch between the start and stop state.
   OnOffButton* start_or_stop_;
   
-  CXTPControlButton* auto_scale_;
+  CommandButton* auto_scale_;
   
   CXTPControlComboBox* can_h_vertical_div_;
 

@@ -8,6 +8,7 @@
 #include "ui/osc_command_ids.h"
 #include "ui/on_off_button.h"
 #include "ui/quantity_edit.h"
+#include "ui/command_button.h"
 
 namespace {
 
@@ -51,8 +52,8 @@ bool RibbonOscConfigBar::Init() {
   start_or_stop_ = new OnOffButton(ID_START_OSC, ID_STOP_OSC, 
     true, command_updater_);
   pGroupOscControl->Add(start_or_stop_, ID_START_STOP_OSC);
-  auto_scale_ = DYNAMIC_DOWNCAST(CXTPControlButton,
-    pGroupOscControl->Add(xtpControlButton, ID_AUTOSCALE));
+  auto_scale_ = new CommandButton(command_updater_, IDC_AUTOSCALE);
+  pGroupOscControl->Add(auto_scale_, ID_AUTOSCALE);
   SetControlToManualUpdate(auto_scale_);
   // CAN-H Group
   CXTPRibbonGroup* pGroupCANH = pTabOsc->AddGroup(ID_GROUP_CAN_HIGH);

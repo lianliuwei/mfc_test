@@ -309,50 +309,57 @@ void MainFrame::OnClose()
 void MainFrame::ExecuteCommand(int id, const base::Value& param)
 {
   switch (id) {
-   case IDC_OSC_ON_OFF: {
-     bool on_off;
-     CHECK(param.GetAsBoolean(&on_off));
-     LOG_ASSERT(osc_on_off_ != on_off);
-     osc_on_off_ = on_off;
-     scoped_ptr<base::Value> value(
-       base::Value::CreateBooleanValue(osc_on_off_));
-     command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
-     break;
-     }
-   
-   case IDC_CHNL_WAVE_VOLT_OFFSET: {
-     double value;
-     string16 unit;
-     const base::DictionaryValue* dict;
-     CHECK(param.GetAsDictionary(&dict));
-     CHECK(dict->GetDouble(string(kValuePath), &value));
-     CHECK(dict->GetString(string(kUnitPath), &unit));
-     CHECK(unit == string16(_T("V")));
-     value += 1.0;
-     scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
-     quantity->SetDouble(string(kValuePath), value);
-     quantity->SetString(string(kUnitPath), string16(_T("V")));
-     command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
-     break;
-     }
-   case IDC_CHNL_WAVE_COUPLING: {
-     int select;
-     CHECK(param.GetAsInteger(&select));
-     switch (select) {
-       case AC:
-         select = DC;
-         break;
-       case DC:
-         select = AC;
-         break;
-       default:
-         NOTREACHED();
-     };
-     scoped_ptr<base::Value> coupling(
-       base::Value::CreateIntegerValue(select));
-     command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_COUPLING, *(coupling.get()));
-     break;
-     }
+  case IDC_OSC_ON_OFF: {
+    bool on_off;
+    CHECK(param.GetAsBoolean(&on_off));
+    LOG_ASSERT(osc_on_off_ != on_off);
+    osc_on_off_ = on_off;
+    scoped_ptr<base::Value> value(
+      base::Value::CreateBooleanValue(osc_on_off_));
+    command_updater_->UpdateCommandParam(IDC_OSC_ON_OFF, *(value.get()));
+    break;
+  }
+
+  case IDC_AUTOSCALE: {
+    // execute the Command.
+    break;
+  }
+ 
+  case IDC_CHNL_WAVE_VOLT_OFFSET: {
+    double value;
+    string16 unit;
+    const base::DictionaryValue* dict;
+    CHECK(param.GetAsDictionary(&dict));
+    CHECK(dict->GetDouble(string(kValuePath), &value));
+    CHECK(dict->GetString(string(kUnitPath), &unit));
+    CHECK(unit == string16(_T("V")));
+    value += 1.0;
+    scoped_ptr<base::DictionaryValue> quantity(new base::DictionaryValue);
+    quantity->SetDouble(string(kValuePath), value);
+    quantity->SetString(string(kUnitPath), string16(_T("V")));
+    command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_VOLT_OFFSET, *(quantity.get()));
+    break;
+  }
+
+  case IDC_CHNL_WAVE_COUPLING: {
+    int select;
+    CHECK(param.GetAsInteger(&select));
+    switch (select) {
+    case AC:
+      select = DC;
+      break;
+    case DC:
+      select = AC;
+      break;
+    default:
+      NOTREACHED();
+    };
+    scoped_ptr<base::Value> coupling(
+      base::Value::CreateIntegerValue(select));
+    command_updater_->UpdateCommandParam(IDC_CHNL_WAVE_COUPLING, *(coupling.get()));
+    break;
+  }
+  
   }
 }
 
