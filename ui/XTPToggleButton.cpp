@@ -10,14 +10,10 @@ CXTPToggleButton::CXTPToggleButton(int set_icon_id, int unset_icon_id,
   , unset_icon_id_(unset_icon_id)
   , state_(state) {
   m_nIconId = state == STATE_SET ? set_icon_id : unset_icon_id;
-  SetFlags(GetFlags()|xtpFlagManualUpdate);
 }
 
 CXTPToggleButton::CXTPToggleButton() {
-  SetFlags(GetFlags()|xtpFlagManualUpdate);
 }
-
-
 
 CXTPToggleButton::~CXTPToggleButton() {}
 
